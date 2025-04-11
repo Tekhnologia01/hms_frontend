@@ -1,0 +1,684 @@
+// import { Row, Col } from "react-bootstrap";
+// import vijay from '../../../assets/images/avatars/vijay1.jpg';
+// import { IoMdAdd } from "react-icons/io";
+// import { RiDeleteBinLine } from "react-icons/ri";
+// import CommonTable from "../../../components/table/CommonTable";
+// import { useParams } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import axios from "axios";
+// import AddCharges from "../../commonfeature/AddCharges";
+// import DeleteConfirmationModal from "../../../components/common/DeleteModal";
+// import AddVisit from "../../commonfeature/AddVisite";
+// import { epochTimeToDate } from "../../../utils/epochToDate";
+// function AdmitedPatientDetails() {
+//     const { admitedId } = useParams()
+//     const [patient, setPatient] = useState();
+
+//     const [charge, setCharges] = useState([]);
+
+//     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+//     const [deleteMessage, setDeleteMessage] = useState('');
+//     const [selectedcharges, setSelectedCharges] = useState({});
+//     const [doctorVisit, setDoctorVisits] = useState([]);
+//     const [selectedvisit, setSelectedvisit] = useState([]);
+
+
+//     const [status, setStatus] = useState()
+
+//     const [showAddChargesModal, setShowAddChargesModal] = useState(false);
+//     const handleAddChargesModal = () => setShowAddChargesModal(true);
+//     const handleAddChargesCloseModal = () => setShowAddChargesModal(false);
+
+
+//     const [showDoctorVisitModal, setShowDoctorVisitModal] = useState(false);
+//     const handleDoctorVisitModal = () => setShowDoctorVisitModal(true);
+//     const handleDoctorVisitCloseModal = () => setShowDoctorVisitModal(false);
+
+
+
+//     const fetchpatient = async () => {
+//         try {
+//             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patient_particular?admited_id=${admitedId}`)
+//             console.log(response.data[0][0])
+//             setPatient(response?.data[0][0])
+//         } catch (error) {
+
+//         }
+//     }
+
+
+//     const fetchCharges = async () => {
+//         try {
+//             const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getipdpatientcharges?admited_id=${admitedId}`)
+//             console.log(response?.data?.data[0])
+//             setCharges(response?.data?.data[0])
+//             // setPatient(response?.data[0][0])
+//         } catch (error) {
+
+//         }
+//     }
+
+
+//     const fetchvisits = async () => {
+//         try {
+//             const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getipddoctorvisits?admited_id=${admitedId}`)
+//             console.log("dfghjkl", response.data.data[0])
+//             setDoctorVisits(response?.data?.data[0])
+//         } catch (error) {
+
+//         }
+//     }
+
+
+
+
+//     useEffect(() => {
+//         fetchpatient();
+//         fetchCharges();
+//         fetchvisits()
+//     }, [])
+
+//     // Table columns
+//     const columns = [
+//         { name: "Charge Name", accessor: "uh_id", class: "text-center" },
+//         { name: "Date", accessor: "date", class: "text-center px-1" },
+//         { name: "Action", accessor: "action", class: "py-3 text-center px-1" },
+//     ];
+
+
+//     const columnsdoctors = [
+//         { name: "Doctor Name", accessor: "uh_id", class: "text-center" },
+//         { name: "Date", accessor: "date", class: "text-center px-1" },
+//         { name: "Action", accessor: "action", class: "py-3 text-center px-1" },
+//     ];
+
+//     const renderRow = (item) => (
+//         <tr key={item.id} className="border-bottom text-center">
+//             <td className="py-3 px-2">{item?.fees_name}</td>
+//             <td className="py-3 px-2">{epochTimeToDate(item?.date)}</td>
+//             <td>
+//                 {/* <FiEdit2
+//                     style={{ height: "23px", width: "23px", cursor: "pointer", color: "#1D949A" }}
+//                 // Add onClick handler here if needed
+//                 /> */}
+//                 <span className="ps-3"></span>
+//                 <RiDeleteBinLine
+//                     style={{ height: "25px", width: "25px", cursor: "pointer", color: "#DC3545" }}
+//                     onClick={() => {
+//                         setStatus(1)
+//                         setSelectedCharges(item)
+//                         setShowDeleteConfirmation(true);
+//                     }}
+//                 // Add onClick handler here if needed
+//                 />
+//             </td>
+//         </tr>
+//     );
+
+
+//     const renderRowdoctorvisit = (item) => (
+//         <tr key={item.id} className="border-bottom text-center">
+//             <td className="py-3 px-2">{item?.user_name}</td>
+//             <td className="py-3 px-2">{epochTimeToDate(item?.ipd_doctor_date)}</td>
+//             <td>
+//                 {/* <FiEdit2
+//                     style={{ height: "23px", width: "23px", cursor: "pointer", color: "#1D949A" }}
+//                 // Add onClick handler here if needed
+//                 /> */}
+//                 <span className="ps-3"></span>
+//                 <RiDeleteBinLine
+//                     style={{ height: "25px", width: "25px", cursor: "pointer", color: "#DC3545" }}
+//                     onClick={() => {
+//                         setStatus(0)
+//                         setSelectedvisit(item)
+//                         setShowDeleteConfirmation(true);
+//                     }}
+//                 // Add onClick handler here if needed
+//                 />
+//             </td>
+//         </tr>
+//     );
+
+
+//     const handleDelete = async () => {
+//         try {
+
+//             if (status == 1) {
+//                 const response = await axios.delete(`${process.env.REACT_APP_API_URL}/fees/deletecharge?ipd_charge_id=${selectedcharges?.ipd_charge_id}`)
+//                 fetchCharges();
+//             } else {
+//                 const response = await axios.delete(`${process.env.REACT_APP_API_URL}/doctor/deleteoctorvisit?IpdDoctorVisitId=${selectedvisit?.ipd_doctor_visit_id}`)
+//                 fetchvisits();
+//             }
+//             setShowDeleteConfirmation(false)
+
+//         } catch (error) {
+//             setShowDeleteConfirmation(false)
+
+//         }
+//     }
+
+
+
+
+//     return (
+//         <div className="pt-4 px-4" style={{ backgroundColor: "#F8F9FA", minHeight: "100vh" }}>
+//             {/* Header */}
+//             <div className="fw-semibold fs-4 mb-4" style={{ color: "#1D949A" }}>
+//                 Patient Details
+//             </div>
+
+//             <Row className="m-0 mt-4">
+//                 {/* Profile Picture */}
+//                 <Col lg={12} md={12} className="mb-4">
+//                     <div
+//                         className="p-4"
+//                         style={{
+//                             border: "1px solid #E4E9EF",
+//                             borderRadius: "10px",
+//                             backgroundColor: "#fff",
+//                             boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+//                         }}
+//                     >
+//                         <div className="d-flex align-items-center gap-3">
+//                             <img
+//                                 src={`${process.env.REACT_APP_API_URL}/${patient?.Photo}`}
+//                                 alt="Profile"
+//                                 className="rounded-circle"
+//                                 style={{
+//                                     width: "100px",
+//                                     height: "100px",
+//                                     objectFit: "cover",
+//                                     border: "3px solid #1D949A",
+//                                 }}
+//                             />
+//                             <div>
+//                                 <h5 className="mb-1 fw-bold" style={{ color: "#333" }}>{patient?.Name}</h5>
+//                                 <p className="mb-0 text-muted" style={{ fontSize: "14px" }}>
+//                                     Patient ID: {patient?.uh_id}
+//                                 </p>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </Col>
+//             </Row>
+
+//             <Row className="m-0 mt-4">
+//                 <Col lg={6} md={12} className="mb-4">
+//                     <div
+//                         className="p-4"
+//                         style={{
+//                             border: "1px solid #E4E9EF",
+//                             borderRadius: "10px",
+//                             backgroundColor: "#fff",
+//                             boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+//                         }}
+//                     >
+//                         <div className="d-flex justify-content-between align-items-center mb-4">
+//                             <div>
+//                                 <p className="fw-semibold mb-0" style={{ color: "#1D949A", fontSize: "18px" }}>
+//                                     Charges
+//                                 </p>
+//                             </div>
+//                             <div>
+//                                 <IoMdAdd
+
+//                                     onClick={() => {
+//                                         // navigate(`/doctor/patient_list/ipd/${item.admitted_patient_id}`)
+//                                         // setAdmited(item)
+//                                         handleAddChargesModal()
+//                                     }}
+
+//                                     style={{
+//                                         height: "23px",
+//                                         width: "23px",
+//                                         cursor: "pointer",
+//                                         color: "#1D949A",
+//                                     }}
+//                                 // Add onClick handler here if needed
+//                                 />
+//                             </div>
+//                         </div>
+
+//                         <div>
+//                             <CommonTable
+//                                 minimumWidth={"100%"}
+//                                 headers={columns}
+//                                 bodyData={charge}
+//                                 renderRow={renderRow}
+//                                 title={"Charges List"}
+//                             />
+//                         </div>
+//                     </div>
+//                 </Col>
+
+//                 {/* Personal Information */}
+//                 <Col lg={6} md={12} className="mb-4">
+//                     <div
+//                         className="p-4"
+//                         style={{
+//                             border: "1px solid #E4E9EF",
+//                             borderRadius: "10px",
+//                             backgroundColor: "#fff",
+//                             boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+//                         }}
+//                     >
+//                         <div className="d-flex justify-content-between align-items-center mb-4">
+//                             <div>
+//                                 <p className="fw-semibold mb-0" style={{ color: "#1D949A", fontSize: "18px" }}>
+//                                     Doctor Visits
+//                                 </p>
+//                             </div>
+//                             <div>
+//                                 <IoMdAdd
+
+//                                     onClick={() => {
+
+//                                         handleDoctorVisitModal()
+//                                     }}
+//                                     style={{
+//                                         height: "23px",
+//                                         width: "23px",
+//                                         cursor: "pointer",
+//                                         color: "#1D949A",
+//                                     }}
+//                                 // Add onClick handler here if needed
+//                                 />
+//                             </div>
+//                         </div>
+
+//                         <div>
+//                             <CommonTable
+//                                 minimumWidth={"100%"}
+//                                 headers={columnsdoctors}
+//                                 bodyData={doctorVisit}
+//                                 renderRow={renderRowdoctorvisit}
+//                                 title={"Doctor Visited List"}
+//                             />
+//                         </div>
+//                     </div>
+//                 </Col>
+//             </Row>
+
+//             <AddCharges
+//                 admited={patient}
+//                 // patientUpdate={patientUpdate}
+//                 show={showAddChargesModal}
+//                 handleClose={() => {
+//                     handleAddChargesCloseModal();
+//                     fetchCharges()
+//                 }}
+//             />
+
+
+//             <AddVisit
+//                 admited={patient}
+//                 // patientUpdate={patientUpdate}
+//                 show={showDoctorVisitModal}
+//                 handleClose={() => {
+//                     handleDoctorVisitCloseModal();
+//                     fetchvisits()
+//                 }}
+//             />
+
+//             <DeleteConfirmationModal
+//                 show={showDeleteConfirmation}
+//                 handleClose={() => setShowDeleteConfirmation(false)}
+//                 handleConfirm={handleDelete}
+//             // message={"deleteMessage"}
+//             />
+
+
+
+//         </div>
+//     );
+// }
+
+// export default AdmitedPatientDetails;
+
+import { Row, Col } from "react-bootstrap";
+import vijay from '../../../assets/images/avatars/vijay1.jpg';
+import { IoMdAdd } from "react-icons/io";
+import { RiDeleteBinLine } from "react-icons/ri";
+import CommonTable from "../../../components/table/CommonTable";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import AddCharges from "../../commonfeature/AddCharges";
+import DeleteConfirmationModal from "../../../components/common/DeleteModal";
+import AddVisit from "../../commonfeature/AddVisite";
+import { epochTimeToDate } from "../../../utils/epochToDate";
+import CourseDetails from "./CourseDetails";
+function AdmitedPatientDetails() {
+    const { admitedId } = useParams()
+    const [patient, setPatient] = useState();
+
+    const [charge, setCharges] = useState([]);
+
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [deleteMessage, setDeleteMessage] = useState('');
+    const [selectedcharges, setSelectedCharges] = useState({});
+    const [doctorVisit, setDoctorVisits] = useState([]);
+    const [selectedvisit, setSelectedvisit] = useState([]);
+
+
+    const [status, setStatus] = useState()
+
+    const [showAddChargesModal, setShowAddChargesModal] = useState(false);
+    const handleAddChargesModal = () => setShowAddChargesModal(true);
+    const handleAddChargesCloseModal = () => setShowAddChargesModal(false);
+
+
+    const [showDoctorVisitModal, setShowDoctorVisitModal] = useState(false);
+    const handleDoctorVisitModal = () => setShowDoctorVisitModal(true);
+    const handleDoctorVisitCloseModal = () => setShowDoctorVisitModal(false);
+
+
+
+    const fetchpatient = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patient_particular?admited_id=${admitedId}`)
+            console.log(response.data[0][0])
+            setPatient(response?.data[0][0])
+        } catch (error) {
+
+        }
+    }
+
+
+    const fetchCharges = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getipdpatientcharges?admited_id=${admitedId}`)
+            console.log(response?.data?.data[0])
+            setCharges(response?.data?.data[0])
+            // setPatient(response?.data[0][0])
+        } catch (error) {
+
+        }
+    }
+
+
+    const fetchvisits = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getipddoctorvisits?admited_id=${admitedId}`)
+            console.log("dfghjkl", response.data.data[0])
+            setDoctorVisits(response?.data?.data[0])
+        } catch (error) {
+
+        }
+    }
+
+
+
+
+    useEffect(() => {
+        fetchpatient();
+        fetchCharges();
+        fetchvisits()
+    }, [])
+
+    // Table columns
+    const columns = [
+        { name: "Charge Name", accessor: "uh_id", class: "text-center" },
+        { name: "Date", accessor: "date", class: "text-center px-1" },
+        { name: "Action", accessor: "action", class: "py-3 text-center px-1" },
+    ];
+
+
+    const columnsdoctors = [
+        { name: "Doctor Name", accessor: "uh_id", class: "text-center" },
+        { name: "Date", accessor: "date", class: "text-center px-1" },
+        { name: "Action", accessor: "action", class: "py-3 text-center px-1" },
+    ];
+
+    const renderRow = (item) => (
+        <tr key={item.id} className="border-bottom text-center">
+            <td className="py-3 px-2">{item?.fees_name}</td>
+            <td className="py-3 px-2">{epochTimeToDate(item?.date)}</td>
+            <td>
+                {/* <FiEdit2
+                    style={{ height: "23px", width: "23px", cursor: "pointer", color: "#1D949A" }}
+                // Add onClick handler here if needed
+                /> */}
+                <span className="ps-3"></span>
+                <RiDeleteBinLine
+                    style={{ height: "25px", width: "25px", cursor: "pointer", color: "#DC3545" }}
+                    onClick={() => {
+                        setStatus(1)
+                        setSelectedCharges(item)
+                        setShowDeleteConfirmation(true);
+                    }}
+                // Add onClick handler here if needed
+                />
+            </td>
+        </tr>
+    );
+
+
+    const renderRowdoctorvisit = (item) => (
+        <tr key={item.id} className="border-bottom text-center">
+            <td className="py-3 px-2">{item?.user_name}</td>
+            <td className="py-3 px-2">{epochTimeToDate(item?.ipd_doctor_date)}</td>
+            <td>
+                {/* <FiEdit2
+                    style={{ height: "23px", width: "23px", cursor: "pointer", color: "#1D949A" }}
+                // Add onClick handler here if needed
+                /> */}
+                <span className="ps-3"></span>
+                <RiDeleteBinLine
+                    style={{ height: "25px", width: "25px", cursor: "pointer", color: "#DC3545" }}
+                    onClick={() => {
+                        setStatus(0)
+                        setSelectedvisit(item)
+                        setShowDeleteConfirmation(true);
+                    }}
+                // Add onClick handler here if needed
+                />
+            </td>
+        </tr>
+    );
+
+
+    const handleDelete = async () => {
+        try {
+
+            if (status == 1) {
+                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/fees/deletecharge?ipd_charge_id=${selectedcharges?.ipd_charge_id}`)
+                fetchCharges();
+            } else {
+                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/doctor/deleteoctorvisit?IpdDoctorVisitId=${selectedvisit?.ipd_doctor_visit_id}`)
+                fetchvisits();
+            }
+            setShowDeleteConfirmation(false)
+
+        } catch (error) {
+            setShowDeleteConfirmation(false)
+
+        }
+    }
+
+
+
+
+    return (
+        <div className="pt-4 px-4" style={{ backgroundColor: "#F8F9FA", minHeight: "100vh" }}>
+            {/* Header */}
+            <div className="fw-semibold fs-4 mb-4" style={{ color: "#1D949A" }}>
+                Patient Details
+            </div>
+
+            <Row className="m-0 mt-4">
+                {/* Profile Picture */}
+                <Col lg={12} md={12} className="mb-4">
+                    <div
+                        className="p-4"
+                        style={{
+                            border: "1px solid #E4E9EF",
+                            borderRadius: "10px",
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                        }}
+                    >
+                        <div className="d-flex align-items-center gap-3">
+                            <img
+                                src={`${process.env.REACT_APP_API_URL}/${patient?.Photo}`}
+                                alt="Profile"
+                                className="rounded-circle"
+                                style={{
+                                    width: "100px",
+                                    height: "100px",
+                                    objectFit: "cover",
+                                    border: "3px solid #1D949A",
+                                }}
+                            />
+                            <div>
+                                <h5 className="mb-1 fw-bold" style={{ color: "#333" }}>{patient?.Name}</h5>
+                                <p className="mb-0 text-muted" style={{ fontSize: "14px" }}>
+                                    Patient ID: {patient?.uh_id}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </Col>
+            </Row>
+
+            <Row className="m-0 mt-4">
+                <Col lg={6} md={12} className="mb-4">
+                    <div
+                        className="p-4"
+                        style={{
+                            border: "1px solid #E4E9EF",
+                            borderRadius: "10px",
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                        }}
+                    >
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <p className="fw-semibold mb-0" style={{ color: "#1D949A", fontSize: "18px" }}>
+                                    Charges
+                                </p>
+                            </div>
+                            <div>
+                                <IoMdAdd
+
+                                    onClick={() => {
+                                        // navigate(`/doctor/patient_list/ipd/${item.admitted_patient_id}`)
+                                        // setAdmited(item)
+                                        handleAddChargesModal()
+                                    }}
+
+                                    style={{
+                                        height: "23px",
+                                        width: "23px",
+                                        cursor: "pointer",
+                                        color: "#1D949A",
+                                    }}
+                                // Add onClick handler here if needed
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <CommonTable
+                                minimumWidth={"100%"}
+                                headers={columns}
+                                bodyData={charge}
+                                renderRow={renderRow}
+                                title={"Charges List"}
+                            />
+                        </div>
+                    </div>
+                </Col>
+
+                {/* Personal Information */}
+                <Col lg={6} md={12} className="mb-4">
+                    <div
+                        className="p-4"
+                        style={{
+                            border: "1px solid #E4E9EF",
+                            borderRadius: "10px",
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                        }}
+                    >
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <p className="fw-semibold mb-0" style={{ color: "#1D949A", fontSize: "18px" }}>
+                                    Doctor Visits
+                                </p>
+                            </div>
+                            <div>
+                                <IoMdAdd
+
+                                    onClick={() => {
+
+                                        handleDoctorVisitModal()
+                                    }}
+                                    style={{
+                                        height: "23px",
+                                        width: "23px",
+                                        cursor: "pointer",
+                                        color: "#1D949A",
+                                    }}
+                                // Add onClick handler here if needed
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <CommonTable
+                                minimumWidth={"100%"}
+                                headers={columnsdoctors}
+                                bodyData={doctorVisit}
+                                renderRow={renderRowdoctorvisit}
+                                title={"Doctor Visited List"}
+                            />
+                        </div>
+                    </div>
+                </Col>
+            </Row>
+
+
+
+<CourseDetails/>
+        
+
+
+
+
+            <AddCharges
+                admited={patient}
+                // patientUpdate={patientUpdate}
+                show={showAddChargesModal}
+                handleClose={() => {
+                    handleAddChargesCloseModal();
+                    fetchCharges()
+                }}
+            />
+
+
+            <AddVisit
+                admited={patient}
+                // patientUpdate={patientUpdate}
+                show={showDoctorVisitModal}
+                handleClose={() => {
+                    handleDoctorVisitCloseModal();
+                    fetchvisits()
+                }}
+            />
+
+            <DeleteConfirmationModal
+                show={showDeleteConfirmation}
+                handleClose={() => setShowDeleteConfirmation(false)}
+                handleConfirm={handleDelete}
+            // message={"deleteMessage"}
+            />
+
+
+
+        </div>
+    );
+}
+
+export default AdmitedPatientDetails;

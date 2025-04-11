@@ -1,0 +1,129 @@
+.general-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.general-container .profile {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #fff;
+    border: 1px solid #0000001A;
+    padding: 10px 18px;
+    border-radius: 16px;
+}
+
+.general-container .profile .profile-img {
+    width: 130px;
+    height: 130px;
+    /* background-color: red; */
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.general-container .profile .details {
+    padding-left: 5px;
+    line-height: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1px;
+}
+
+.general-container .profile .details .name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #434966;
+}
+
+.general-container .profile .details p {
+    font-size: 14px;
+    color: #82889C;
+}
+
+.general-container .personal-info {
+    border: 1px solid #0000001A;
+    margin-top: 20px;
+    border-radius: 16px;
+    background-color: #fff;
+    padding: 10px 18px;
+}
+
+.general-container .personal-info h3 {
+    font-size: 18px;
+    color: #434966;
+    font-weight: 600;
+}
+
+.general-container .personal-info .info-container {
+    display: flex;
+    flex-wrap: wrap;
+    color: #434966;
+    gap: 5px;
+}
+
+.general-container .personal-info .info-container div {
+    width: 300px;
+    line-height: 10px;
+}
+
+.general-container .personal-info .info-container div {
+    font-weight: 500;
+
+}
+
+.general-container .personal-info .info-container div .label,
+.general-container .diseases .diseases-container .label {
+    font-weight: normal;
+    color: #82889C;
+    font-size: 14px;
+}
+
+.general-container .diseases {
+    border: 1px solid #0000001A;
+    margin-top: 20px;
+    padding: 10px 18px;
+    border-radius: 16px;
+    background-color: #fff;
+}
+
+.general-container .diseases h3 {
+    color: #232323;
+    font-size: 18px;
+}
+
+.general-container .diseases .diseases-container .disease-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.general-container .diseases .diseases-container .disease-item span {
+    background-color: #1E959B33;
+    padding: 5px 10px;
+    border-radius: 4px;
+    height: 30px;
+    width: 83px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #434966;
+    font-weight: 400;
+}
+
+@media screen and (max-width: 370px) {
+    .general-container .profile {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .general-container .profile .details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        line-height: 3px;
+    }
+
+}

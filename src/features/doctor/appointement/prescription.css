@@ -1,0 +1,24 @@
+.prescription_tbl .form-control {
+    border: none !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0.5rem !important;
+    background-color: rgba(128, 128, 128, .1);
+}
+
+.prescription_tbl th {
+    text-align: center;
+    padding: .75rem;
+}
+
+.prescription_tbl .form-control:disabled {
+    background-color: transparent;
+    /* color: #999; */
+    cursor: not-allowed;
+}
+
+.prescription_tbl .form-control:focus {
+    border-color: #98DBDE !important;
+    /* background-color: white !important; */
+    outline: #98DBDE !important;
+    box-shadow: 0 0 0 .05rem #98DBDE;
+}

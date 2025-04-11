@@ -1,0 +1,120 @@
+import React from "react";
+import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer";
+import Airavat from "../../../assets/images/Airavat.png";
+
+Font.register({
+    family: 'Times New Roman',
+    fonts: [
+        { src: '/fonts/Times New Roman.ttf', fontWeight: 'normal' },
+        { src: '/fonts/Times New Roman Bold.ttf', fontWeight: 'bold' },
+    ],
+});
+
+const styles = StyleSheet.create({
+    page: {
+        fontFamily: 'Times New Roman',
+        padding: 20,
+        fontSize: 12,
+    },
+    custom_header: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        marginBottom: 15,
+    },
+    table: {
+        display: "table",
+        width: "100%",
+        borderCollapse: "collapse",
+    },
+    tableRow: {
+        flexDirection: "row",
+        borderBottom: "1px solid #EAECF0",
+    },
+    tableHeader: {
+        backgroundColor: "#F9FAFB",
+        fontSize: 12,
+        fontWeight: "bold",
+        padding: 8,
+        textAlign: "center",
+    },
+    tableCol: {
+        width: "10%", // Divide equally among 8 columns
+        padding: 6,
+        textAlign: "center",
+    },
+    medicineNameCol: {
+        width: "17%",
+        fontWeight: "bold",
+        padding: 6,
+        textAlign: "center",
+    },
+    remarksCol: {
+        width: "20%",
+        padding: 6,
+        textAlign: "center",
+    }
+});
+
+const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
+    console.log("patient details ", patientDetails);
+    return (
+        <Document>
+            <Page size="A4" style={styles.page}>
+                <View style={{ textAlign: 'center' }}>
+                    <Image
+                        src={Airavat}
+                        style={{ width: 150, height: 100, margin: 'auto', marginBottom: 5 }}
+                    />
+                </View>
+
+                <View style={styles.custom_header}>
+                    <View>
+                        <Text style={{ marginBottom: 10 }}><Text style={{ fontWeight: "bold" }}>Patient Name:</Text> {patientDetails?.Patient_Name}</Text>
+                        <Text><Text style={{ fontWeight: "bold" }}>Consulting Dr.:</Text> {patientDetails?.Doctor_Name}</Text>
+                    </View>
+                    <View>
+                        <Text style={{ marginBottom: 10 }}><Text style={{ fontWeight: "bold" }}>UH I’d Number:</Text> {patientDetails?.uh_id}</Text>
+                        <Text><Text style={{ fontWeight: "bold" }}>Date:</Text> {patientDetails?.RegisterDate?.split("T")[0]}</Text>
+                    </View>
+                </View>
+
+                <View style={{ width: '100%', borderTop: '1px solid #475467', marginTop: 8 }} />
+
+                <View style={{ marginBottom: 10, marginTop: 10 }}>
+                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>Prescription</Text>
+                </View>
+
+                {/* Table Header */}
+                <View style={styles.table}>
+                    <View style={[styles.tableRow, { backgroundColor: "#F9FAFB" }]}>
+                        <Text style={[styles.tableCol, { fontWeight: "bold" }]}>No</Text>
+                        <Text style={styles.medicineNameCol}>Medicine Name</Text>
+                        <Text style={[styles.tableCol, { fontWeight: "bold" }]}>Dose</Text>
+                        <Text style={[styles.tableCol, { fontWeight: "bold" }]}>Type</Text>
+                        <Text style={[styles.tableCol, { fontWeight: "bold", width: "12%" }]}>Frequency</Text>
+                        <Text style={[styles.tableCol, { fontWeight: "bold" }]}>Days</Text>
+                        <Text style={[styles.tableCol, { fontWeight: "bold", width: "11%" }]}>Quantity</Text>
+                        <Text style={[styles.remarksCol, { fontWeight: "bold" }]}>Remarks</Text>
+                    </View>
+
+                    {/* Table Rows */}
+                    {prescriptionData?.map((prescription, index) => (
+                        <View style={styles.tableRow} key={prescription.Prescription_Id}>
+                            <Text style={[styles.tableCol, { fontSize: '12px' }]}>{index + 1}</Text>
+                            <Text style={[styles.medicineNameCol, { fontSize: '12px' }]}>{prescription?.medicine_name}</Text>
+                            <Text style={[styles.tableCol, { fontSize: '12px' }]}>{prescription?.dosage}</Text>
+                            <Text style={[styles.tableCol, { fontSize: '12px' }]}>{prescription?.medicine_type}</Text>
+                            <Text style={[styles.tableCol, { width: "12%", fontSize: '12px' }]}>{prescription?.frequency}</Text>
+                            <Text style={[styles.tableCol, { fontSize: '12px' }]}>{prescription?.days}</Text>
+                            <Text style={[styles.tableCol, { width: "11%", fontSize: '12px' }]}>{prescription?.quantity}</Text>
+                            <Text style={[styles.remarksCol, { fontSize: '12px' }]}>{prescription?.common_note}</Text>
+                        </View>
+                    ))}
+                </View>
+            </Page>
+        </Document>
+    );
+};
+
+export default PrescriptionPDF;

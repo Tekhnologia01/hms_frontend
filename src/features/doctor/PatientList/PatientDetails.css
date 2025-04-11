@@ -1,0 +1,58 @@
+.patient-list-container {
+    padding: 15px 25px;
+    font-family: 'Inter', sans-serif;
+}
+
+.patient-list-container h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #101828;
+    font-family: 'Instrument Sans', sans-serif;
+}
+
+.patient-list-container>p {
+    margin-top: -16px;
+    font-size: 14px;
+    color: #344054;
+    font-family: 'Instrument Sans', sans-serif;
+}
+
+.patient-list-container>p span {
+    font-weight: 500;
+    color: #1D2939;
+}
+
+.patient-list-container .buttons {
+    display: flex;
+    gap: 20px;
+    margin-top: 25px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.patient-list-container .buttons .active {
+    border: none;
+    font-weight: 500;
+    color: #181818;
+    background-color: #fff;
+}
+
+.patient-list-container .buttons button {
+    height: 48px;
+    width: 200px;
+    background-color: transparent;
+    border: 1px solid #E5E5E5;
+    color: #7A7D84;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Instrument Sans', sans-serif;
+    transition: 0.3s ease-in-out;
+}
+
+.patient-list-container .buttons button:hover {
+    border: none;
+    font-weight: 500;
+    color: #101828;
+    background-color: #ffffff;
+}
+

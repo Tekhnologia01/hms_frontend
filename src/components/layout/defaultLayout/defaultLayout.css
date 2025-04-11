@@ -1,0 +1,19 @@
+.main-container {
+    width: calc(100vw - 302px);
+    margin-left: 285px;
+}
+
+@media screen and (max-width: 768px) {
+    .main-container {
+        width: calc(100vw - 102px);
+        margin-left: 85px;
+
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .main-container {
+        width: 100vw;
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,220 @@
+import { useEffect, useState } from "react";
+import vijay from "../../../assets/images/avatars/vijay1.jpg";
+import { FiEdit2 } from "react-icons/fi";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+import { FaAmazonPay, FaArrowLeft } from "react-icons/fa";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import CommonTable from "../../../components/table/CommonTable";
+import { IoInformationCircle, IoReceiptSharp } from "react-icons/io5";
+import PatientInfoModal from "./PatientInfoModal"; // Existing modal
+import PaymentModal from "./PaymentModal"; // New payment modal
+import { MdPayments } from "react-icons/md";
+
+function AdmitedDepatientBillDetals() {
+  const navigate = useNavigate();
+  const [doctors, setDoctors] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showInfoModal, setShowInfoModal] = useState(false); // State for info modal
+  const [showPaymentModal, setShowPaymentModal] = useState(false); // State for payment modal
+  const [selectedPatient, setSelectedPatient] = useState(null); // State for selected patient
+  const limitPerPage = 10;
+  const { role } = useSelector((state) => state?.auth?.user);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`
+        );
+        setDoctors(response?.data?.data);
+      } catch (err) {
+        console.log("Error fetching doctors => ", err);
+      }
+    };
+    fetchDoctors();
+  }, [currentPage]);
+
+  const columns = [
+    { name: "Patient Name", accessor: "Name", class: "py-3 px-4 text-left" },
+    { name: "Sex", accessor: "joining_date", class: "text-center px-1" },
+    { name: "Admit Date", accessor: "joining_date", class: "text-center px-1" },
+    { name: "Department", accessor: "degree", class: "py-3 text-center px-1" },
+    { name: "Paid Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+    { name: "R.Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+    { name: "Total Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+    { name: "Receipt", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+    { name: "Actions", accessor: "actions", class: "py-3 text-center px-1" },
+  ];
+
+  const handleShowInfoModal = (patient) => {
+    setSelectedPatient(patient);
+    setShowInfoModal(true);
+  };
+
+  const handleCloseInfoModal = () => {
+    setShowInfoModal(false);
+    setSelectedPatient(null);
+  };
+
+  const handleShowPaymentModal = (patient) => {
+    setSelectedPatient(patient);
+    setShowPaymentModal(true);
+  };
+
+  const handleClosePaymentModal = () => {
+    setShowPaymentModal(false);
+    setSelectedPatient(null);
+  };
+
+
+const renderRow = (item, index) => {
+  // Calculate total deposits
+  const totalDeposits = item.deposits?.reduce((sum, deposit) => sum + (deposit.amount || 0), 0) || 0;
+
+  // Calculate other charges
+  const otherCharges = item.othercharges?.reduce((sum, charge) => sum + (charge.amount || 0), 0) || 0;
+
+
+  const doctorCharge = item.doctorvisiting?.reduce((sum, visit) => sum + (visit.amount || 0), 0) || 0;
+
+  // Calculate total amount including other charges
+  const totalAmount = item.total_amount + otherCharges + doctorCharge;
+
+  // Calculate remaining amount
+  const remainingAmount = totalAmount - totalDeposits;
+
+  return (
+    <tr key={item.id || index} className="border-bottom text-center">
+      {/* Patient Information */}
+      <td className="px-2 text-start">
+        <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
+          <img
+            src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
+            alt={item.uh_id}
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+            className="ms-lg-3 mb-2 mb-lg-0"
+          />
+          <div className="d-flex flex-column ms-lg-2 text-center">
+            <p className="fw-semibold mb-0">{item.Name}</p>
+            <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
+              {item.uh_id}
+            </p>
+          </div>
+        </div>
+      </td>
+
+      {/* Patient Sex */}
+      <td className="py-3 px-2">{item.patient_sex ?? "-"}</td>
+
+      {/* Admitted Date */}
+      <td className="py-3 px-2">
+        {item.admitted_date
+          ? new Date(item.admitted_date * 1000).toLocaleDateString()
+          : "-"}
+      </td>
+
+      {/* Department */}
+      <td className="py-3 px-2">{item.department ?? "-"}</td>
+
+      {/* Total Deposits */}
+      <td className="py-3 px-2">{totalDeposits || "-"}</td>
+
+      {/* Remaining Amount */}
+      <td className="py-3 px-2">{remainingAmount >= 0 ? remainingAmount : "-"}</td>
+
+      {/* Total Amount */}
+      <td className="py-3 px-2">{totalAmount || "-"}</td>
+
+      {/* Actions */}
+      <td>
+        <IoReceiptSharp
+          style={{ height: "25px", width: "25px", cursor: "pointer" }}
+          onClick={() => navigate(`/accountant/bill/ipd/${item.admitted_patient_id}`) }       />
+      </td>
+      <td>
+      
+
+
+        <FaAmazonPay
+          style={{ height: "25px", width: "25px", cursor: "pointer" }}
+          onClick={() => navigate(`/accountant/bill/ipd/deposite/${item.admitted_patient_id}`) } />
+{/*     
+        <IoInformationCircle
+          style={{ height: "25px", width: "25px", cursor: "pointer" }}
+          onClick={() => handleShowInfoModal(item)}
+        /> */}
+        <span className="ps-3"></span>
+        <MdPayments
+          style={{ height: "25px", width: "25px", cursor: "pointer" }}
+          onClick={() => handleShowPaymentModal(item)}
+        />
+      </td>
+    </tr>
+  );
+};
+
+  return (
+    <>
+      <div className="px-3">
+        {/* <div
+          className="fw-semibold fs-6"
+          style={{ color: "#1D949A" }}
+          onClick={() => navigate(-1)}
+        >
+          <FaArrowLeft />
+          <span className="pt-1 px-2">Admited Patient List</span>
+        </div> */}
+        <div className="fw-bold py-4 fs-4">
+          <span>Admited Patient List</span>
+        </div>
+
+        <div>
+          <div>
+            <CommonTable
+              minimumWidth={"700px"}
+              headers={columns}
+              bodyData={doctors}
+              renderRow={renderRow}
+              title={"Doctor List"}
+            />
+          </div>
+          {doctors?.data?.length > 0 && (
+            <NewCommonPagination
+              currentPage={currentPage}
+              limitPerPage={limitPerPage}
+              totalRecords={doctors?.pagination?.TotalRecords}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Info Modal */}
+      <PatientInfoModal
+        show={showInfoModal}
+        handleClose={handleCloseInfoModal}
+        patient={selectedPatient}
+      />
+
+      {/* Payment Modal */}
+      <PaymentModal
+        show={showPaymentModal}
+        handleClose={handleClosePaymentModal}
+        patient={selectedPatient}
+      />
+    </>
+  );
+}
+
+export default AdmitedDepatientBillDetals;
+
+
+

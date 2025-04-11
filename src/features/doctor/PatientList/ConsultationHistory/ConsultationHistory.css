@@ -1,0 +1,76 @@
+.consultation-history-container .history {
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 12px 18px;
+    border: 1px solid #0000001A;
+}
+
+.consultation-history-container .history>h3 {
+    color: #232323;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.history-map .year-container .year {
+    font-size: 14px;
+    color: #232323;
+    font-weight: 600;
+}
+
+.history-map .year-container .history-cards {
+    display: flex;
+    margin-top: 0px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.history-item-container {
+    width: 247px;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.history-item-container .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.history-item-container .card-top .profile {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.history-item-container .card-top .profile>.icon {
+    height: 28px;
+    width: 28px;
+    font-weight: normal;
+    color: #00000033;
+}
+
+.history-item-container .card-top .profile>.name {
+    font-size: 12px;
+    color: #000000;
+    font-weight: 600;
+}
+
+.history-item-container .card-top .download>.icon {
+    height: 18px;
+    width: 15px;
+    cursor: pointer;
+    color: #3B9AB8;
+}
+
+.history-item-container .specialty-container {
+    background-color: #F6F6F6;
+    font-size: 14px;
+    color: #3B9AB8;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0px 8px;
+    border-radius: 4px;
+}
