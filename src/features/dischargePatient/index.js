@@ -1502,7 +1502,6 @@ const DischargePatient = () => {
             if (response?.data?.status) {
 
 
-                console.log("disfvvvvvvvvvvvvvvvvvvvvvvvvvv",response?.data?.data?.discharge_date)
                 // const dischargeDate = new Date(response?.data?.data?.discharge_date);
 
                 console.log("first", response?.data?.data)
@@ -1902,6 +1901,7 @@ const DischargePatient = () => {
                     show={showDischargeSheet}
                     setShow={setShowDischargeSheet}
                     data={dischargeDetails}
+                    
                 />
             </div>
         </>

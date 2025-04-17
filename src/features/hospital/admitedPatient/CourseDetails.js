@@ -40,6 +40,9 @@ function CourseDetails() {
     }
   }, [admitedId]);
 
+
+
+  
   useEffect(() => {
     const loadData = async () => {
       await fetchCourseData();
@@ -74,6 +77,8 @@ const addTreatmentPoint = async () => {
       setIsSaving(false);
     }
   };
+
+
   const startEditing = (point) => {
     setEditingPoint(point.id);
     setEditText(point.point_text || '');
@@ -138,7 +143,7 @@ const addTreatmentPoint = async () => {
       setIsSaving(true);
       setSaveStatus(null);
       
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/treatment/updatecourse`, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/treatment/addcourse`, {
         course_details: courseDetails,
         admited_id: admitedId
       });

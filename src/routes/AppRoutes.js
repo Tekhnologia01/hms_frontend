@@ -56,6 +56,7 @@ import Report from "../features/accountant/report/Report";
 import AdmitedPatientDetails from "../features/hospital/admitedPatient/AdmitedPatientDetails";
 import IpdBill from "../features/accountant/billAdmitedPatient.js/IpdBill";
 import DepositeReceipt from "../features/accountant/billAdmitedPatient.js/DepositeReceipt";
+import DischargeSummery from "../features/accountant/dischargeSummery/DischargeSummery";
 
 
 function AppRoutes({ getDefaultRoute }) {
@@ -101,10 +102,8 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/lab/lab_appointments/ipd/:labId" element={<LabAppointmentDetail  appointmenttype={"Ipd"}/>} />
         <Route path="/lab/lab_appointments/ipd/:labId/:appointmentId/:IpdLabId/update" element={<ViewIpdLabAppointment type={"update"} />} />
         <Route path="/lab/lab_appointments/ipd/:labId/:appointmentId/:IpdLabId/add" element={<ViewIpdLabAppointment type={"create"} />} />
-
         <Route path="/lab/lab_appointments/opd/:labId/:appointmentId/:IpdLabId/update" element={<ViewLabAppointment type={"update"} />} />
         <Route path="/lab/lab_appointments/opd/:labId/:appointmentId/:IpdLabId/add" element={<ViewLabAppointment type={"create"} />} />
-
         <Route path="/lab/lab_appointments/opd/:labId/:appointmentId" element={<ViewLabAppointment />} />
         <Route path="/lab/doctor_list" element={<HospitalDoctorList />} />
         <Route path="/lab/patient_list" element={<NursePatientList />} />
@@ -132,8 +131,11 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/reception/emergency" element={<Emergency />} />
         <Route path="/reception/emergency/add_patient" element={<AddEmergencyPatient />} />
         <Route path="/reception/billing/opd/:appointmentId" element={<BillDetails/>} />
-        <Route path="/reception/billing/ipd" element={<IPDBillList/>} />
- 
+        <Route path="/reception/billing/ipd" element={<AdmitedDepatientBillDetals/>} />
+        <Route path="/receptionist/bill/ipd/:admitedId" element={<IpdBill/>} />
+        <Route path="/receptionist/bill/ipd/deposite/:admitedId" element={<DepositeReceipt />} />
+
+
         {/* Doctor routes */}
         <Route path="/doctor" element={<DoctorDashboard />} />
         <Route path="/doctor/appointments" element={<DoctorAppointment />} />
@@ -151,25 +153,21 @@ function AppRoutes({ getDefaultRoute }) {
 
        {/* Accountant routes */}
        <Route path="/accountant" element={<AccountantDashboard />} />
-        <Route path="/accountant/discharge_summery" element={<DoctorAppointment />} />
+        <Route path="/accountant/discharge_summery" element={<DischargeSummery />} />
         <Route path="/accountant/bill" element={<AdmitedDepatientBillDetals />} />
         <Route path="/accountant/bill/ipd/deposite/:admitedId" element={<DepositeReceipt />} />
-
-        
         <Route path="/accountant/bill/ipd/:admitedId" element={<IpdBill />} />
         <Route path="/accountant/add_patient" element={<AddPatient />} />
         <Route path="/accountant/report" element={<Report/>} />
-        <Route path="/accountant/billing_history" element={<BillingHistory />} />
+        {/* <Route path="/accountant/billing_history" element={<BillingHistory />} /> */}
         <Route path="/accountant/account" element={<Account />} />
         <Route path="/accountant/settings" element={<Setting />} />
         <Route path="/accountant/billing/ipd" element={<Charges />} />
         <Route path="/accountant/billing/opd" element={<AddCharges />} />
-
       </Route>
 
 
-      
-
+    
       {/* Redirect to default route only for authenticated users */}
       <Route path="*" element={<Navigate to={getDefaultRoute()} replace />} />
     </Routes>

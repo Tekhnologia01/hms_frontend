@@ -24,7 +24,8 @@ function AccountantDashboard() {
 
     const fetchTodaysAppointments = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${todaysDate}`)
+            console.log("hello")
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`)
             console.log("Appointments data => ", response?.data?.data);
             setTodaysAppointments(response?.data?.data);
         } catch (err) {
@@ -33,6 +34,9 @@ function AccountantDashboard() {
     }
 
     useEffect(() => {
+
+
+    
         fetchTodaysAppointments();
     }, []);
 
@@ -263,12 +267,12 @@ function AccountantDashboard() {
                             <Table className="bordered">
                                 <tbody>
                                     {data.appointmentRequests.map((patient) => (
-                                        <tr key={patient.uhId}>
+                                        <tr key={patient.ipd_id}>
                                             <td style={{ bodystyle }}>
                                                 <div className="d-flex align-items-center">
                                                     <img
                                                         src={vijay}
-                                                        alt={patient.name}
+                                                        alt={patient?.Name}
                                                         style={{
                                                             width: "40px",
                                                             height: "40px",
@@ -277,7 +281,7 @@ function AccountantDashboard() {
                                                         }}
                                                     />
                                                     <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                        <p style={nameStyle}>{patient.name}</p>
+                                                        <p style={nameStyle}>{patient.Name}</p>
                                                         <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "14px" }}>Age: {patient.age} on {patient.date} at {patient.time}</p>
                                                     </div>
                                                 </div>
@@ -303,16 +307,19 @@ function AccountantDashboard() {
                     <Col xl={6} className="mt-4 mt-xl-0">
                         <div className="border" style={{ borderRadius: "5px", overflowX: "auto" }}>
                             <div className="border-bottom d-flex justify-content-between align-items-center">
-                                <div className="p-3 px-4 fs-5 fw-semibold">Todays Appointments</div>
+                                <div className="p-3 px-4 fs-5 fw-semibold">Admited Patients</div>
                             </div>
                             <Table className="bordered">
                                 <tbody>
                                     {todaysAppintments?.map((patient) => (
                                         <tr key={patient.Patient_Id}>
                                             <td style={{ bodystyle }}>
-                                                <div className="d-flex align-items-center">
+                                                <div className="d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex">
+
+                                               
                                                     <img
-                                                        src={patient.Patient_Photo ? `${process.env.REACT_APP_API_URL}/${patient.Patient_Photo}` : vijay}
+                                                        src={patient.Photo ? `${process.env.REACT_APP_API_URL}/${patient.Photo}` : vijay}
                                                         alt={patient.name}
                                                         style={{
                                                             width: "40px",
@@ -322,8 +329,15 @@ function AccountantDashboard() {
                                                         }}
                                                     />
                                                     <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                        <p style={nameStyle}>{patient.Patient_Name}</p>
+                                                        <p style={nameStyle}>{patient.Name}</p>
                                                         <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "14px" }}>Disease: {patient.Disease}</p>
+                                                    </div>
+
+                                                    </div>
+                                                    <p style={nameStyle}>{patient.doctor_name}</p>
+
+                                                    <div>
+
                                                     </div>
                                                 </div>
                                             </td>

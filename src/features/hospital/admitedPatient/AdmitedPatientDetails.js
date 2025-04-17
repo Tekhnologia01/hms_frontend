@@ -347,34 +347,35 @@ import axios from "axios";
 import AddCharges from "../../commonfeature/AddCharges";
 import DeleteConfirmationModal from "../../../components/common/DeleteModal";
 import AddVisit from "../../commonfeature/AddVisite";
-import { epochTimeToDate } from "../../../utils/epochToDate";
+import { convertEpochToDateTime, epochTimeToDate } from "../../../utils/epochToDate";
 import CourseDetails from "./CourseDetails";
+import CommanButton from "../../../components/common/form/commonButtton";
+import Setdicharge from "../../commonfeature/Setdischarge";
 function AdmitedPatientDetails() {
     const { admitedId } = useParams()
     const [patient, setPatient] = useState();
-
     const [charge, setCharges] = useState([]);
-
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deleteMessage, setDeleteMessage] = useState('');
     const [selectedcharges, setSelectedCharges] = useState({});
     const [doctorVisit, setDoctorVisits] = useState([]);
     const [selectedvisit, setSelectedvisit] = useState([]);
-
-
     const [status, setStatus] = useState()
+
+    const [showDischagredateModal, setShowDichagredateModal] = useState(false);
+    const handledischargedateModal = () => setShowDichagredateModal(true);
+    const handledischargedateCloseModal = () => setShowDichagredateModal(false);
+
 
     const [showAddChargesModal, setShowAddChargesModal] = useState(false);
     const handleAddChargesModal = () => setShowAddChargesModal(true);
     const handleAddChargesCloseModal = () => setShowAddChargesModal(false);
 
 
+
     const [showDoctorVisitModal, setShowDoctorVisitModal] = useState(false);
     const handleDoctorVisitModal = () => setShowDoctorVisitModal(true);
     const handleDoctorVisitCloseModal = () => setShowDoctorVisitModal(false);
-
-
-
     const fetchpatient = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patient_particular?admited_id=${admitedId}`)
@@ -384,8 +385,6 @@ function AdmitedPatientDetails() {
 
         }
     }
-
-
     const fetchCharges = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getipdpatientcharges?admited_id=${admitedId}`)
@@ -396,8 +395,6 @@ function AdmitedPatientDetails() {
 
         }
     }
-
-
     const fetchvisits = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getipddoctorvisits?admited_id=${admitedId}`)
@@ -407,9 +404,6 @@ function AdmitedPatientDetails() {
 
         }
     }
-
-
-
 
     useEffect(() => {
         fetchpatient();
@@ -454,7 +448,6 @@ function AdmitedPatientDetails() {
         </tr>
     );
 
-
     const renderRowdoctorvisit = (item) => (
         <tr key={item.id} className="border-bottom text-center">
             <td className="py-3 px-2">{item?.user_name}</td>
@@ -478,7 +471,6 @@ function AdmitedPatientDetails() {
         </tr>
     );
 
-
     const handleDelete = async () => {
         try {
 
@@ -496,8 +488,6 @@ function AdmitedPatientDetails() {
 
         }
     }
-
-
 
 
     return (
@@ -541,6 +531,18 @@ function AdmitedPatientDetails() {
                     </div>
                 </Col>
             </Row>
+
+
+            <div className="d-flex justify-content-end pe-3">
+                <span className="pe-3 pt-2">{epochTimeToDate(patient?.discharge_date)} </span>
+                <CommanButton
+                    onClick={() => handledischargedateModal()}
+                    label="Discharge Date"
+                    className="me-3 p-2 px-3 fw-semibold fs-6"
+                    style={{ borderRadius: "5px" }}
+                />
+            </div>
+
 
             <Row className="m-0 mt-4">
                 <Col lg={6} md={12} className="mb-4">
@@ -639,17 +641,12 @@ function AdmitedPatientDetails() {
                 </Col>
             </Row>
 
-
-
-<CourseDetails/>
-        
-
+            <CourseDetails />
 
 
 
             <AddCharges
                 admited={patient}
-                // patientUpdate={patientUpdate}
                 show={showAddChargesModal}
                 handleClose={() => {
                     handleAddChargesCloseModal();
@@ -657,6 +654,15 @@ function AdmitedPatientDetails() {
                 }}
             />
 
+
+           <Setdicharge
+                admited={patient}
+                show={showDischagredateModal}
+                handleClose={() => {
+                    handledischargedateCloseModal();
+                    fetchCharges()
+                }}
+            />
 
             <AddVisit
                 admited={patient}

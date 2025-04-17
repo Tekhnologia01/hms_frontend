@@ -360,6 +360,10 @@ const styles = StyleSheet.create({
 });
 
 const DischargeSheetPDF = ({ data, prescription }) => {
+
+
+
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>

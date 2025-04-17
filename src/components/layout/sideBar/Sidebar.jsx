@@ -172,8 +172,8 @@ function Sidebar({ isVisible, isCompact, role }) {
         label: "Billing & Charges",
         icon: <FiTag />,
         subLinks: [
-          { path: "/hospital/billing/ipd", label: "IPD Billing", icon: <FiTag /> },
-          { path: "/hospital/billing/opd", label: "OPD Billing", icon: <FiTag /> },
+          { path: "/hospital/billing/ipd", label: "Room Charges", icon: <FiTag /> },
+          { path: "/hospital/billing/opd", label: "Other Charges", icon: <FiTag /> },
         ],
       },
       { path: "/hospital/account", label: "Account", icon: <TbUser /> },
@@ -240,7 +240,7 @@ function Sidebar({ isVisible, isCompact, role }) {
     Accountant: [
       { path: "/accountant", label: "Dashboard", icon: <CgLoadbarSound /> },
       { path: "/accountant/bill", label: "Billing", icon: <FaCalendarPlus /> },
-      { path: "/accountant/billing_history", label: "Bill History", icon: <TbUsers /> },
+      // { path: "/accountant/billing_history", label: "Bill History", icon: <TbUsers /> },
       { path: "/accountant/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
       { path: "/accountant/report", label: "Report", icon: <FiTag /> },
       {

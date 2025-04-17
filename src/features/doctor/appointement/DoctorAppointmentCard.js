@@ -193,13 +193,39 @@ function DoctorAppointmentCard({
 
         <Col xl={2} lg={2} md={3} sm={12} xs={12} className="py-2">
           <div className="h-100 d-flex justify-content-center align-items-center">
-            <CommanButton
-             label="Monitor Patient"
+
+            {/* <CommanButton
+              label={appointmentData.Appointment_Status === "Completed" ? "Monitored Patient" : "Monitor Patient"}
               className="px-4 py-2 fs-6 fw-semibold w-100"
-              style={{ borderRadius: "5px" }}
-              onClick={() => { navigate(`${appointmentData?.Appointment_Id}`) }}
+              style={{ borderRadius:   "5px" }}
+              onClick={() => {
+                appointmentData.Appointment_Status === "Completed"
+                  ? navigate("/doctor/appointments")
+                  : navigate(`${appointmentData?.Appointment_Id}`);
+              }}
               aria-label="Monitor Patient Button"
-            />
+            /> */}
+
+
+<CommanButton
+  label={appointmentData.Appointment_Status === "Completed" ? "Monitored Patient" : "Monitor Patient"}
+  className="px-4 py-2 fs-6 fw-semibold w-100 text-white"
+  style={{
+    borderRadius: "5px",
+    backgroundColor: appointmentData.Appointment_Status === "Completed" ? "#6c757d" : "#198754", // gray or green
+  }}
+  onClick={() => {
+    appointmentData.Appointment_Status === "Completed"
+      ? navigate("/doctor/appointments")
+      : navigate(`${appointmentData?.Appointment_Id}`);
+  }}
+  aria-label="Monitor Patient Button"
+/>
+
+
+
+
+
           </div>
         </Col>
 

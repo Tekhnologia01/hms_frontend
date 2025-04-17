@@ -21,7 +21,8 @@ function AdmitedDepatientBillDetals() {
   const [showPaymentModal, setShowPaymentModal] = useState(false); // State for payment modal
   const [selectedPatient, setSelectedPatient] = useState(null); // State for selected patient
   const limitPerPage = 10;
-  const { role } = useSelector((state) => state?.auth?.user);
+  // const { role } = useSelector((state) => state?.auth?.user);
+  const { user } = useSelector((state) => state?.auth);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -135,17 +136,31 @@ const renderRow = (item, index) => {
 
       {/* Actions */}
       <td>
-        <IoReceiptSharp
-          style={{ height: "25px", width: "25px", cursor: "pointer" }}
-          onClick={() => navigate(`/accountant/bill/ipd/${item.admitted_patient_id}`) }       />
-      </td>
+  <IoReceiptSharp
+    style={{ height: "25px", width: "25px", cursor: "pointer" }}
+    onClick={() =>
+      user.RoleId == 4
+        ? navigate(`/receptionist/bill/ipd/${item.admitted_patient_id}`)
+        : navigate(`/accountant/bill/ipd/${item.admitted_patient_id}`)
+    }
+  />
+</td>
+
       <td>
       
-
+{/* <>/accountant/bill/ipd/</> */}
 
         <FaAmazonPay
           style={{ height: "25px", width: "25px", cursor: "pointer" }}
-          onClick={() => navigate(`/accountant/bill/ipd/deposite/${item.admitted_patient_id}`) } />
+
+
+
+          onClick={() =>
+            user.RoleId == 4
+              ? navigate(`/receptionist/bill/ipd/deposite/${item.admitted_patient_id}`)
+              :  navigate(`/accountant/bill/ipd/deposite/${item.admitted_patient_id}`)
+          }
+         />
 {/*     
         <IoInformationCircle
           style={{ height: "25px", width: "25px", cursor: "pointer" }}
@@ -183,7 +198,7 @@ const renderRow = (item, index) => {
               headers={columns}
               bodyData={doctors}
               renderRow={renderRow}
-              title={"Doctor List"}
+              title={"Patient List"}
             />
           </div>
           {doctors?.data?.length > 0 && (
