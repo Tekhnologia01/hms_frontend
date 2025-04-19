@@ -8,24 +8,34 @@ import CommonTable from "../../components/table/CommonTable";
 import NewCommonPagination from "../../components/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 
 function DoctorDashboard() {
-   const [admitedPatient,setAdmitedPatient]=useState([])
+    const [admitedPatient, setAdmitedPatient] = useState([])
     const { user } = useSelector(state => state?.auth);
-
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
     const [currentPage, setCurrentPage] = useState(1);
     const [limitPerPage, setLimitPerPage] = useState(10);
-    const totalRecords = 200;
-
+    const [patient, setPatient] = useState([])
+    const [appointementcount,setAppointmentcount]=useState()
     const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
     const [todaysAppintments, setTodaysAppointments] = useState([]);
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+
+
+
+    console.log(appointementcount)
+
 
     const fetchTodaysAppointments = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${todaysDate}`)
-            // console.log("Appointments data => ", response?.data?.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${todaysDate}`, config)
             setTodaysAppointments(response?.data?.data);
         } catch (err) {
             console.log("Error fetching appointments => ", err)
@@ -36,16 +46,42 @@ function DoctorDashboard() {
 
     const fetchIpdPatient = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patients`)
-            console.log("Appointments data => ", response?.data?.data.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patients`, config)
             setAdmitedPatient(response?.data?.data.data);
         } catch (err) {
             console.log("Error fetching appointments => ", err)
         }
     }
+
+
+    const fetchPatient = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_patient_createdby?userId=${user?.userId}`, config)
+            setPatient(response?.data?.data);
+        } catch (err) {
+            console.log("Error fetching appointments => ", err)
+        }
+    }
+
+
+    
+    const fetchappointmentcount = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_appointment_count?userId=${user?.userId}`, config)
+            setAppointmentcount(response?.data?.data);
+        } catch (err) {
+            console.log("Error fetching appointments => ", err)
+        }
+    }
+
+
+
+
     useEffect(() => {
         fetchTodaysAppointments();
         fetchIpdPatient();
+        fetchPatient();
+        fetchappointmentcount()
     }, []);
 
 
@@ -67,12 +103,11 @@ function DoctorDashboard() {
 
 
     const dataForBargraph = {
-
-        labels: ["January", "February", "March", "April", "May"], // Months
+        labels: appointementcount?.month,
         datasets: [
             {
                 label: "Active Doctors",
-                data: [100, 400, 600, 800, 1000], // Active doctor counts
+                data: appointementcount?.count, 
                 backgroundColor: "#1D949A", // Bar color
                 borderColor: "#1D949A", // Border color
                 barPercentage: 1.0, // Maximize bar width relative to category
@@ -89,82 +124,8 @@ function DoctorDashboard() {
 
     };
 
-    // Example data for the table
 
-    const data = {
-        appointmentRequests: [
-            {
-                uhId: 1212,
-                name: "Patient Name",
-                age: 23,
-                date: "Date",
-                time: "Time",
-                status: "Confirmed"
-            },
-            {
-                uhId: 2342,
-                name: "Patient Name",
-                age: 23,
-                date: "Date",
-                time: "Time",
-                status: "Pending"
-            },
-            {
-                uhId: 3432,
-                name: "Patient Name",
-                age: 23,
-                date: "Date",
-                time: "Time",
-                status: "Declined"
-            },
-            {
-                name: "Patient Name",
-                age: 23,
-                date: "Date",
-                time: "Time",
-                status: "Pending"
-            },
-        ],
-        todayAppointments: [
-            {
-                name: "Patient Name",
-                disease: "Disease",
-                time: "12:30"
-            },
-            {
-                name: "Patient Name",
-                disease: "Disease",
-                time: "01:30"
-            },
-            {
-                name: "Patient Name",
-                disease: "Disease",
-                time: "02:30"
-            },
-            {
-                name: "Patient Name",
-                disease: "Disease",
-                time: "03:30"
-            },
-        ],
-        recentPatients: [
-            {
-                name: "John Doe",
-                uhId: "UH12345",
-                sex: "Male",
-                age: 35,
-                appointmentFor: "Cancer"
-            },
-            {
-                name: "Jane Smith",
-                uhId: "UH67890",
-                sex: "Female",
-                age: 29,
-                appointmentFor: "Consultation"
-            },
-        ],
 
-    }
 
 
     const nameStyle = {
@@ -179,27 +140,10 @@ function DoctorDashboard() {
         color: "#475467"
     };
 
-    const confirmedStyle = {
-        backgroundColor: "#EFFBE7",
-        color: "#095512",
-        fontSize: "14px"
-    }
 
-    const pendingStyle = {
-        backgroundColor: "#FDF8E4",
-        color: "#905900",
-        fontSize: "14px"
-    }
-
-    const declinedStyle = {
-        backgroundColor: "#FDE4E4",
-        color: "#905900",
-        fontSize: "14px"
-    }
 
 
     const columns = [
-        // { name: "", accessor: "checkbox", class: "w-auto" },
         { name: "Patient Name", accessor: "doctorName", class: "py-3 w-50 ps-5 text-left" },
         { name: "UH ID", accessor: "uhId", class: "text-center px-1" },
         { name: "Age", accessor: "age", class: "py-3 text-center px-1" },
@@ -210,15 +154,10 @@ function DoctorDashboard() {
         <tr key={item.id} className="border-bottom text-center">
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
-                    <div className="ps-2">
-                        <input
-                            type="checkbox"
-                            style={{ transform: "scale(1.5)", cursor: "pointer" }}
-                        />
-                    </div>
+
                     <img
                         src={vijay}
-                        alt={item.name}
+                        alt={item.patient_image}
                         style={{
                             width: "40px",
                             height: "40px",
@@ -228,14 +167,14 @@ function DoctorDashboard() {
                         className="ms-3"
                     />
                     <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                        <p className="fw-semibold">{item.name}</p>
-                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>Appoinement for {item.appointmentFor}</p>
+                        <p className="fw-semibold">{item.patient_name}</p>
+                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>UH_ID: {item.uh_id}</p>
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item.uhId}</td>
-            <td className="py-3 px-2">{item.age}</td>
-            <td className="py-3 px-2">{item.sex}</td>
+            <td className="py-3 px-2">{item.uh_id}</td>
+            <td className="py-3 px-2">{item.patient_age}</td>
+            <td className="py-3 px-2">{item.patient_sex}</td>
         </tr>
     );
 
@@ -356,12 +295,9 @@ function DoctorDashboard() {
 
                 <div className="mt-4">
                     <div>
-                        <CommonTable minimumWidth={"800px"} headers={columns} bodyData={data.recentPatients} renderRow={renderRow} title={"Recent Patients List"} />
+                        <CommonTable minimumWidth={"800px"} headers={columns} bodyData={patient} renderRow={renderRow} title={"Recent Patients List"} />
                     </div>
-                    {
-                        data.recentPatients.length > 0 &&
-                        <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={totalRecords} setCurrentPage={setCurrentPage} />
-                    }
+
                 </div>
             </div>
         </>

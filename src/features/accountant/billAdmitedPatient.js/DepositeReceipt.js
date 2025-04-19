@@ -13,16 +13,19 @@ function DepositeReceipt() {
   const params = useParams();
   const [details, setDetails] = useState(null);
   const { user } = useSelector((state) => state?.auth);
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    
   const fetchReceipt = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientreceipt/`,
-        {
-          params: {admited_id: params.admitedId }
-        }
+        `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientreceipt/?admited_id=${params.admitedId}`,
+        config
       );
-      console.log("first",response.data.data[0][0])
 
       setDetails(response?.data?.data[0][0]);
     } catch (error) {

@@ -9,8 +9,6 @@ import AddChargesModal from "./AddChargesModal";
 import CommonTable from "../../../components/table/CommonTable";
 
 function AddCharges() {
-
-
     const user =useSelector(state => state?.auth?.user)    
     const [status, setStatus] = useState(1);
     const [chargesData, setChargesData] = useState([]);
@@ -19,7 +17,12 @@ function AddCharges() {
     const handleCloseModal = () => setShowModal(false);
     const userId = useSelector(state => state?.auth?.user?.userId);
     const [charges, setCharges] = useState(null);
-
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     const columns = [
         { name: "Sr No.", accessor: "index", class: "text-center" },
         { name: "Name", accessor: "name", class: "text-center px-1" },
@@ -54,7 +57,7 @@ function AddCharges() {
 
     const fetchChargesData = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`,config);
 
             setChargesData(response?.data?.data);
         } catch (error) {
@@ -75,7 +78,7 @@ function AddCharges() {
                 fees_amount: chargeData.fees,
                 created_by: userId
             };
-            await axios.post(`${process.env.REACT_APP_API_URL}/fees/addcharges`, data);
+            await axios.post(`${process.env.REACT_APP_API_URL}/fees/addcharges`, data,config);
             fetchChargesData();
             handleCloseModal();
         } catch (error) {
@@ -92,7 +95,7 @@ function AddCharges() {
                 fees_amount: chargeData.fees,
             };
 
-            await axios.post(`${process.env.REACT_APP_API_URL}/fees/updatedcharges`, data);
+            await axios.post(`${process.env.REACT_APP_API_URL}/fees/updatedcharges`, data,config);
             fetchChargesData();
             handleCloseModal();
         } catch (error) {
@@ -102,10 +105,7 @@ function AddCharges() {
 
     const handleDeleteCharges = async (id) => {
         try {
-
-
-            console.log("Deletedid",id)
-            await axios.delete(`${process.env.REACT_APP_API_URL}/fees/deletecharges/${id}`);
+            await axios.delete(`${process.env.REACT_APP_API_URL}/fees/deletecharges/${id}`,config);
             fetchChargesData();
         } catch (error) {
             console.error(error);

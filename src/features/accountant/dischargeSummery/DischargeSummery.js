@@ -7,22 +7,25 @@ import { Form, OverlayTrigger } from "react-bootstrap";
 import ViewDischargeSheet from "../../dischargePatient/ViewDischargeSheet";
 import { FaCheck } from "react-icons/fa";
 import { Tooltip } from 'react-bootstrap';
+import { useSelector } from "react-redux";
 function DischargeSummery() {
     const [doctors, setDoctors] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [showDischargeSheet, setShowDischargeSheet] = useState(false);
     const [ipdid, setIpdId] = useState()
-
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
-
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     // Function to fetch discharged patients based on selected date
     const fetchDoctors = async () => {
         try {
             // Convert selected date to Unix timestamp (seconds)
             const dateTimestamp = Math.floor(new Date(selectedDate).getTime() / 1000);
-            const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`
-            );
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`,config);
 
             setDoctors(response?.data?.data[0]);
         } catch (err) {
@@ -61,9 +64,9 @@ function DischargeSummery() {
 
 
     const handleStatus= async(id)=>{
-
         try {
-            const response=await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`)
+
+            const response=await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`,config)
             fetchDoctors()
         } catch (error) {
             

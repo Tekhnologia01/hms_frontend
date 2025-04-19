@@ -9,10 +9,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import CommonTable from "../../../components/table/CommonTable";
 import axios from "axios";
 import { MdOutlineOpenWith } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 function LabAppointmentDetail({ appointmenttype }) {
     const navigate = useNavigate();
     const params = useParams();
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     const labData = {
         labName: "Covid RT-PCR",
         description: "Infectious Diseases Hub aims to provide up-to-date, essential research and on aspects of microbiology, virology, and parasitology.",
@@ -121,7 +128,7 @@ function LabAppointmentDetail({ appointmenttype }) {
                 url = `${process.env.REACT_APP_API_URL}/lab/getipdlabtest?test_id=${params?.labId}`;
             }
 
-            const response = await axios.get(url);
+            const response = await axios.get(url,config);
             setPatientList(response?.data?.data?.data);
             setTestData(response?.data?.data?.test[0]);
         } catch (error) {
@@ -133,7 +140,6 @@ function LabAppointmentDetail({ appointmenttype }) {
         getPatientsData();
     }, [])
 
-    console.log(testData);
 
     return (
         <>

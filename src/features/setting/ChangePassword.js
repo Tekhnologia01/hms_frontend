@@ -12,13 +12,18 @@ function ChangePassword() {
     confirmPassword: "",
   });
   const userId = useSelector(state => state?.auth?.user?.userId);
-
   const [errors, setErrors] = useState({});
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   const validateForm = () => {
     let newErrors = {};
 
@@ -38,30 +43,30 @@ function ChangePassword() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFormSubmit = async() => {
-try {
+  const handleFormSubmit = async () => {
+    try {
       if (validateForm()) {
-  
+
         const payload = {
-          user_id:userId,
-          current_password:formData.currentPassword,
-          new_password:formData.newPassword
+          user_id: userId,
+          current_password: formData.currentPassword,
+          new_password: formData.newPassword
+        }
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/changepassword`, payload, config);
+
+
+
+        if (response?.data?.status) {
+          alert(response?.data?.message);
+        }
       }
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/changepassword`, payload);
+    } catch (error) {
+
+      console.log(error?.response?.data?.status)
+      alert(error?.response?.data?.message);
 
 
-
-if(response?.data?.status){
-  alert(response?.data?.message);
-}
-      }
-} catch (error) {
-
-  console.log(error?.response?.data?.status)
-  alert(error?.response?.data?.message);
-
-  
-}
+    }
   };
 
   return (

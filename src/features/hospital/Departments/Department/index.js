@@ -7,27 +7,28 @@ import CommonTable from "../../../../components/table/CommonTable";
 import NewCommonPagination from "../../../../components/pagination/NewCommonPagination";
 import axios from "axios";
 import { showToast } from "../../../../components/common/Toaster";
+import { useSelector } from "react-redux";
 
 function Department() {
   const navigate = useNavigate();
-
   const [selectedCard, setSelectedCard] = useState("staff");
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [selectedData, setSelectedData] = useState(null);
   const [userCount, setUserCount] = useState([]);
-
   const params = useParams();
   const { deptId } = params;
-
   const [currentPage, setCurrentPage] = useState(1);
   const [limitPerPage, setLimitPerPage] = useState(10);
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
   const fetchCount = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/DepartmentWiseCount?department_id=${deptId}`)
-      console.log(response?.data?.data);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/DepartmentWiseCount?department_id=${deptId}`,config)
       setUserCount(response?.data?.data);
     } catch (err) {
       console.log(err)
@@ -59,7 +60,7 @@ function Department() {
 
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}${endpoint}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}${endpoint}`,config);
       setSelectedData(response?.data?.data || null);
     } catch (error) {
       console.error(`Error fetching ${selectedCard} data:`, error);

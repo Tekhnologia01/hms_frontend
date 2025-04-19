@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const BillPDF = ({ billData }) => {
+const BillPDF = ({ billData,discount }) => {
   const calculateRoomDays = (startDate, endDate) => {
     if (!endDate) {
       const now = Math.floor(Date.now() / 1000);
@@ -236,15 +236,27 @@ const BillPDF = ({ billData }) => {
             </View>
           ))}
 
+
+         <View style={styles.totalRow}>
+            <Text style={[styles.tableCellLeft, { flex: 4, textAlign: 'right', borderRightWidth: 0 }]}>
+              Discount
+            </Text>
+            <Text style={[styles.tableCell, { fontWeight: 'bold', borderRightWidth: 0 }]}>
+              ₹{discount}
+            </Text>
+          </View>
+
           {/* Total Row */}
           <View style={styles.totalRow}>
             <Text style={[styles.tableCellLeft, { flex: 4, textAlign: 'right', borderRightWidth: 0 }]}>
               Grand Total
             </Text>
             <Text style={[styles.tableCell, { fontWeight: 'bold', borderRightWidth: 0 }]}>
-              ₹{totalAmount}
+              ₹{totalAmount-discount}
             </Text>
           </View>
+
+
         </View>
 
         {/* Payment Mode with smaller font */}

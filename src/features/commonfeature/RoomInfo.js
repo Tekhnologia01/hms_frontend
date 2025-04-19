@@ -33,7 +33,12 @@ function RoomInfo() {
     const [bed, setBed] = useState(null)
     const [room, setRoom] = useState(null)
 
-
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     ////////////////////////////////FetchData()///////////////////////////////
     const fetchdata = async () => {
         try {
@@ -47,7 +52,7 @@ function RoomInfo() {
             } else if (cardState === "Bed") {
                 endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?page=${currentPage}&limit=${limitPerPage}`;
             }
-            const response = await axios.get(endpoint);
+            const response = await axios.get(endpoint,config);
             setDoctors(response?.data?.data || []);
         } catch (err) {
             showToast("Error fetching data", "error");
@@ -62,7 +67,7 @@ function RoomInfo() {
 
     const fetchCount = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroombedcount`)
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroombedcount`,config)
             setUserCount(response?.data?.data);
         } catch (err) {
             showToast("Error fetching user count", "error");
@@ -222,7 +227,7 @@ function RoomInfo() {
                 "bed_name": bedData.bedName,
                 "room_id": bedData.roomId
             }
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addbed/${userId}`, data)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addbed/${userId}`, data,config)
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
@@ -245,7 +250,7 @@ function RoomInfo() {
                 "room_name": RoomData.room_name,
                 "max_bed": RoomData.max_bed
             }
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addroom/${userId}`, data)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addroom/${userId}`, data,config)
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
@@ -268,7 +273,7 @@ function RoomInfo() {
                 "bed_id": bedData.bedId,
                 "room_id": bedData.roomId
             }
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/updatebed`, data)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/updatebed`, data,config)
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
@@ -292,7 +297,7 @@ function RoomInfo() {
                 "room_name": values?.room_name,
                 "max_bed": values?.max_bed
             }
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/roombed/updateroom/${room?.room_id}`, data)
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/roombed/updateroom/${room?.room_id}`,data,config)
             if (response.data?.status) {
                 fetchdata();
                 fetchCount();
@@ -310,7 +315,7 @@ function RoomInfo() {
     const handleDeleteRoom = async () => {
         try {
             if (deleteItem) {
-                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deleteroom/${deleteItem?.room_id}`, data)
+                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deleteroom/${deleteItem?.room_id}`,config)
                 if (response.data?.status) {
                     fetchdata();
                     fetchCount();
@@ -331,7 +336,7 @@ function RoomInfo() {
         try {
             if (deleteItem) {
                 if (deleteItem?.bed_id) {
-                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deletebed/${deleteItem?.bed_id}`)
+                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deletebed/${deleteItem?.bed_id}`,config)
                     if (response.data?.status) {
                         fetchdata();
                         fetchCount();

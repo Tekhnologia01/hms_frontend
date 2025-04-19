@@ -6,6 +6,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
 import NewCommonPagination from "../../../../components/pagination/NewCommonPagination";
 import CommonTable from "../../../../components/table/CommonTable";
+import { useSelector } from "react-redux";
 
 function IPDBillList() {
   const navigate = useNavigate();
@@ -13,7 +14,12 @@ function IPDBillList() {
   const [doctors, setDoctors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const limitPerPage = 10;
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date().toISOString().split("T")[0]; // Format to YYYY-MM-DD
     return today;
@@ -24,16 +30,10 @@ function IPDBillList() {
   const fetchDetails = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/appointment/getappointmentdatewise`, {
-        params: {
-          appointment_date: selectedDate,
-          page: currentPage,
-          limit: limitPerPage,
-        },
-      }
+        `${process.env.REACT_APP_API_URL}/appointment/getappointmentdatewise?appointment_date=${selectedDate}&page=${currentPage}&limit=${limitPerPage}`,
+       config
       );
 
-      console.log("first", response.data)
       setDoctors(response?.data?.data);
     } catch (err) {
       console.log("Error fetching doctors => ", err);

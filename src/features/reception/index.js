@@ -11,6 +11,7 @@ import CommonTable from "../../components/table/CommonTable";
 import NewCommonPagination from "../../components/pagination/NewCommonPagination";
 import { addYears } from "date-fns";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function ReceptionDashboard() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +20,13 @@ function ReceptionDashboard() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [doctorsData,setDoctorsData]=useState([])
     const [totalPages,setTotalPages]=useState()
+
+    const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
@@ -54,37 +62,9 @@ function ReceptionDashboard() {
 
     };
 
-    // Example data for the table
-    // const patients = [
-    //     {
-    //         patientName: "John Doe",
-    //         uhId: "UH12345",
-    //         sex: "Male",
-    //         appointmentFor: "Consultation",
-    //         age: 35,
-    //         status: "Schedule",
-    //         price: 6000,
-    //     },
-    //     {
-    //         patientName: "Jane Smith",
-    //         uhId: "UH67890",
-    //         sex: "Female",
-    //         appointmentFor: "Checkup",
-    //         age: 29,
-    //         status: "Pending",
-    //         price: 4000,
-    //     },
-    // ];
-
-
-
-
-
-
-
     const fetchPatient=async()=>{
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`,config);
             setPatients(response?.data?.data);
             setTotalPages(response?.data?.data?.pagination?.TotalPages);
           } catch (err) {
@@ -94,20 +74,32 @@ function ReceptionDashboard() {
 
 
 
-    const fetchDoctor=async()=>{
+    // const fetchDoctor=async()=>{
+    //     try {
+    //         const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=2025-04-08`,config);
+    //         setDoctorsData(response?.data?.data);
+    //         setTotalPages(response?.data?.data?.pagination?.TotalPages);
+    //       } catch (err) {
+    //         console.log("Error fetching departments:", err);
+    //       }
+    // }
+
+
+    const fetchDoctor = async () => {
+        const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+      
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=2025-04-08`);
-            console.log("appooijofdng => ", response?.data?.data);
-            setDoctorsData(response?.data?.data);
-            setTotalPages(response?.data?.data?.pagination?.TotalPages);
-          } catch (err) {
-            console.log("Error fetching departments:", err);
-          }
-    }
-
-
-   
-
+          const response = await axios.get(
+            `${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=${today}`,
+            config
+          );
+          setDoctorsData(response?.data?.data);
+          setTotalPages(response?.data?.data?.pagination?.TotalPages);
+        } catch (err) {
+          console.log("Error fetching doctors:", err);
+        }
+      };
+      
 
     useEffect(()=>{
         fetchPatient();
@@ -116,52 +108,6 @@ function ReceptionDashboard() {
 
 
 
-
-    
-
-
-    const upcomingAppointment = [
-        {
-            id: 1,
-            doctorName: "Doctor Name",
-            image: vijay,
-            speciality: "Nuerosurgen",
-            scheduleDate: "Date",
-            appointmentTime: "Time",
-            onCancelAppointment: () => console.log("Cancel Appointment clicked"),
-            onReschedule: () => console.log("Reschedule Appoinement clicked")
-        },
-        {
-            id: 2,
-            doctorName: "Doctor Name",
-            image: vijay,
-            speciality: "Homeopathe",
-            scheduleDate: "Date",
-            appointmentTime: "Time",
-            onCancelAppointment: () => console.log("Cancel Appointment clicked"),
-            onReschedule: () => console.log("Reschedule Appoinement clicked")
-        },
-        {
-            id: 3,
-            doctorName: "Doctor Name",
-            image: vijay,
-            speciality: "Nuerosurgen",
-            scheduleDate: "Date",
-            appointmentTime: "Time",
-            onCancelAppointment: () => console.log("Cancel Appointment clicked"),
-            onReschedule: () => console.log("Reschedule Appoinement clicked")
-        },
-        {
-            id: 4,
-            doctorName: "Doctor Name",
-            image: vijay,
-            speciality: "Cancer",
-            scheduleDate: "Date",
-            appointmentTime: "Time",
-            onCancelAppointment: () => console.log("Cancel Appointment clicked"),
-            onReschedule: () => console.log("Reschedule Appoinement clicked")
-        },
-    ]
 
     const confirmedStyle = {
         backgroundColor: "#EFFBE7",
@@ -182,14 +128,12 @@ function ReceptionDashboard() {
     }
 
     const columns = [
-        // { name: "", accessor: "checkbox", class: "w-auto" },
         { name: "Patient Name", accessor: "patientName", class: "py-3 px-5 text-left", width: "350px" },
         { name: "UH ID", accessor: "uhId", class: "text-center px-1" },
         { name: "Age", accessor: "age", class: "py-3 text-center px-1" },
         { name: "Sex", accessor: "sex", class: "py-3 text-center px-1" },
         { name: "Status", accessor: "status", class: "py-3 text-center px-1", width: "140px" },
-        // { name: "Price", accessor: "price", class: "py-3 text-center px-1", },
-        // { name: "Action", accessor: "action", class: "py-3 text-center px-1" }
+
     ];
 
     const renderRow = (item, index) => (
@@ -241,6 +185,7 @@ function ReceptionDashboard() {
             </td> */}
         </tr>
     );
+
 
     return (
         <>

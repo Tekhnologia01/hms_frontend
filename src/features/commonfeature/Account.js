@@ -14,10 +14,15 @@ function Account() {
     const { user } = useSelector(state => state?.auth);
     const [bloodGroups, setBloodGroups] = useState([]);
     const [previewImage, setPreviewImage] = useState(null);
-
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     async function getProfile() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${user?.userId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${user?.userId}`,config);
             formik.setValues(response?.data?.data);
             if (!response?.data?.data?.photo) {
                 setPreviewImage(defaultProfile);
@@ -29,7 +34,7 @@ function Account() {
 
     const fetchblood = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`,config);
             setBloodGroups(response?.data?.data);
         } catch (err) {
             console.log("Error fetching blood group:", err);
@@ -56,6 +61,7 @@ function Account() {
         try {
             const response = await axios.put(`${process.env.REACT_APP_API_URL}/user/accountUpdate`, formData, {
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 }
             });

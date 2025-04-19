@@ -10,19 +10,22 @@ import { epochTimeToDate } from "../../../utils/epochToDate";
 
 function PatientList() {
   const navigate = useNavigate();
-
   const [patients, setPatients] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const limitPerPage = 10;
-
   const { user } = useSelector(state => state?.auth);
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getAllApointmentDoctorswise?doctor_id=${user?.userId}&page=${currentPage}&limit=${limitPerPage}`);
-        console.log("Patient list response => ", response.data?.data)
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getAllApointmentDoctorswise?doctor_id=${user?.userId}&page=${currentPage}&limit=${limitPerPage}`,config);
         setPatients(response?.data?.data);
       } catch (err) {
         console.log("Error fetching patients => ", err)

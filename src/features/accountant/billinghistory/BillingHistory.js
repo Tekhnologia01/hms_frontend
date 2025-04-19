@@ -15,11 +15,17 @@ function BillingHistory() {
   const [currentPage, setCurrentPage] = useState(1);
   const limitPerPage = 10;
   const { role } = useSelector(state => state?.auth?.user);
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/get?page=${currentPage}&limit=${limitPerPage}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/get?page=${currentPage}&limit=${limitPerPage}`,config);
         console.log("Doctor list response => ", response.data)
         setDoctors(response?.data?.data);
       } catch (err) {

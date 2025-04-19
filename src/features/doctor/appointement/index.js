@@ -11,7 +11,12 @@ function DoctorAppointment() {
   const [appointmentData, setAppointmentData] = useState([]);
   const [days, setDays] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   const [selectedDay, setSelectedDay] = useState(() => {
     const today = new Date().getDay();
     return today === 0 ? 7 : today;
@@ -22,7 +27,7 @@ function DoctorAppointment() {
 
   const getDays = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getday`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getday`,config);
       // console.log(response);
       setDays(response?.data?.data)
     } catch (err) {
@@ -32,7 +37,7 @@ function DoctorAppointment() {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${selectedDate}`)
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${selectedDate}`,config)
       console.log("Appointments data => ", response?.data?.data);
       setAppointmentData(response?.data?.data);
     } catch (err) {

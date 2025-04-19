@@ -7,8 +7,16 @@ import Note from "../../../components/common/form/textarea";
 import InputBox from "../../../components/common/form/inputbox";
 import MultiSelectWithDropdown from "../../../components/common/form/multiselect";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const AddTest = ({ show, handleClose, handleTestSave }) => {
+
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   const closeIconStyle = {
     position: "absolute",
     top: "20px",
@@ -51,7 +59,7 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
 
   async function getTest() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`,config);
       setTests(response?.data?.data);
     } catch (error) {
 

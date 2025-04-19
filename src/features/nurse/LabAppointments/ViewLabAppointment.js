@@ -33,11 +33,20 @@ function ViewLabAppointment({ type }) {
   const [appointmentData, setAppointmentData] = useState([]);
   const params = useParams();
 
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+
+
 
 
   const initialState = {
     report_photo: "",
-    report_test_id: +params.labId,
+    report_test_id: +params.IpdLabId,
     report_appo_id: +params.appointmentId,
   }
   const [formData, setFormData] = useState(initialState);
@@ -48,6 +57,7 @@ function ViewLabAppointment({ type }) {
 
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/report/add`, formData, {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data"
           }
         });
@@ -58,7 +68,7 @@ function ViewLabAppointment({ type }) {
             labTestId: +params?.IpdLabId,
             testStatus: "Completed"
           }
-          await axios.post(`${process.env.REACT_APP_API_URL}/lab/updatelabtest`, payload);
+          await axios.post(`${process.env.REACT_APP_API_URL}/lab/updatelabtest`, payload,config);
           navigate(-1);
         }
         else {
@@ -90,6 +100,7 @@ function ViewLabAppointment({ type }) {
 
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/report/opdupdate`, formDataObj, {
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data"
         }
       });
@@ -109,7 +120,7 @@ function ViewLabAppointment({ type }) {
 
   async function getAppointementDetail() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`,config);
       setAppointmentData(response?.data?.data);
     } catch (error) {
 

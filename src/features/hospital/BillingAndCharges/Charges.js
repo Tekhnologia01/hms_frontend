@@ -18,13 +18,19 @@ function Charges() {
   const [chargesData, setChargesData] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   const handleEditClass = async (newData) => {
     // Add your Edit Class logic here
 
     try {
-      const config = {
-        headers: { "Content-Type": "application/json" }
-      }
+      // const config = {
+      //   headers: { "Content-Type": "application/json" }
+      // }
 
       const response = isEdit ?
         await axios.put(`${process.env.REACT_APP_API_URL}/bill/UpdateBillingAndCharges/${newData?.billing_and_charges_no}`, newData, config) :
@@ -45,7 +51,7 @@ function Charges() {
   const fetchChargesData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/bill/GetAllBillingAndCharges`
+        `${process.env.REACT_APP_API_URL}/bill/GetAllBillingAndCharges`,config
       )
       setChargesData(response?.data?.data[0]);
     } catch (err) {

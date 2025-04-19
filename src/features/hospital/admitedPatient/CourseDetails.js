@@ -1,11 +1,10 @@
-
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Form, Button, ListGroup, InputGroup, Row, Col, Alert, Spinner } from 'react-bootstrap';
 import { FaPlus, FaEdit, FaTrash, FaSave, FaBook } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
 function CourseDetails() {
   const { admitedId } = useParams();
   const [courseDetails, setCourseDetails] = useState('');
@@ -15,11 +14,16 @@ function CourseDetails() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   const fetchCourseData = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${admitedId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${admitedId}`,config);
       setCourseDetails(response?.data?.data?.course_details || '');
     } catch (error) {
       setSaveStatus({ variant: 'danger', message: error.message || 'Failed to load course' });
@@ -30,7 +34,7 @@ function CourseDetails() {
 
   const fetchTreatmentPoints = useCallback(async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/gettreatmnts?admited_id=${admitedId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/gettreatmnts?admited_id=${admitedId}`,config);
       if (response.data?.data) {
         setTreatmentPoints(response.data.data);
       }
@@ -64,7 +68,7 @@ const addTreatmentPoint = async () => {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/treatment/addtreatment`, {
         admited_id: admitedId,
         treatment_point: editText
-      });
+      },config);
   
       // Even if response doesn't contain data key, assume success for now
       await fetchTreatmentPoints();
@@ -95,7 +99,7 @@ const addTreatmentPoint = async () => {
       await axios.put(`${process.env.REACT_APP_API_URL}/treatment/updatetreatment`, {
         treatment_id: editingPoint,
         treatment_point: editText
-      });
+      },config);
 
       setTreatmentPoints(prev => 
         prev.map(point => 
@@ -122,8 +126,7 @@ const addTreatmentPoint = async () => {
     try {
       setIsSaving(true);
 
-      await axios.delete(`${process.env.REACT_APP_API_URL}/treatment/deletetreatment?treatment_id=${id}`, {
-      });
+      await axios.delete(`${process.env.REACT_APP_API_URL}/treatment/deletetreatment?treatment_id=${id}`,config);
       fetchTreatmentPoints()
       setSaveStatus({ variant: 'success', message: 'Treatment point deleted successfully' });
     } catch (error) {
@@ -146,7 +149,7 @@ const addTreatmentPoint = async () => {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/treatment/addcourse`, {
         course_details: courseDetails,
         admited_id: admitedId
-      });
+      },config);
 
       setSaveStatus({ 
         variant: 'success', 
@@ -169,7 +172,7 @@ const addTreatmentPoint = async () => {
   }
 
   return (
-    <Container className="py-4">
+    <div className="p-3">
       <Row className="mb-4">
         <Col>
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -197,11 +200,11 @@ const addTreatmentPoint = async () => {
             </Button>
           </div>
 
-          {saveStatus && (
+          {/* {saveStatus && (
             <Alert variant={saveStatus.variant} className="mt-3" onClose={() => setSaveStatus(null)} dismissible>
               {saveStatus.message}
             </Alert>
-          )}
+          )} */}
 
           <Form.Group controlId="courseDetails">
             <Form.Control
@@ -346,7 +349,7 @@ const addTreatmentPoint = async () => {
           )}
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 }
 

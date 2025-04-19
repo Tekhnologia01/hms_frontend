@@ -18,10 +18,13 @@ function AddUserForm({ user }) {
     const [days, setDays] = useState([]);
     const [errors, setErrors] = useState({});
     const [bloodGroups, setBloodGroups] = useState([]);
-
     const userId = useSelector(state => state?.auth?.user?.userId);
-
-    // const role_id = useSelector((state) => state?.auth?.user?.RoleId)
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
     let role_id;
 
@@ -35,7 +38,7 @@ function AddUserForm({ user }) {
 
     async function getDepartments() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`,config);
             setDepartments(response?.data?.data);
         } catch (err) {
             showToast("Error fetching departments", "error");
@@ -44,7 +47,7 @@ function AddUserForm({ user }) {
 
     async function getShifts() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getshift`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getshift`,config);
 
             setShifts(response?.data?.data);
         } catch (err) {
@@ -55,7 +58,7 @@ function AddUserForm({ user }) {
     async function getDays() {
         try {
 
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getday`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getday`,config);
             setDays(response?.data?.data)
         } catch (err) {
 
@@ -205,9 +208,12 @@ function AddUserForm({ user }) {
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/${user?.toLowerCase()}/add`, formDataObj, {
-                headers: { "Content-Type": "multipart/form-data" },
+                headers:
+                 {          
+                      Authorization: `Bearer ${token}`,
+                     "Content-Type": "multipart/form-data"
+                 },
             });
-            console.log(response);
             showToast(response?.data?.message ? response?.data?.message : 'User added successfully', 'success');
             setFormData(initialState);
         } catch (error) {
@@ -237,7 +243,7 @@ function AddUserForm({ user }) {
 
     const fetchblood = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`,config);
             setBloodGroups(response?.data?.data);
         } catch (err) {
             console.log("Error fetching blood group:", err);

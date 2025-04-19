@@ -210,6 +210,12 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const AddVisit = ({ show = false, handleClose, admited, patientUpdate }) => {
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     const [formData, setFormData] = useState({
         patient_name: "",
         doctor_id: "",
@@ -256,8 +262,7 @@ const AddVisit = ({ show = false, handleClose, admited, patientUpdate }) => {
     // Fetch available doctors
     const fetchTreatmentOptions = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/get`);
-            console.log("Doctors fetched:", response.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/get`,config);
             setDoctors(response?.data?.data?.data || []);
         } catch (err) {
             console.log("Error fetching doctors:", err);
@@ -291,7 +296,7 @@ const AddVisit = ({ show = false, handleClose, admited, patientUpdate }) => {
 
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/doctor/adddoctorvisit`,  // Assuming endpoint for adding visits
-                submitData
+                submitData,config
             );
 
             if (patientUpdate) patientUpdate();

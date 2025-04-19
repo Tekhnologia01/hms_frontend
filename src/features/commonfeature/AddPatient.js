@@ -16,7 +16,12 @@ function AddPatient() {
   const [bloodGroup,setBloodGroup]=useState([]);
   const navigate = useNavigate();
   const { user } = useSelector(state => state?.auth)
-  // State for form data
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   const [formData, setFormData] = useState({
     patient_name: "",
     patient_phone_no: "",
@@ -74,6 +79,7 @@ function AddPatient() {
         data,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -103,7 +109,7 @@ function AddPatient() {
   };
 const fetchblood=async()=>{
   try{
-    const response=await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`)
+    const response=await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`,config)
     setBloodGroup(response?.data?.data)
   }
   catch(err){

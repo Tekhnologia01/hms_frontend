@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
-import { FiEdit2 } from "react-icons/fi";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { FaAmazonPay, FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
@@ -12,6 +10,7 @@ import { IoInformationCircle, IoReceiptSharp } from "react-icons/io5";
 import PatientInfoModal from "./PatientInfoModal"; // Existing modal
 import PaymentModal from "./PaymentModal"; // New payment modal
 import { MdPayments } from "react-icons/md";
+import { GiCheckMark } from "react-icons/gi";
 
 function AdmitedDepatientBillDetals() {
   const navigate = useNavigate();
@@ -21,14 +20,20 @@ function AdmitedDepatientBillDetals() {
   const [showPaymentModal, setShowPaymentModal] = useState(false); // State for payment modal
   const [selectedPatient, setSelectedPatient] = useState(null); // State for selected patient
   const limitPerPage = 10;
-  // const { role } = useSelector((state) => state?.auth?.user);
   const { user } = useSelector((state) => state?.auth);
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`
+          `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`,
+          config
         );
         setDoctors(response?.data?.data);
       } catch (err) {
@@ -37,6 +42,9 @@ function AdmitedDepatientBillDetals() {
     };
     fetchDoctors();
   }, [currentPage]);
+
+
+
 
   const columns = [
     { name: "Patient Name", accessor: "Name", class: "py-3 px-4 text-left" },
@@ -71,122 +79,126 @@ function AdmitedDepatientBillDetals() {
   };
 
 
-const renderRow = (item, index) => {
-  // Calculate total deposits
-  const totalDeposits = item.deposits?.reduce((sum, deposit) => sum + (deposit.amount || 0), 0) || 0;
+  const renderRow = (item, index) => {
+    // Calculate total deposits
+    const totalDeposits = item.deposits?.reduce((sum, deposit) => sum + (deposit.amount || 0), 0) || 0;
 
-  // Calculate other charges
-  const otherCharges = item.othercharges?.reduce((sum, charge) => sum + (charge.amount || 0), 0) || 0;
+    // Calculate other charges
+    const otherCharges = item.othercharges?.reduce((sum, charge) => sum + (charge.amount || 0), 0) || 0;
 
 
-  const doctorCharge = item.doctorvisiting?.reduce((sum, visit) => sum + (visit.amount || 0), 0) || 0;
+    const doctorCharge = item.doctorvisiting?.reduce((sum, visit) => sum + (visit.amount || 0), 0) || 0;
 
-  // Calculate total amount including other charges
-  const totalAmount = item.total_amount + otherCharges + doctorCharge;
+    // Calculate total amount including other charges
+    const totalAmount = item.total_amount + otherCharges + doctorCharge;
 
-  // Calculate remaining amount
-  const remainingAmount = totalAmount - totalDeposits;
+    // Calculate remaining amount
+    const remainingAmount = totalAmount - totalDeposits;
 
-  return (
-    <tr key={item.id || index} className="border-bottom text-center">
-      {/* Patient Information */}
-      <td className="px-2 text-start">
-        <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
-          <img
-            src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
-            alt={item.uh_id}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-            className="ms-lg-3 mb-2 mb-lg-0"
-          />
-          <div className="d-flex flex-column ms-lg-2 text-center">
-            <p className="fw-semibold mb-0">{item.Name}</p>
-            <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
-              {item.uh_id}
-            </p>
+    return (
+      <tr key={item.id || index} className="border-bottom text-center">
+        {/* Patient Information */}
+        <td className="px-2 text-start">
+          <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
+            <img
+              src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
+              alt={item.uh_id}
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+              className="ms-lg-3 mb-2 mb-lg-0"
+            />
+            <div className="d-flex flex-column ms-lg-2 text-center">
+              <p className="fw-semibold mb-0">{item.Name}</p>
+              <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
+                {item.uh_id}
+              </p>
+            </div>
           </div>
-        </div>
-      </td>
+        </td>
 
-      {/* Patient Sex */}
-      <td className="py-3 px-2">{item.patient_sex ?? "-"}</td>
+        {/* Patient Sex */}
+        <td className="py-3 px-2">{item.patient_sex ?? "-"}</td>
 
-      {/* Admitted Date */}
-      <td className="py-3 px-2">
-        {item.admitted_date
-          ? new Date(item.admitted_date * 1000).toLocaleDateString()
-          : "-"}
-      </td>
+        {/* Admitted Date */}
+        <td className="py-3 px-2">
+          {item.admitted_date
+            ? new Date(item.admitted_date * 1000).toLocaleDateString()
+            : "-"}
+        </td>
 
-      {/* Department */}
-      <td className="py-3 px-2">{item.department ?? "-"}</td>
+        {/* Department */}
+        <td className="py-3 px-2">{item.department ?? "-"}</td>
 
-      {/* Total Deposits */}
-      <td className="py-3 px-2">{totalDeposits || "-"}</td>
+        {/* Total Deposits */}
+        <td className="py-3 px-2">{totalDeposits || "-"}</td>
 
-      {/* Remaining Amount */}
-      <td className="py-3 px-2">{remainingAmount >= 0 ? remainingAmount : "-"}</td>
+        {/* Remaining Amount */}
+        <td className="py-3 px-2">{remainingAmount >= 0 ? remainingAmount : "-"}</td>
 
-      {/* Total Amount */}
-      <td className="py-3 px-2">{totalAmount || "-"}</td>
+        {/* Total Amount */}
+        <td className="py-3 px-2">{totalAmount || "-"}</td>
 
-      {/* Actions */}
-      <td>
-  <IoReceiptSharp
+        {/* Actions */}
+        <td>
+          <IoReceiptSharp
+            style={{ height: "25px", width: "25px", cursor: "pointer" }}
+            onClick={() =>
+              user.RoleId == 4
+                ? navigate(`/receptionist/bill/ipd/${item.admitted_patient_id}`)
+                : navigate(`/accountant/bill/ipd/${item.admitted_patient_id}`)
+            }
+          />
+        </td>
+
+
+{
+  item.bill_status==0 ?
+  <td>
+
+
+  <FaAmazonPay
     style={{ height: "25px", width: "25px", cursor: "pointer" }}
+
+
+
     onClick={() =>
       user.RoleId == 4
-        ? navigate(`/receptionist/bill/ipd/${item.admitted_patient_id}`)
-        : navigate(`/accountant/bill/ipd/${item.admitted_patient_id}`)
+        ? navigate(`/receptionist/bill/ipd/deposite/${item.admitted_patient_id}`)
+        : navigate(`/accountant/bill/ipd/deposite/${item.admitted_patient_id}`)
     }
+  />
+
+  <span className="ps-3"></span>
+  <MdPayments
+    style={{ height: "25px", width: "25px", cursor: "pointer" }}
+    onClick={() => handleShowPaymentModal(item)}
+  />
+</td>:<td>
+  
+<GiCheckMark 
+    style={{ height: "25px", width: "25px", cursor: "pointer",color:"green" }}
+    // onClick={() => handleShowPaymentModal(item)}
   />
 </td>
 
-      <td>
-      
-{/* <>/accountant/bill/ipd/</> */}
-
-        <FaAmazonPay
-          style={{ height: "25px", width: "25px", cursor: "pointer" }}
+}
+    
 
 
 
-          onClick={() =>
-            user.RoleId == 4
-              ? navigate(`/receptionist/bill/ipd/deposite/${item.admitted_patient_id}`)
-              :  navigate(`/accountant/bill/ipd/deposite/${item.admitted_patient_id}`)
-          }
-         />
-{/*     
-        <IoInformationCircle
-          style={{ height: "25px", width: "25px", cursor: "pointer" }}
-          onClick={() => handleShowInfoModal(item)}
-        /> */}
-        <span className="ps-3"></span>
-        <MdPayments
-          style={{ height: "25px", width: "25px", cursor: "pointer" }}
-          onClick={() => handleShowPaymentModal(item)}
-        />
-      </td>
-    </tr>
-  );
-};
+
+      </tr>
+    );
+  };
 
   return (
     <>
       <div className="px-3">
-        {/* <div
-          className="fw-semibold fs-6"
-          style={{ color: "#1D949A" }}
-          onClick={() => navigate(-1)}
-        >
-          <FaArrowLeft />
-          <span className="pt-1 px-2">Admited Patient List</span>
-        </div> */}
+   
         <div className="fw-bold py-4 fs-4">
           <span>Admited Patient List</span>
         </div>

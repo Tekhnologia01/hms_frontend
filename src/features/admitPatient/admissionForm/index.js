@@ -16,9 +16,14 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     const [doctors, setDoctors] = useState([]);
     const [beds, setBeds] = useState([]);
     const [roomTypes, setRoomTypes] = useState([]);
-
     const { user } = useSelector(state => state?.auth);
     const [errors, setErrors] = useState({});
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
     const initialState = {
         uh_id: "",
@@ -57,8 +62,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     // Fetch room types
     async function getRoomTypes() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`);
-            console.log(response?.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
             if (response.status) {
                 setRoomTypes(response?.data?.data);
             }
@@ -104,7 +108,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     // Fetch departments
     async function getDepartments() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`,config);
             setDepartments(response?.data?.data);
         } catch (err) {
             console.log("Error fetching departments:", err);
@@ -115,12 +119,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     async function getBeds(id) {
         try {
 
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/get_available_beds`, {
-                params: {
-                    room_type: parseInt(formData.room_type),
-                    admit_date: convertDateTimeToEpoch(formData.admit_date, formData.admit_time)
-                }
-            });
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/get_available_beds?room_type=${+formData.room_type}&admit_date=${convertDateTimeToEpoch(formData.admit_date, formData.admit_time)}`,config);
             if (response.data?.status) {
                 setBeds(response?.data?.data);
             }
@@ -134,7 +133,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     // Fetch patients
     async function getPatients() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll`,config);
             setPatients(response?.data?.data?.data);
         } catch (err) {
             console.log("Error fetching patients:", err);
@@ -145,7 +144,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     async function getDoctors(departmentId) {
         try {
             if (!departmentId) return;
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsDepartmentwise?dep_id=${departmentId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsDepartmentwise?dep_id=${departmentId}`,config);
             setDoctors(response?.data?.data?.data);
         } catch (err) {
             console.log("Error fetching doctors:", err);
@@ -226,7 +225,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                 other_relation: formData.other_relation,
             };
 
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/admit/${user?.userId}`, payload);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/admit/${user?.userId}`, payload,config);
             // alert(response?.data?.message);
             setFormData(initialState);
             showToast(response?.data?.message);

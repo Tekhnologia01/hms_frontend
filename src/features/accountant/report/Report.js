@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
 import CommonTable from "../../../components/table/CommonTable";
+import { epochTimeToDate } from "../../../utils/epochToDate";
 function Report() {
   const [reportData, setReportData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,22 +17,22 @@ function Report() {
   const limitPerPage = 10;
   const { role } = useSelector((state) => state?.auth?.user);
 
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
   const fetchReport = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/accountant/getcollection`,
-        {
-          params: {
-            date: selectedDate, // Use selected date
-            page: currentPage,
-            limit: limitPerPage
-          }
-        }
+        `${process.env.REACT_APP_API_URL}/accountant/getcollection?date=${selectedDate}&page=${currentPage}&limit=${limitPerPage}`,
+        config
       );
       setReportData(response?.data?.data[0] || []);
     } catch (err) {
-      console.error("Error fetching report => ", err);
     } finally {
       setIsLoading(false);
     }
@@ -42,6 +43,9 @@ function Report() {
     fetchReport();
   }, [selectedDate, currentPage]);
 
+
+
+  
   const columns = [
     { name: "Patient Name", accessor: "Name", class: "py-3 px-4 text-left" },
     { name: "Date", accessor: "date", class: "text-center px-1" },
@@ -73,7 +77,7 @@ function Report() {
           </div>
         </div>
       </td>
-      <td className="py-3 px-2">{item.date ?? "-"}</td>
+      <td className="py-3 px-2">{epochTimeToDate(item.date) ?? "-"}</td>
       <td className="py-3 px-2">{item.amount ?? "-"}</td>
       {/* <td>
         <IoReceiptSharp

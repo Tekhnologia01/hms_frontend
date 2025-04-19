@@ -27,6 +27,12 @@ function ViewIpdLabAppointment({ type }) {
     const handleShowModalbill = () => setShowModalbill(true);
     const handleCloseModalbill = () => setShowModalbill(false);
     // const [prescriptionData, setPrescriptionData] = useState([]);
+    const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     const [testData, setTestData] = useState([]);
     const [appointmentData, setAppointmentData] = useState([]);
     const params = useParams();
@@ -50,6 +56,7 @@ function ViewIpdLabAppointment({ type }) {
 
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/report/ipdadd`, formData, {
                     headers: {
+                        Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data"
                     }
                 });
@@ -79,6 +86,7 @@ function ViewIpdLabAppointment({ type }) {
 
             const response = await axios.put(`${process.env.REACT_APP_API_URL}/report/ipdupdate`, formDataObj, {
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
                 }
             });
@@ -97,7 +105,7 @@ function ViewIpdLabAppointment({ type }) {
     async function getAppointementDetail() {
         try {
 
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getipdappointmentdetail?admited_id=${params.appointmentId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getipdappointmentdetail?admited_id=${params.appointmentId}`,config);
             setAppointmentData(response?.data?.data);
         } catch (error) {
 

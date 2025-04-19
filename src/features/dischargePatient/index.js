@@ -1431,6 +1431,15 @@ import ViewDischargeSheet from "./ViewDischargeSheet";
 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+
+    console.log("config",config)
     const [dischargeDetails, setDischargeDetails] = useState({
         diagnosisDetails: "",
         chiefComplaints: "",
@@ -1470,7 +1479,7 @@ const DischargePatient = () => {
 
     async function getPrescription() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${location.state}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${location.state}`,config);
             setPrescriptionData(response?.data?.data || [
                 {
                     srNo: 1,
@@ -1492,11 +1501,7 @@ const DischargePatient = () => {
 
     async function getDischargeDetails() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_discahrge_details`, {
-                params: {
-                    ipd_id: location.state
-                }
-            });
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_discahrge_details?ipd_id=${location.state}`,config);
 
 
             if (response?.data?.status) {
@@ -1504,7 +1509,6 @@ const DischargePatient = () => {
 
                 // const dischargeDate = new Date(response?.data?.data?.discharge_date);
 
-                console.log("first", response?.data?.data)
                 setDischargeDetails({
                     discharge_details_id: response?.data?.data?.discharge_details_id,
                     diagnosisDetails: response?.data?.data?.diagnosis,
@@ -1526,7 +1530,7 @@ const DischargePatient = () => {
                 });
             }
         } catch (error) {
-            showToast("Error while retrieving discharge details", "error");
+            // showToast("Error while retrieving discharge details", "error");
         }
     }
 
@@ -1561,27 +1565,20 @@ const DischargePatient = () => {
             if (values?.discharge_details_id) {
                 // Update existing discharge details
                 response = await axios.put(
-                    `${process.env.REACT_APP_API_URL}/patient/updatedischarge`,
+                    `${process.env.REACT_APP_API_URL}/patient/updatedischarge?userId=${user?.userId}`,
                     {
                         ...payload,
                         discharge_details_id: values.discharge_details_id
                     },
-                    {
-                        params: {
-                            userId: user?.userId
-                        }
-                    }
+                   
+                    config
                 );
             } else {
                 // Create new discharge details
                 response = await axios.post(
-                    `${process.env.REACT_APP_API_URL}/patient/discharge`,
+                    `${process.env.REACT_APP_API_URL}/patient/discharge?userId=${user?.userId}`,
                     payload,
-                    {
-                        params: {
-                            userId: user?.userId
-                        }
-                    }
+                    config
                 );
             }
 

@@ -15,7 +15,12 @@ const AddCharges = ({ show = false, handleClose, admited, patientUpdate }) => {
     });
     const [treatmentOptions, setTreatmentOptions] = useState([]);
     const [errors, setErrors] = useState({});
-
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
     const user = useSelector(state => state?.auth?.user?.userId);
     // Populate form with admitted patient data and fetch treatments
@@ -53,7 +58,7 @@ const AddCharges = ({ show = false, handleClose, admited, patientUpdate }) => {
     // Fetch available treatments
     const fetchTreatmentOptions = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`,config);
             setTreatmentOptions(response?.data?.data || []);
         } catch (err) {
             console.log("Error fetching treatments:", err);
@@ -89,7 +94,7 @@ const AddCharges = ({ show = false, handleClose, admited, patientUpdate }) => {
 
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/fees/addipdcharges`, 
-                submitData
+                submitData,config
             );
             console.log("Charge added:", submitData);
 

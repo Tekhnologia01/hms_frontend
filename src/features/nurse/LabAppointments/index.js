@@ -7,17 +7,22 @@ import { useNavigate } from "react-router-dom";
 import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
 import AddLabModal from "./AddLabModal";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function LabAppointments() {
-
     const [labs, setLabs] = useState([]);
     const [loading, setLoading] = useState(false);
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
 
     const fetchLabs = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`)
-            console.log(response?.data?.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`,config)
             setLabs(response?.data?.data);
         } catch (err) {
             console.log(err)
@@ -30,9 +35,9 @@ function LabAppointments() {
         fetchLabs();
     }, [])
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [limitPerPage, setLimitPerPage] = useState(10);
-    const totalRecords = labs.length;
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [limitPerPage, setLimitPerPage] = useState(10);
+    // const totalRecords = labs.length;
 
     const navigate = useNavigate();
 

@@ -8,37 +8,77 @@ import CommonTable from "../../components/table/CommonTable";
 import NewCommonPagination from "../../components/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import SetDischarge from "../commonfeature/Setdischarge";
+import { epochTimeToDate } from "../../utils/epochToDate";
 
 function AccountantDashboard() {
-
     const { user } = useSelector(state => state?.auth);
-
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
     const [currentPage, setCurrentPage] = useState(1);
     const [limitPerPage, setLimitPerPage] = useState(10);
+    const [reportData, setReportData] = useState()
     const totalRecords = 200;
-
     const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
     const [todaysAppintments, setTodaysAppointments] = useState([]);
 
+    const [discharge,setDischarge]=useState()
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
     const fetchTodaysAppointments = async () => {
         try {
-            console.log("hello")
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`)
-            console.log("Appointments data => ", response?.data?.data);
+
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`, config)
             setTodaysAppointments(response?.data?.data);
         } catch (err) {
             console.log("Error fetching appointments => ", err)
         }
     }
 
+
+    const fetchTodayDischargepatients= async () => {
+        try {
+            const today = new Date().toISOString().slice(0, 10); 
+            const dateTimestamp = Math.floor(new Date(today).getTime() / 1000);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`,config);
+            setDischarge(response?.data?.data[0]);
+        } catch (err) {
+            console.log("Error fetching doctors => ", err);
+        }
+    };
+
+ 
+
+    const fetchReport = async () => {
+        const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/accountant/getcollection?date=${today}&page=${1}&limit=${5}`,
+                config
+            );
+            console.log(response?.data?.data)
+            setReportData(response?.data?.data[0] || []);
+        } catch (err) {
+            console.error("Error fetching report:", err);
+        }
+    };
+
+
     useEffect(() => {
-
-
-    
         fetchTodaysAppointments();
+        fetchReport()
+        fetchTodayDischargepatients()
     }, []);
+
+
+
+
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -53,7 +93,6 @@ function AccountantDashboard() {
     }, []);
 
     const dataForBargraph = {
-
         labels: ["January", "February", "March", "April", "May"], // Months
         datasets: [
             {
@@ -75,7 +114,6 @@ function AccountantDashboard() {
 
     };
 
-    // Example data for the table
 
     const data = {
         appointmentRequests: [
@@ -158,38 +196,12 @@ function AccountantDashboard() {
         color: "#101828"
     }
 
-    const bodystyle = {
-        textAlign: "center",
-        verticalAlign: "middle",
-        fontSize: "1rem",
-        color: "#475467"
-    };
-
-    const confirmedStyle = {
-        backgroundColor: "#EFFBE7",
-        color: "#095512",
-        fontSize: "14px"
-    }
-
-    const pendingStyle = {
-        backgroundColor: "#FDF8E4",
-        color: "#905900",
-        fontSize: "14px"
-    }
-
-    const declinedStyle = {
-        backgroundColor: "#FDE4E4",
-        color: "#905900",
-        fontSize: "14px"
-    }
-
 
     const columns = [
-        // { name: "", accessor: "checkbox", class: "w-auto" },
         { name: "Patient Name", accessor: "doctorName", class: "py-3 w-50 ps-5 text-left" },
-        { name: "UH ID", accessor: "uhId", class: "text-center px-1" },
-        { name: "Age", accessor: "age", class: "py-3 text-center px-1" },
-        { name: "Sex", accessor: "sex", class: "py-3 text-center px-1" },
+        { name: "Amited Date", accessor: "uhId", class: "text-center px-1" },
+        { name: "Discharge Date", accessor: "age", class: "py-3 text-center px-1" },
+        { name: "Doctor Name", accessor: "sex", class: "py-3 text-center px-1" },
     ];
 
     const renderRow = (item, index) => (
@@ -197,13 +209,13 @@ function AccountantDashboard() {
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
                     <div className="ps-2">
-                        <input
-                            type="checkbox"
-                            style={{ transform: "scale(1.5)", cursor: "pointer" }}
-                        />
-                    </div>
+                                        </div>
                     <img
-                        src={vijay}
+                       src={
+                        item.Photo
+                            ? `${process.env.REACT_APP_API_URL}/${item.Photo}`
+                            : vijay
+                    }
                         alt={item.name}
                         style={{
                             width: "40px",
@@ -214,14 +226,14 @@ function AccountantDashboard() {
                         className="ms-3"
                     />
                     <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                        <p className="fw-semibold">{item.name}</p>
-                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>Appoinement for {item.appointmentFor}</p>
+                        <p className="fw-semibold">{item.Name}</p>
+                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}> {item.ipd_id}</p>
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item.uhId}</td>
-            <td className="py-3 px-2">{item.age}</td>
-            <td className="py-3 px-2">{item.sex}</td>
+            <td className="py-3 px-2">{epochTimeToDate(item.admitted_date)}</td>
+            <td className="py-3 px-2">{epochTimeToDate(item.discharge_date)}</td>
+            <td className="py-3 px-2">{item.doctor_name}</td>
         </tr>
     );
 
@@ -258,106 +270,104 @@ function AccountantDashboard() {
             </div >
 
             <div className="mx-4">
+
+
                 <Row>
-                    <Col xl={6}>
-                        <div className="border" style={{ borderRadius: "5px", overflowX: "auto" }}>
-                            <div className="border-bottom d-flex justify-content-between align-items-center">
-                                <div className="p-3 px-4 fs-5 fw-semibold">Appointment Request</div>
-                            </div>
-                            <Table className="bordered">
-                                <tbody>
-                                    {data.appointmentRequests.map((patient) => (
-                                        <tr key={patient.ipd_id}>
-                                            <td style={{ bodystyle }}>
-                                                <div className="d-flex align-items-center">
-                                                    <img
-                                                        src={vijay}
-                                                        alt={patient?.Name}
-                                                        style={{
-                                                            width: "40px",
-                                                            height: "40px",
-                                                            borderRadius: "50%",
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                    <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                        <p style={nameStyle}>{patient.Name}</p>
-                                                        <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "14px" }}>Age: {patient.age} on {patient.date} at {patient.time}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style={bodystyle}><span className="py-1 px-3 fw-semibold rounded-5"
-                                                style={
-                                                    patient.status === "Pending"
-                                                        ? pendingStyle
-                                                        : patient.status === "Declined"
-                                                            ? declinedStyle
-                                                            : confirmedStyle
-                                                }
-                                            >
-                                                &#x2022; {patient.status}
-                                            </span></td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-
-                        </div>
-                    </Col>
                     <Col xl={6} className="mt-4 mt-xl-0">
-                        <div className="border" style={{ borderRadius: "5px", overflowX: "auto" }}>
-                            <div className="border-bottom d-flex justify-content-between align-items-center">
-                                <div className="p-3 px-4 fs-5 fw-semibold">Admited Patients</div>
-                            </div>
-                            <Table className="bordered">
-                                <tbody>
-                                    {todaysAppintments?.map((patient) => (
-                                        <tr key={patient.Patient_Id}>
-                                            <td style={{ bodystyle }}>
-                                                <div className="d-flex align-items-center justify-content-between">
-                                                    <div className="d-flex">
-
-                                               
-                                                    <img
-                                                        src={patient.Photo ? `${process.env.REACT_APP_API_URL}/${patient.Photo}` : vijay}
-                                                        alt={patient.name}
-                                                        style={{
-                                                            width: "40px",
-                                                            height: "40px",
-                                                            borderRadius: "50%",
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                    <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                        <p style={nameStyle}>{patient.Name}</p>
-                                                        <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "14px" }}>Disease: {patient.Disease}</p>
-                                                    </div>
-
-                                                    </div>
-                                                    <p style={nameStyle}>{patient.doctor_name}</p>
-
-                                                    <div>
-
-                                                    </div>
+                        <h5 className="mb-3">Today Payment Report</h5>
+                        <Table className="custom-table  border">
+                        <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {reportData?.map((patient) => (
+                                    <tr key={patient.ipd_id}>
+                                        <td >
+                                            <div className="d-flex align-items-center">
+                                                <img
+                                                    src={
+                                                        patient.patient_image
+                                                            ? `${process.env.REACT_APP_API_URL}/${patient.patient_image}`
+                                                            : vijay
+                                                    }
+                                                    alt={patient?.patient_name}
+                                                    style={{
+                                                        width: "40px",
+                                                        height: "40px",
+                                                        borderRadius: "50%",
+                                                        objectFit: "cover",
+                                                    }}
+                                                />
+                                                <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
+                                                    <p style={nameStyle}>{patient.patient_name}</p>
+                                                    <p style={{ marginTop: "-20px", color: "#475467", fontSize: "14px" }}>
+                                                        UH_ID: {patient.uh_id}
+                                                    </p>
                                                 </div>
-                                            </td>
-                                            <td style={bodystyle} className="fw-semibold">{patient.slot_time}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-                        </div>
+                                            </div>
+                                        </td>
+                                        <td >
+                                            <span className="py-1 px-3 fw-semibold rounded-5">
+                                                ₹{patient.amount}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
                     </Col>
+
+                    <Col xl={6} className="mt-4 mt-xl-0">
+                        <h5 className="mb-3">Admitted Patients</h5>
+                        <Table className="custom-table border">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Doctor Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {todaysAppintments?.map((patient) => (
+                                    <tr key={patient.Patient_Id}>
+                                        <td>
+                                            <div className="d-flex align-items-center">
+                                                <img
+                                                    src={patient.Photo ? `${process.env.REACT_APP_API_URL}/${patient.Photo}` : vijay}
+                                                    alt={patient.name}
+                                                    style={{
+                                                        width: "40px",
+                                                        height: "40px",
+                                                        borderRadius: "50%",
+                                                        objectFit: "cover",
+                                                    }}
+                                                />
+                                                <div className="d-flex flex-column ms-2">
+                                                    <span className="fw-semibold">{patient.Name}</span>
+                                                    <span style={{ marginTop: "-4px", color: "#475467", fontSize: "14px" }}>
+                                                        Disease: {patient.Disease}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="fw-semibold align-middle">{patient.doctor_name}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </Col>
+
                 </Row>
+
+
 
                 <div className="mt-4">
                     <div>
-                        <CommonTable minimumWidth={"800px"} headers={columns} bodyData={data.recentPatients} renderRow={renderRow} title={"Recent Patients List"} />
+                        <CommonTable minimumWidth={"800px"} headers={columns} bodyData={discharge} renderRow={renderRow} title={"Discharge Patient"} />
                     </div>
-                    {
-                        data.recentPatients.length > 0 &&
-                        <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={totalRecords} setCurrentPage={setCurrentPage} />
-                    }
+                 
                 </div>
             </div>
         </>

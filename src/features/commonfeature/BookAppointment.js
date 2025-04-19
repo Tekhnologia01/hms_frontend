@@ -22,7 +22,12 @@ const BookAppointment = ({ show, handleClose }) => {
   const [slots, setSlots] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { user } = useSelector(state => state?.auth);
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   const [errors, setErrors] = useState({});
   const initialState = {
     patientId: "",
@@ -39,7 +44,7 @@ const BookAppointment = ({ show, handleClose }) => {
   // Fetch departments
   async function getDepartments() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`,config);
       setDepartments(response?.data?.data);
     } catch (err) {
       console.log("Error fetching departments:", err);
@@ -51,7 +56,7 @@ const BookAppointment = ({ show, handleClose }) => {
   // Fetch patients
   async function getPatients() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll`,config);
       setPatients(response?.data?.data?.data);
     } catch (err) {
       console.log("Error fetching patients:", err);
@@ -62,7 +67,7 @@ const BookAppointment = ({ show, handleClose }) => {
   async function getDoctors(departmentId) {
     try {
       if (!departmentId) return;
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsDepartmentwise?dep_id=${departmentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsDepartmentwise?dep_id=${departmentId}`,config);
       setDoctors(response?.data?.data?.data);
     } catch (err) {
       console.log("Error fetching doctors:", err);
@@ -73,7 +78,7 @@ const BookAppointment = ({ show, handleClose }) => {
   async function getSlots(doctorId, selectedDay) {
     try {
       if (!doctorId || !selectedDay) return;
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/slots/getDoctorSlots?doctor_id=${doctorId}&appointment_date=${selectedDate}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/slots/getDoctorSlots?doctor_id=${doctorId}&appointment_date=${selectedDate}`,config);
       setSlots(response?.data?.data);
     } catch (err) {
       console.log("Error fetching slots:", err);
@@ -153,7 +158,7 @@ const BookAppointment = ({ show, handleClose }) => {
         visited_type: formData.visitType,
       };
 
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/appointment/add/${user?.userId}`, payload);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/appointment/add/${user?.userId}`, payload,config);
       // alert(response?.data?.message);
       showToast(response?.data?.message);
       setFormData(initialState);

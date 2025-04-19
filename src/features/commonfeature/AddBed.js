@@ -33,6 +33,13 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
         bedName: Yup.string().required("Bed Name is required"),
     });
 
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
     useEffect(() => {
         if (show) {
             fetchRoomTypes();
@@ -41,7 +48,7 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
 
     const fetchRoomTypes = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
             setRoomType(response?.data?.data || []);
         } catch (err) {
             console.log(err);
@@ -50,7 +57,7 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
 
     const fetchRoom = async (roomTypeId) => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtypewise?id=${roomTypeId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtypewise?id=${roomTypeId}`,config);
             setRooms(response?.data?.data || []);
         } catch (err) {
             console.log(err);

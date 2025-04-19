@@ -9,6 +9,7 @@ import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { showToast } from "../../../components/common/Toaster";
 import UpdateUser from "./UpdateUser";
+import { useSelector } from "react-redux";
 
 function AddUsers() {
     const navigate = useNavigate();
@@ -26,7 +27,12 @@ function AddUsers() {
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
-
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     const endpoints = {
         add_doctor: "doctor/get",
         add_labassistant: "lab/get",
@@ -77,7 +83,7 @@ function AddUsers() {
         try {
             const endpoint = endpoints[currentState];
             const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/${endpoint}?page=${currentPage}&limit=${limitPerPage}`
+                `${process.env.REACT_APP_API_URL}/${endpoint}?page=${currentPage}&limit=${limitPerPage}`,config
             );
             setUsers(response?.data?.data || { data: [], pagination: {} });
         } catch (err) {
@@ -96,7 +102,7 @@ function AddUsers() {
 
     const fetchCount = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/count`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/count`,config);
             setUserCount({
                 totalDoctors: response?.data?.data?.totalDoctors || 0,
                 totalLabAssistance: response?.data?.data?.totalLabAssistance || 0,
@@ -341,7 +347,7 @@ function AddUsers() {
 
     const handleEdit = async (data) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/receptionist/updateuser`, data);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/receptionist/updateuser`, data,config);
             console.log(response)
             fetchData()
             showToast("user updated successfully", "success");
@@ -354,7 +360,7 @@ function AddUsers() {
     const handleDelete = async (id) => {
         try {
 
-            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/doctor/delete/${id}`);
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/doctor/delete/${id}`,config);
             fetchCount();
             fetchData()
             showToast("User deleted successfully", "success");

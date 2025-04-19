@@ -1,75 +1,3 @@
-// import React from "react";
-// import { Card, Col, Row } from "react-bootstrap";
-// import vijay from '../../assets/images/avatars/vijay.jpg'
-
-// function DoctorDetails() {
-//   return (
-//     <div className="p-5">
-//       <Row>
-//         <Col md={3}>
-
-//     {/* className="ps-lg-5 pe-lg-5" */}
-//           <div className="border ">
-//           <div className="d-flex justify-content-center pt-5">
-//             <img
-//               src={vijay}
-//               alt="Doctor"
-//               className="rounded-circle "
-//               style={{
-//                 width: "100px",
-//                 height: "100px",
-//                 objectFit: "cover",
-//                 backgroundColor: "",
-//               }}
-//             />
-//           </div>
-//             <div className="text-center fw-bold fs-5 pt-3">Doctor Name</div>
-
-//             <div className="text-center pt-3 pb-5 fs-6">Doctor Info In short</div>
-//           </div>
-
-//           <div></div>
-//         </Col>
-//         <Col>
-
-//         <div>
-
-//             <div className="fw-bold fs-5">
-//             
-//             </div>
-//             <div className="text-muted " style={{fontSize:'1.02rem'}}>
-//             Doctor Info
-//             </div>
-
-//             <div className="fw-bold fs-5">
-//             Education
-//             </div>
-
-//             <hr>
-//             </hr>
-//             <div className="fw-bold fs-5">
-//             Degree
-//             </div>
-
-//             <hr>
-//             </hr>
-
-//             <div className="fw-bold fs-5">
-//             Services
-//             </div>
-
-//             <div className="fw-bold fs-4">
-//             Specializations
-//             </div>
-
-//         </div>
-//     </Col>
-//       </Row>
-//     </div>
-//   );
-// }
-
-// export default DoctorDetails;
 
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
@@ -77,18 +5,22 @@ import vijay from "../../assets/images/avatars/vijay.jpg";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function DoctorDetails() {
-
   const params = useParams();
   const navigate = useNavigate();
-
   const [doctor, setDoctor] = useState([]);
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
   async function getProfile() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${params?.doctorId}`);
-      console.log("appooijofdng => ", response?.data?.data);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${params?.doctorId}`,config);
       setDoctor(response?.data?.data);
     } catch (err) {
       console.log("Error fetching departments:", err);

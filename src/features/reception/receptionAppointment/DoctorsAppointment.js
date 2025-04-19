@@ -15,24 +15,26 @@ import { format } from "date-fns";
 import CommonTable from "../../../components/table/CommonTable";
 import axios from "axios";
 import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import { useSelector } from "react-redux";
 
 function DoctorsAppointment() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location);
-
     const params = useParams();
     const doctorId = params.doctorId;
-
-    // const [displayedPatient, setDisplayedPatient] = useState(patients[0]);
-
     const [currentPage, setCurrentPage] = useState(1);
     const limitPerPage = 10;
-
     const [currentDate, setCurrentDate] = useState(location.state ? new Date(location.state) : new Date());
     const [formattedDate, setFormattedDate] = useState(new Date(currentDate).toISOString().split("T")[0]);
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
 
+    
     useEffect(() => {
         setFormattedDate(format(currentDate, "yyyy-MM-dd"));
     }, [currentDate])
@@ -41,8 +43,7 @@ function DoctorsAppointment() {
 
     async function getAppointmentsData() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsAppointmentByDate?doctor_id=${doctorId}&appointment_date=${formattedDate}&page=${currentPage}&page_size=${limitPerPage}`);
-            // console.log("appooijofdng => ", response?.data?.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsAppointmentByDate?doctor_id=${doctorId}&appointment_date=${formattedDate}&page=${currentPage}&page_size=${limitPerPage}`,config);
             setAppointmentData(response?.data?.data);
         } catch (err) {
             console.log("Error fetching departments:", err);

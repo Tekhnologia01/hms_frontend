@@ -10,6 +10,12 @@ import axios from "axios";
 
 const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handleupdateroom }) => {
     const [roomType, setRoomType] = useState([]);
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
     const closeIconStyle = {
         position: "absolute",
@@ -63,7 +69,7 @@ const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handle
     useEffect(() => {
         const fetchRoomTypes = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
                 setRoomType(response?.data?.data || []);
             } catch (err) {
                 console.log(err);

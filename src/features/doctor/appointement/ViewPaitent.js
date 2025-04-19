@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Table } from "react-bootstrap";
-import InputBox from "../../../components/common/form/inputbox";
 import Note from "../../../components/common/form/textarea";
 import { FaArrowLeft, FaFileUpload } from "react-icons/fa";
 import CommanButton from "../../../components/common/form/commonButtton";
@@ -10,7 +9,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
-import { epochTimeToDate } from "../../../utils/epochToDate";
 import AddPrescriptionTable from "./PrescriptionAddTable";
 import ExaminationForm from "./ExaminationForm";
 import AdmitPatient from "../../admitPatient/admissionForm";
@@ -40,11 +38,17 @@ function ViewPatient() {
   const handleShowModalAdmit = () => setShowAdmitModal(true);
   const handleCloseModalAdmit = () => {setShowAdmitModal(false)};
   const [isUpdate, setIsUpdate] = useState(false);
-
   const [testData, setTestData] = useState([]);
   const [appointmentData, setAppointmentData] = useState([]);
   const [prescriptionData, setPrescriptionData] = useState();
   const params = useParams();
+
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
   const initialState = {
     report_photo: "",
@@ -74,17 +78,13 @@ function ViewPatient() {
   }, [params]);
 
   const handleTestSubmit = async (newData) => {
-
     try {
-
       newData.labAppoiId = +appointmentData?.Appointment_Id;
       newData.labTestIds = newData.labTestIds.map((test) => {
         return test.value;
       });
 
-      await axios.post(`${process.env.REACT_APP_API_URL}/lab/addlabtest`, newData, {
-        headers: { "Content-Type": "application/json" }
-      });
+      await axios.post(`${process.env.REACT_APP_API_URL}/lab/addlabtest`, newData, config);
 
       getPrescriptionTest();
       alert("Test Added Successfully")
@@ -99,11 +99,7 @@ function ViewPatient() {
     });
     if (value === 'Test') {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}/lab/delete_patient_test`, {
-          params: {
-            test_id: filteredData?.lab_id
-          }
-        });
+        await axios.delete(`${process.env.REACT_APP_API_URL}/lab/delete_patient_test?test_id=${filteredData?.lab_id}`, config);
         getPrescriptionTest();
         alert("Test Deleted Successfully");
       } catch (error) {
@@ -140,7 +136,7 @@ function ViewPatient() {
               central_nervous_system: examinationData?.central_nervous_system,
               per_abdomen: examinationData?.per_abdomen
             };
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/appointment/examination_update?userId=${user?.userId}`, payload);
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/appointment/examination_update?userId=${user?.userId}`, payload,config);
             if (response?.data?.status) {
               showToast("Changes Saved Successfully", "success");
               handleShowModalbill()
@@ -164,7 +160,7 @@ function ViewPatient() {
               central_nervous_system: examinationData?.central_nervous_system,
               per_abdomen: examinationData?.per_abdomen
             };
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/appointment/monitor?userId=${user?.userId}`, payload);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/appointment/monitor?userId=${user?.userId}`, payload,config);
             if (response?.data?.status) {
               showToast("Changes Saved Successfully", "success");
               handleShowModalbill()
@@ -181,7 +177,7 @@ function ViewPatient() {
 
   async function getAppointementDetail() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`,config);
       setAppointmentData(response?.data?.data);
 
     } catch (error) {
@@ -192,7 +188,7 @@ function ViewPatient() {
 
   async function getPrescriptionTest() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${params?.appointmentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${params?.appointmentId}`,config);
       if (response?.data?.data?.prescription?.length !== 0) { setPrescriptionData(response?.data?.data?.prescription); }
       setTestData(response?.data?.data?.Test);
     } catch (error) {
@@ -207,7 +203,7 @@ function ViewPatient() {
 
   async function getExaminationDetails() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/get_examination_details?appointment_id=${params?.appointmentId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/get_examination_details?appointment_id=${params?.appointmentId}`,config);
       if (response?.data?.status && response?.data?.data?.length > 0) {
         console.log(response?.data?.data[0])
         const newData = {
@@ -266,7 +262,7 @@ function ViewPatient() {
       formDataToUpload.append("user_id", user?.userId);
       // window.open(URL.createObjectURL(pdfBlob), "_blank");
 
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/bill/createbill`, { appointment_id: params.appointmentId, total_amount: totalBill, chargesList: formData?.chargesList, user_id: user?.userId });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/bill/createbill`, { appointment_id: params.appointmentId, total_amount: totalBill, chargesList: formData?.chargesList, user_id: user?.userId },config);
       if (response.data?.status) {
         alert("Bill Created Successfully");
         handleCloseModalbill();

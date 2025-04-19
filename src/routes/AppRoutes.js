@@ -151,6 +151,7 @@ function AppRoutes({ getDefaultRoute }) {
 
         {/* doctor/patient_list */}
 
+        
        {/* Accountant routes */}
        <Route path="/accountant" element={<AccountantDashboard />} />
         <Route path="/accountant/discharge_summery" element={<DischargeSummery />} />

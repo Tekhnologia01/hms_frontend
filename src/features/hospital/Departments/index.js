@@ -8,17 +8,19 @@ import { useSelector } from "react-redux";
 
 function Departments() {
   const navigate = useNavigate();
-
   const [departments, setDepartments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const userId = useSelector((state) => state?.auth?.user?.userId);
-  // console.log("USer id = = > ", userId)
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   async function getDepartments() {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`,config);
       // console.log("Response => ", response.data.data);
       setDepartments(response?.data?.data);
     } catch (err) {
@@ -52,7 +54,7 @@ function Departments() {
       try {
         const response = await axios.post(
           `${process.env.REACT_APP_API_URL}/department/add/${userId}`,
-          { department_name: newDepartment }
+          { department_name: newDepartment },config
         );
 
         // console.log(response);

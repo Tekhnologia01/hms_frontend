@@ -7,6 +7,12 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => {
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     const [formData, setFormData] = useState({
         patient_name: "",
         discharge_date: "",
@@ -67,14 +73,10 @@ const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => 
                 created_by: user,
             };
 
-
-            console.log("submitData", submitData)
-
             const response = await axios.put(
-                `${process.env.REACT_APP_API_URL}/patient/setdischargedate`, // Adjust endpoint if needed
-                submitData
+                `${process.env.REACT_APP_API_URL}/patient/setdischargedate`, 
+                submitData,config
             );
-            console.log("Discharge date set:", response);
 
             if (patientUpdate) patientUpdate();
             handleClose();

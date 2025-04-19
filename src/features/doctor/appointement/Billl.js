@@ -5,6 +5,7 @@ import CommanButton from "../../../components/common/form/commonButtton";
 import InputBox from "../../../components/common/form/inputbox";
 import SelectBox from "../../../components/common/form/selectBox/SelectBox";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) => {
   const [formData, setFormData] = useState({
@@ -17,13 +18,18 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
   const [chargesData, setChargesData] = useState([]);
   const [chargesDataTable, setChargesDataTable] = useState([]); const [errors, setErrors] = useState({});
 
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
 
   useEffect(() => {
     const fetchCharges = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`,config);
         setChargesData(response?.data?.data || []);
       } catch (error) {
         console.error("Error fetching charges:", error);

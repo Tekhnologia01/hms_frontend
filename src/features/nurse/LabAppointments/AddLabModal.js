@@ -4,12 +4,15 @@ import { Modal, Form, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 function AddLabModal({ show, handleClose, fetchLabs }) {
-
     const { userId } = useSelector(state => state?.auth?.user);
-
     const [newLab, setNewLab] = useState({ labName: "", description: "", price: "", image: null });
-    
     const [loading, setLoading] = useState(false);
+    const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
     // Handle text input changes
     const handleInputChange = (e) => {
@@ -40,7 +43,7 @@ function AddLabModal({ show, handleClose, fetchLabs }) {
 
                 // console.log("FormData Object =>", Object.fromEntries(formData.entries()));
 
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/lab/addtest/${userId}`, formData);
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/lab/addtest/${userId}`, formData,config);
                 fetchLabs();
                 console.log(response);
 

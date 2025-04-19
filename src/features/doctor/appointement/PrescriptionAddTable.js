@@ -7,7 +7,6 @@ import { RxCross2 } from "react-icons/rx";
 import { useSelector } from "react-redux";
 import './prescription.css'
 import axios from "axios";
-import CommanButton from "../../../components/common/form/commonButtton";
 import { FaFilePrescription } from "react-icons/fa";
 import PrescriptionPDF from "./PrescriptionPDF";
 import { PDFViewer } from "@react-pdf/renderer";
@@ -18,8 +17,13 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
     const [editableRowIndex, setEditableRowIndex] = useState(); // Default to last row being editable
     const [prevRowValues, setPrevRowValues] = useState();
     const [showPrescription, setShowPrescription] = useState(false);
-
     const userId = useSelector(state => state?.auth?.user?.userId);
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
 
     const addRow = () => {
         if (isIPD) {
@@ -64,7 +68,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
 
     async function getPrescriptionTest() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${appointmentId}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${appointmentId}`,config);
             if (response?.data?.data?.prescription?.length !== 0) { setRows(response?.data?.data?.prescription); }
         } catch (error) {
             showToast(error?.response?.data?.error ? error?.response?.data?.error : "Error getting data", "error",)
@@ -73,7 +77,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
 
     async function getPrescription() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${ipd_id}`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${ipd_id}`,config);
             if (response?.data?.data !== 0) {
                 setRows(response?.data?.data);
             }
@@ -86,11 +90,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         if (isIPD && ipd_id) {
             try {
                 if (row?.Prescription_Id) {
-                    const response = await axios.put(`${process.env.REACT_APP_API_URL}/prescription/update_ipd_prescription`, row, {
-                        params: {
-                            prescription_id: row?.Prescription_Id
-                        }
-                    });
+                    const response = await axios.put(`${process.env.REACT_APP_API_URL}/prescription/update_ipd_prescription?prescription_id=${row?.Prescription_Id}`, row, config);
                     if (!response?.data?.status) {
                         showToast("Error while adding prescription", "error")
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
@@ -105,7 +105,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                             ipd_id: ipd_id,
                             created_by: userId
                         }
-                    });
+                    },config);
                     if (!response?.data?.status) {
                         showToast("Error while adding prescription", "error");
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
@@ -125,14 +125,14 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         params: {
                             prescription_id: row?.Prescription_Id
                         }
-                    });
+                    },config);
                 } else {
                     const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/add`, row, {
                         params: {
                             appointment_id: appointmentId,
                             created_by: userId
                         }
-                    });
+                    },config);
                     if (!response.data?.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         setEditableRowIndex(-1);
@@ -174,7 +174,8 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         params: {
                             prescription_id: row?.Prescription_Id
                         }
-                    });
+                    },
+                    config);
                     if (response.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                     }
@@ -187,7 +188,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         params: {
                             prescription_id: row?.Prescription_Id
                         }
-                    });
+                    },config);
                     if (response.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                     }

@@ -1,66 +1,4 @@
-// import React, { useState } from "react";
-// import CommanButton from "../../components/common/form/commonButtton";
-// import PasswordInput from "../../components/common/form/password";
-// import { Row, Col } from "react-bootstrap";
-// import DeleteModal from "./DeleteModal";
 
-// function DeletAccount() {
-//   const [showModal, setShowModal] = useState(false);
-//   const handleShowModal = () => setShowModal(true);
-//   const handleCloseModal = () => setShowModal(false);
-
-//   const handleDeleteAccount = () => {
-//     // Add your account deletion logic here
-//     console.log("Account deleted.");
-//     handleCloseModal();
-//   };
-
-//   return (
-//     <div className="">
-//       <div className="fs-4 fw-bold pb-1">Delete Account</div>
-//       <div className="pb-3" style={{fontSize:'1rem'}}>
-//         This Information will be displayed publicly so be careful what you share .
-//       </div>
-//       <Row className="m-0">
-//         <Col lg={5}>
-//           <div className="pb-4">
-//             <PasswordInput
-//               label="Enter Password"
-//               name="password"
-//               placeholder="Enter password"
-//               required
-//             />
-//           </div>
-//           <div className="pb-4">
-//             <PasswordInput
-//               label="Confirm Password"
-//               name="password"
-//               placeholder="Re-enter password"
-//               required
-//             />
-//           </div>
-//           <div className="p-2 pt-3">
-//             <CommanButton
-//               label="Delete Account"
-//               className="mb-3 ps-4 pe-4 p-2 fw-semibold"
-//               style={{ borderRadius: "5px" ,fontsize:'1rem'}}
-//               onClick={handleShowModal} // Show modal on button click
-//             />
-//           </div>
-//         </Col>
-//       </Row>
-
-//       {/* Delete Account Modal */}
-//       <DeleteModal
-//         show={showModal}
-//         handleClose={handleCloseModal}
-//         handleDelete={handleDeleteAccount}
-//       />
-//     </div>
-//   );
-// }
-
-// export default DeletAccount;
 import React, { useState } from "react";
 import CommanButton from "../../components/common/form/commonButtton";
 import PasswordInput from "../../components/common/form/password";
@@ -72,12 +10,18 @@ import axios from "axios";
 function DeleteAccount() {
   const [showModal, setShowModal] = useState(false);
   const userId = useSelector(state => state?.auth?.user?.userId);
-
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
   });
+
   const [errors, setErrors] = useState({});
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
   const handleShowModal = () => {
     if (validateForm()) {
@@ -86,20 +30,18 @@ function DeleteAccount() {
   };
 
   const handleCloseModal = () => setShowModal(false);
-
   const handleDeleteAccount = async () => {
+    try {
+      const payload = {
+        user_id: userId,
+        password: formData.password,
+      }
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/deleteaccount`, payload, config);
 
+      handleCloseModal();
+    } catch (error) {
 
-
-    const payload = {
-      user_id: userId,
-      password: formData.password,
     }
-    console.log(payload)
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/deleteaccount`, payload);
-
-    console.log("Account deleted.");
-    handleCloseModal();
   };
 
   // Handle form input change

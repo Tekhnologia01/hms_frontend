@@ -4,18 +4,20 @@ import AppointmentCard from "./AppointmentCard";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputBox from "../../../components/common/form/inputbox";
+import { useSelector } from "react-redux";
 
 function AppointmentDoctor() {
-
-  const navigate = useNavigate();
-
   const [doctors, setDoctors] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
-
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   async function getDoctors() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=${selectedDate}`);
-      console.log("appooijofdng => ", response?.data?.data);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=${selectedDate}`,config);
       setDoctors(response?.data?.data);
     } catch (err) {
       console.log("Error fetching departments:", err);

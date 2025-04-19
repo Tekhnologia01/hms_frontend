@@ -42,8 +42,14 @@ function PatientAppointmentList() {
     setShowModal(false);
   };
 
+  const token = useSelector((state) => state.auth.currentUserToken);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
-const navigate=useNavigate()
+  const navigate = useNavigate()
   const handleAddChargesModal = () => setShowAddChargesModal(true);
   const handleAddChargesCloseModal = () => setShowAddChargesModal(false);
   const handleChangeRoomModal = () => setShowChangeRoomModal(true);
@@ -62,8 +68,7 @@ const navigate=useNavigate()
 
   async function getPatients() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll?page=${currentPage}&limit=${limitPerPage}`);
-      console.log("appooijofdng => ", response?.data?.data);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll?page=${currentPage}&limit=${limitPerPage}`, config);
       setPatients(response?.data?.data);
       setTotalPages(response?.data?.data?.pagination?.TotalPages);
     } catch (err) {
@@ -73,7 +78,7 @@ const navigate=useNavigate()
 
   async function getIPDPatients() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patients?page=${currentPage}&limit=${limitPerPage}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patients?page=${currentPage}&limit=${limitPerPage}`, config);
       console.log("appooijofdng => ", response?.data?.data);
       setPatients(response?.data?.data);
       setTotalPages(response?.data?.data?.pagination?.TotalPages);
@@ -84,7 +89,7 @@ const navigate=useNavigate()
 
   async function getOPDPatients() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`, config);
       setPatients(response?.data?.data);
       setTotalPages(response?.data?.data?.pagination?.TotalPages);
     } catch (err) {
@@ -94,7 +99,7 @@ const navigate=useNavigate()
 
   async function getDoctorsOPDPatients() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`, config);
       setPatients(response?.data?.data);
       setTotalPages(response?.data?.data?.pagination?.TotalPages);
     } catch (err) {
@@ -127,19 +132,19 @@ const navigate=useNavigate()
     setCurrentPage(1);
   }, [cardState]);
 
-  async function getPatientsCount() {
+  const getPatientsCount = async () => {
+
+
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_patient_count`, {
-        params: {
-          role: user.role,
-          doctor_id: user?.userId
-        }
-      });
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_patient_count?role=${user.role}&doctor_id=${user?.userId}`, config);
       setPatientCounts(response?.data?.data);
     } catch (err) {
       console.log("Error fetching departments:", err);
     }
   }
+
+
+
 
   useEffect(() => {
     getPatientsCount();
@@ -330,14 +335,14 @@ const navigate=useNavigate()
 
 
 
-{user?.userId == item?.doctor_id && <NavLink to={"/doctor/discharge_patient"} state={item?.ipd_id}>
-          <CiMedicalClipboard  style={{ height: "30px", width: "30px" }} />
-        </NavLink>}
+          {user?.userId == item?.doctor_id && <NavLink to={"/doctor/discharge_patient"} state={item?.ipd_id}>
+            <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
+          </NavLink>}
         </td>
       }
 
 
-   
+
     </tr>
   );
 
@@ -350,7 +355,7 @@ const navigate=useNavigate()
         patient_address: data.patient_address,
         patientId: patient.Patient_ID
       };
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/update`, patientData)
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/update`, patientData, config)
       showToast(response?.data?.message);
       getPatients()
     } catch (error) {
