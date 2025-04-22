@@ -113,10 +113,6 @@ function AddLabTest() {
 
 
 
-
-
-
-
     return (
         <div className="py-4">
             <Row className="mt-3 m-0">
@@ -153,8 +149,8 @@ function AddLabTest() {
                     />
                 </Col>
             </Row>
-
-
+{/* 
+{admitedData.length >0 &&
             <div className='p-2'>
                 <CommonTable
                     minimumWidth={"100%"}
@@ -166,6 +162,21 @@ function AddLabTest() {
             </div>
 
 
+
+} */}
+
+
+{admitedData.length > 0 &&
+    <div className='p-2'>
+        <CommonTable
+            minimumWidth={"100%"}
+            headers={columns}
+            bodyData={admitedData}
+            renderRow={renderRow}
+            title={"Lab Test List"}
+        />
+    </div>
+}
 
 
         </div>

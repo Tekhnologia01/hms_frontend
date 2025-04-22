@@ -244,15 +244,19 @@ function AdmitedPatientDetails() {
                             </div>
                         </div>
 
-                        <div>
-                            <CommonTable
-                                minimumWidth={"100%"}
-                                headers={columns}
-                                bodyData={charge}
-                                renderRow={renderRow}
-                                title={"Charges List"}
-                            />
-                        </div>
+                        {charge.length > 0 ?
+                            <div>
+                                <CommonTable
+                                    minimumWidth={"100%"}
+                                    headers={columns}
+                                    bodyData={charge}
+                                    renderRow={renderRow}
+                                    title={"Charges List"}
+                                />
+                            </div> : <div className="text-center">No charges data</div>
+                        }
+
+
                     </div>
                 </Col>
 
@@ -290,6 +294,8 @@ function AdmitedPatientDetails() {
                                 />
                             </div>
                         </div>
+{doctorVisit.length>0 ?
+
 
                         <div>
                             <CommonTable
@@ -299,7 +305,8 @@ function AdmitedPatientDetails() {
                                 renderRow={renderRowdoctorvisit}
                                 title={"Doctor Visited List"}
                             />
-                        </div>
+                        </div>:<div className="text-center">No doctor visits data</div>
+}
                     </div>
                 </Col>
             </Row>
@@ -308,7 +315,7 @@ function AdmitedPatientDetails() {
             <AddLabTest />
             <CourseDetails />
 
-         
+
 
 
 

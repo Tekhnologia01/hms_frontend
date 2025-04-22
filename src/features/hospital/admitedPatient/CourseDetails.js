@@ -5,6 +5,7 @@ import { FaPlus, FaEdit, FaTrash, FaSave, FaBook } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import CommanButton from '../../../components/common/form/commonButtton';
 function CourseDetails() {
   const { admitedId } = useParams();
   const [courseDetails, setCourseDetails] = useState('');
@@ -223,7 +224,27 @@ const addTreatmentPoint = async () => {
         <Col>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h2 className="h4">Treatment Plan</h2>
-            <Button 
+
+
+            <CommanButton
+                        label="Add Point"
+                        variant="#7B3F0080"
+                        className="ps-3 pe-3 p-2 fw-semibold"
+                        style={{ borderRadius: "5px" }}
+                        onClick={() => {
+                          setEditText('');
+                          setEditingPoint('new');
+                        }}
+                        disabled={isSaving}
+
+                        // onClick={handleTestSubmit}
+                    />
+
+
+
+
+
+            {/* <Button 
               variant="primary" 
               onClick={() => {
                 setEditText('');
@@ -232,9 +253,12 @@ const addTreatmentPoint = async () => {
               className="d-flex align-items-center"
               disabled={isSaving}
             >
+
+
+
               <FaPlus className="me-2" />
               Add Point
-            </Button>
+            </Button> */}
           </div>
 
           {editingPoint === 'new' && (
