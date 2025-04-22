@@ -272,7 +272,7 @@ function PatientAppointmentList() {
       <td className="py-3 px-2">{item?.uh_id}</td>
       <td className="py-3 px-2">{epochTimeToDate(item?.appo_date)}</td>
       <td className="py-3 px-2">{item?.user_name}</td>
-      <td className="py-3 px-2">{item?.slot_time}</td>
+      <td className="py-3 px-2">{item?.appo_time}</td>
 
       <td className="py-3 px-2">{item?.patient_sex}</td>
       <td className="py-3 px-2">{item?.patient_age}</td>

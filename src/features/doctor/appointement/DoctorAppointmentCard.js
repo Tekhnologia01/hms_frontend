@@ -37,7 +37,7 @@ function DoctorAppointmentCard({
               <Col md={4} xs={12} className="gy-1 d-flex align-items-center">
                 <BiTimeFive style={{ height: "25px", width: "25px" }} />
                 <span className="ps-2 fw-semibold" style={{ fontSize: "0.9rem" }}>
-                  {appointmentData?.slot_time}
+                  {appointmentData?.appo_time}
                 </span>
               </Col>
 

@@ -17,9 +17,9 @@ export const validateAppointmentForm = (data) => {
       errors.doctorId = "Doctor is required";
     }
   
-    if (!data.slotId) {
-      errors.slotId = "Slot is required";
-    }
+    // if (!data.appointmentTime) {
+    //   errors.slotId = "Slot is required";
+    // }
   
     if (!data.consultationReason.trim()) {
       errors.consultationReason = "Consultation reason is required";
