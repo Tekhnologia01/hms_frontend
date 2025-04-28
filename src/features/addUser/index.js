@@ -217,8 +217,8 @@ function AddUserForm({ user }) {
             showToast(response?.data?.message ? response?.data?.message : 'User added successfully', 'success');
             setFormData(initialState);
         } catch (error) {
-            console.log(error);
-            showToast(error?.response?.data?.message ? error?.response?.data?.message : `Failed to add ${user}.`, 'error');
+            console.log(error?.response?.data?.error);
+            showToast(error?.response?.data ? error?.response?.data?.error : `Failed to add ${user}.`, 'error');
         }
     };
 

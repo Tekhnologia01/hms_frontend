@@ -7,6 +7,7 @@ import { MdPayments } from "react-icons/md";
 import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { useSelector } from "react-redux";
+import { showToast } from "../../../components/common/Toaster";
 
 // Mock InputBox component; replace with your actual import if different
 const InputBox = ({ label, placeholder, isRequired, type = "text", value, onChange, name, disabled }) => (
@@ -101,7 +102,8 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
         paymentData,config
       );
 
-      alert("Payment added successfully!");
+
+   showToast("Payment added successfully!", "success");
 
       setFormData({
         name: patient?.Name || "",
@@ -112,6 +114,8 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
       handleClose();
     } catch (err) {
       setError("Error adding payment: " + (err.response?.data?.message || err.message));
+      showToast("Payment issue", "error");
+
     } finally {
       setLoading(false);
     }

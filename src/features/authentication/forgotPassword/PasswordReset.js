@@ -5,10 +5,11 @@ import CommanButton from "../../../components/common/form/commonButtton";
 import Airavat from "../../../assets/images/Airavat.png";
 import ForgotLogo from "../../../assets/images/forgotlogo.png";
 import Login from '../../../assets/images/loginflip.png'
+import { useNavigate } from "react-router-dom";
 
 
 function PasswordReset() {
-
+const navigate=useNavigate()
   // Handle input change
 
   return (
@@ -46,7 +47,7 @@ function PasswordReset() {
                   <h5>Your password has been successfully reset.</h5>
                 </div>
 
-                <div className="pt-2">
+                {/* <div className="pt-2">
                   <CommanButton
                     label="Reset password"
                     variant="#7B3F0080"
@@ -54,14 +55,16 @@ function PasswordReset() {
                     style={{ borderRadius: "5px" }}
                     // onClick={handleFormSubmit}
                   />
-                </div>
+                </div> */}
 
                 <div className="text-center pt-3">
                   <span className="pe-2" style={{ color: "#1D949A" }}>
                     {" "}
                     <FaArrowLeft />
                   </span>
-                  <span style={{ color: "#1D949A", fontWeight: "500" }}>
+                  <span style={{ color: "#1D949A", fontWeight: "500" }} onClick={()=>{
+                    navigate('/login')
+                  }}>
                     {" "}
                     Log in
                   </span>

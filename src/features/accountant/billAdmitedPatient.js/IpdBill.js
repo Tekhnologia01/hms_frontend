@@ -443,6 +443,7 @@ function IpdBill() {
                     bill_report: response.data.filePath,
                     payment_status: "Paid"
                 }));
+                fetchReceipt()
                 setShowPaymentModal(true);
                 showToast("Bill generated and uploaded successfully!", "success");
             }

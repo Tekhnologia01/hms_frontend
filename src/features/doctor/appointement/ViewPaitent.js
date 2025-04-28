@@ -264,11 +264,11 @@ function ViewPatient() {
 
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/bill/createbill`, { appointment_id: params.appointmentId, total_amount: totalBill, chargesList: formData?.chargesList, user_id: user?.userId },config);
       if (response.data?.status) {
-        alert("Bill Created Successfully");
+        showToast("End Appointment")
         handleCloseModalbill();
 
         setFormData(initialState);
-        // navigate('/doctor/patient_list')
+        navigate('/doctor/appointments')
       }
     } catch (err) {
       console.log(err);

@@ -28,18 +28,20 @@ function AdmitedDepatientBillDetals() {
     },
   }
 
+  const fetchDoctors = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`,
+        config
+      );
+      setDoctors(response?.data?.data);
+    } catch (err) {
+      console.log("Error fetching doctors => ", err);
+    }
+  };
+
+
   useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`,
-          config
-        );
-        setDoctors(response?.data?.data);
-      } catch (err) {
-        console.log("Error fetching doctors => ", err);
-      }
-    };
     fetchDoctors();
   }, [currentPage]);
 
@@ -77,6 +79,11 @@ function AdmitedDepatientBillDetals() {
     setShowPaymentModal(false);
     setSelectedPatient(null);
   };
+
+const handleClose =()=>{
+  handleClosePaymentModal()
+  fetchDoctors()
+}
 
 
   const renderRow = (item, index) => {
@@ -234,7 +241,7 @@ function AdmitedDepatientBillDetals() {
       {/* Payment Modal */}
       <PaymentModal
         show={showPaymentModal}
-        handleClose={handleClosePaymentModal}
+        handleClose={handleClose}
         patient={selectedPatient}
       />
     </>

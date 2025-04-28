@@ -162,12 +162,15 @@ function Login() {
                       </div>
                     </Col>
                   </Row>
-                </div>
+                </div>*/}
 
                 <div className="text-center">
-                  <span style={{ fontWeight: "500" }}>I don’t have an account? </span>
-                  <span style={{ fontWeight: "500", color: " #0D157F" }}> Create account</span>
-                </div> */}
+                  {/* <span style={{ fontWeight: "500" }}>I don’t have an account? </span> */}
+                  <p>
+            <span style={{ fontWeight: "500", color: "#1D949A" ,cursor:
+              "pointer"
+            }}  onClick={()=>{navigate('/enteremail')}}>forgot password ?</span></p>
+                </div> 
               </Col>
             </Row>
           </Container>

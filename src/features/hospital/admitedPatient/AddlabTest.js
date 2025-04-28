@@ -9,6 +9,7 @@ import MultiSelectWithDropdown from '../../../components/common/form/multiselect
 import { epochTimeToDate } from '../../../utils/epochToDate';
 import CommonTable from '../../../components/table/CommonTable';
 import { FaEye } from 'react-icons/fa';
+import { showToast } from '../../../components/common/Toaster';
 
 function AddLabTest() {
     const { admitedId } = useParams();
@@ -76,10 +77,9 @@ function AddLabTest() {
                 labAdmitedId: +admitedId,
                 labTestIds: formData.labTestIds.map((test) => test.value),
             };
-
             await axios.post(`${process.env.REACT_APP_API_URL}/lab/addipdlabtest`, newData, config);
-
-            alert("Test Added Successfully");
+            getAppointmentDetails();
+            showToast("Test Added Successfully!", "success");
         } catch (error) {
             console.error('Failed to add test', error);
         }

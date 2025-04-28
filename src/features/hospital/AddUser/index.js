@@ -10,6 +10,7 @@ import CommanButton from "../../../components/common/form/commonButtton";
 import { showToast } from "../../../components/common/Toaster";
 import UpdateUser from "./UpdateUser";
 import { useSelector } from "react-redux";
+import UpdateDoctor from "./UpdateDoctor";
 
 function AddUsers() {
     const navigate = useNavigate();
@@ -27,12 +28,21 @@ function AddUsers() {
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
+
+
+
+
+    const [showDoctorModal, setShowDoctorModal] = useState(false);
+    const handleShowDoctorModal = () => setShowDoctorModal(true);
+    const handleCloseDoctorModal = () => setShowDoctorModal(false);
+
+
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-      }
+    }
     const endpoints = {
         add_doctor: "doctor/get",
         add_labassistant: "lab/get",
@@ -83,7 +93,7 @@ function AddUsers() {
         try {
             const endpoint = endpoints[currentState];
             const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/${endpoint}?page=${currentPage}&limit=${limitPerPage}`,config
+                `${process.env.REACT_APP_API_URL}/${endpoint}?page=${currentPage}&limit=${limitPerPage}`, config
             );
             setUsers(response?.data?.data || { data: [], pagination: {} });
         } catch (err) {
@@ -102,7 +112,7 @@ function AddUsers() {
 
     const fetchCount = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/count`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/count`, config);
             setUserCount({
                 totalDoctors: response?.data?.data?.totalDoctors || 0,
                 totalLabAssistance: response?.data?.data?.totalLabAssistance || 0,
@@ -178,14 +188,15 @@ function AddUsers() {
             <td className="py-3 px-2">{item.mobile || "-"}</td>
             <td className="py-3 px-2">{item.consultancy_fee ? `${item.consultancy_fee}` : "-"}</td>
 
-    
+
             <td>
                 <FiEdit2
                     style={{ height: "23px", width: "23px", cursor: "pointer" }}
                     onClick={async () => {
                         await setSelectedUser(item)
-                        handleShowModal()
-                    }}                  />
+                        // handleShowModal()
+                        handleShowDoctorModal()
+                    }} />
                 <span className="ps-3"></span>
                 <RiDeleteBinLine
                     style={{ height: "25px", width: "25px", cursor: "pointer" }}
@@ -218,8 +229,11 @@ function AddUsers() {
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item?.joining_date || "-"}</td>
-            <td className="py-3 px-2">{item?.mobile || "-"}</td>
+            <td className="py-3 px-2">
+                {item?.joining_date
+                    ? new Date(item.joining_date * 1000).toLocaleDateString('en-GB')
+                    : "-"}
+            </td>            <td className="py-3 px-2">{item?.mobile || "-"}</td>
 
             <td className="py-3 px-2">{item.degree || "-"}</td>
             <td className="py-3 px-2">{item.shift_name || "-"}</td>
@@ -231,7 +245,7 @@ function AddUsers() {
                     onClick={async () => {
                         await setSelectedUser(item)
                         handleShowModal()
-                    }}                />
+                    }} />
                 <span className="ps-3"></span>
                 <RiDeleteBinLine
                     style={{ height: "25px", width: "25px", cursor: "pointer" }}
@@ -264,8 +278,11 @@ function AddUsers() {
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item?.joining_date || "-"}</td>
-            <td className="py-3 px-2">{item?.mobile || "-"}</td>
+            <td className="py-3 px-2">
+                {item?.joining_date
+                    ? new Date(item.joining_date * 1000).toLocaleDateString('en-GB')
+                    : "-"}
+            </td>            <td className="py-3 px-2">{item?.mobile || "-"}</td>
 
             <td className="py-3 px-2">{item?.Department_name || "-"}</td>
 
@@ -338,8 +355,8 @@ function AddUsers() {
                 return renderNurseRow;
             case "add_receptionist":
                 return renderReceptionistRow;
-                case "add_accountant":
-                    return renderAccountantRow;
+            case "add_accountant":
+                return renderAccountantRow;
             default:
                 return renderDoctorRow;
         }
@@ -347,7 +364,7 @@ function AddUsers() {
 
     const handleEdit = async (data) => {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/receptionist/updateuser`, data,config);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/receptionist/updateuser`, data, config);
             console.log(response)
             fetchData()
             showToast("user updated successfully", "success");
@@ -360,7 +377,7 @@ function AddUsers() {
     const handleDelete = async (id) => {
         try {
 
-            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/doctor/delete/${id}`,config);
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/doctor/delete/${id}`, config);
             fetchCount();
             fetchData()
             showToast("User deleted successfully", "success");
@@ -372,6 +389,21 @@ function AddUsers() {
     };
 
 
+
+    const handleEditDoctor = async (data) => {
+        try {
+
+
+            console.log(data)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/doctor/updatedoctor`, data, config);
+            fetchData()
+            showToast("Doctor updated successfully", "success");
+
+        } catch (error) {
+
+        }
+    };
+    
     return (
         <div className="py-4">
             <div className="fw-semibold fs-5 px-3">Add Users</div>
@@ -437,12 +469,26 @@ function AddUsers() {
             </div>
 
             <UpdateUser
-              status={currentState}
+                status={currentState}
                 show={showModal}
                 handleClose={handleCloseModal}
                 user={selctedUser}
                 patientUpdate={handleEdit}
             />
+
+
+
+
+             <UpdateDoctor
+                status={currentState}
+                show={showDoctorModal}
+                handleClose={handleCloseDoctorModal}
+                user={selctedUser}
+                patientUpdate={handleEditDoctor}
+            />
+
+
+
 
         </div>
     );

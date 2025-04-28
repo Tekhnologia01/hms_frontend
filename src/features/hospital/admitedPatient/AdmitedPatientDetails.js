@@ -294,19 +294,17 @@ function AdmitedPatientDetails() {
                                 />
                             </div>
                         </div>
-{doctorVisit.length>0 ?
-
-
-                        <div>
-                            <CommonTable
-                                minimumWidth={"100%"}
-                                headers={columnsdoctors}
-                                bodyData={doctorVisit}
-                                renderRow={renderRowdoctorvisit}
-                                title={"Doctor Visited List"}
-                            />
-                        </div>:<div className="text-center">No doctor visits data</div>
-}
+                        {doctorVisit.length > 0 ?
+                            <div>
+                                <CommonTable
+                                    minimumWidth={"100%"}
+                                    headers={columnsdoctors}
+                                    bodyData={doctorVisit}
+                                    renderRow={renderRowdoctorvisit}
+                                    title={"Doctor Visited List"}
+                                />
+                            </div> : <div className="text-center">No doctor visits data</div>
+                        }
                     </div>
                 </Col>
             </Row>
@@ -335,7 +333,7 @@ function AdmitedPatientDetails() {
                 show={showDischagredateModal}
                 handleClose={() => {
                     handledischargedateCloseModal();
-                    fetchCharges()
+                    fetchpatient()
                 }}
             />
 

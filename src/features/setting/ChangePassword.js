@@ -30,11 +30,17 @@ function ChangePassword() {
     if (!formData.currentPassword.trim()) {
       newErrors.currentPassword = "Current password is required";
     }
-    if (!formData.newPassword.trim()) {
-      newErrors.newPassword = "New password is required";
-    } else if (formData.newPassword.length < 6) {
-      newErrors.newPassword = "Password must be at least 6 characters long";
-    }
+
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
+
+if (!formData.newPassword.trim()) {
+  newErrors.newPassword = "New password is required";
+} else if (!passwordPattern.test(formData.newPassword)) {
+  newErrors.newPassword =
+    "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character";
+}
+
+
     if (formData.confirmPassword !== formData.newPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }

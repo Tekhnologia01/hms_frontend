@@ -410,15 +410,12 @@ const BookAppointment = ({ show, handleClose }) => {
 
   // Handle form submission
   const handleSubmit = async () => {
-    console.log("first")
     const validationErrors = validateAppointmentForm(formData);
     setErrors(validationErrors);
-    console.log("firsqt")
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
-    console.log("fisssrsqt")
 
     setIsSubmitted(true);
 
@@ -435,8 +432,6 @@ const BookAppointment = ({ show, handleClose }) => {
         visited_type: formData.visitType,
       };
 
-
-      console.log("payload",payload)
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/appointment/add/${user?.userId}`, 
         payload,
@@ -446,8 +441,9 @@ const BookAppointment = ({ show, handleClose }) => {
       showToast(response?.data?.message);
       setFormData(initialState);
       handleClose();
+
     } catch (error) {
-      showToast(error?.response?.data?.message);
+      showToast(error?.response?.data?.message,"error");
     } finally {
       setIsSubmitted(false);
     }

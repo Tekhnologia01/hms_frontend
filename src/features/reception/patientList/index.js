@@ -121,6 +121,9 @@ function PatientAppointmentList() {
     if (cardState === "opd" && user.role === "Reception") {
       getOPDPatients();
     }
+   else if (cardState === "opd" && user.role === "Admin") {
+      getOPDPatients();
+    }
     else if (cardState === "opd" && user.role === "Doctor") {
       getDoctorsOPDPatients();
     }
@@ -133,8 +136,6 @@ function PatientAppointmentList() {
   }, [cardState]);
 
   const getPatientsCount = async () => {
-
-
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_patient_count?role=${user.role}&doctor_id=${user?.userId}`, config);
       setPatientCounts(response?.data?.data);
@@ -142,9 +143,6 @@ function PatientAppointmentList() {
       console.log("Error fetching departments:", err);
     }
   }
-
-
-
 
   useEffect(() => {
     getPatientsCount();
