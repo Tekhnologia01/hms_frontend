@@ -1,3 +1,7 @@
+
+
+
+
 // import React, { useEffect, useState } from "react";
 // import { Col, Modal, Row } from "react-bootstrap";
 // import { FaTimes } from "react-icons/fa";
@@ -19,13 +23,12 @@
 //   };
 //   const token = useSelector((state) => state.auth.currentUserToken);
 //   const config = {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   };
 
-
-//   const [roomType,setRoomType]=useState([])
+//   const [roomType, setRoomType] = useState([]);
 //   const [formData, setFormData] = useState({
 //     billing_and_charges_no: "",
 //     class_name: "",
@@ -37,6 +40,7 @@
 //     total: "",
 //     deposit: "",
 //   });
+//   const [errors, setErrors] = useState({ class_name: "" }); // State for validation errors
 
 //   // Update formData when rowData changes
 //   useEffect(() => {
@@ -56,50 +60,77 @@
 //         deposit: rowData.deposit || "",
 //       });
 //     }
-//   }, [rowData]);
+//   }, [rowData, roomType]);
 
+//   // Calculate total
 //   useEffect(() => {
 //     const calculateTotal = () => {
 //       const fields = ["bed", "nursing", "doctor", "rmo", "bmw"];
 //       const total = fields.reduce((sum, field) => {
-//         const value = parseFloat(formData[field]) || 0; 
+//         const value = parseFloat(formData[field]) || 0;
 //         return sum + value;
 //       }, 0);
 //       setFormData((prev) => ({
 //         ...prev,
-//         total: total.toString(), 
+//         total: total.toString(),
 //       }));
 //     };
 //     calculateTotal();
 //   }, [formData.bed, formData.nursing, formData.doctor, formData.rmo, formData.bmw]);
 
+//   // Fetch room types
+//   useEffect(() => {
+//     const fetchRoomTypes = async () => {
+//       try {
+//         const response = await axios.get(
+//           `${process.env.REACT_APP_API_URL}/roombed/getroomtype`,
+//           config
+//         );
+//         setRoomType(response?.data?.data || []);
+//       } catch (err) {
+//         console.log(err);
+//       }
+//     };
+//     fetchRoomTypes();
+//   }, []);
+
+//   // Handle input change
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
-//     console.log(name, value);
 //     setFormData({
 //       ...formData,
 //       [name]: value,
 //     });
+
+//     // Clear error when user selects a valid room type
+//     if (name === "class_name" && value) {
+//       setErrors((prev) => ({ ...prev, class_name: "" }));
+//     }
 //   };
 
+//   // Validate form
+//   const validateForm = () => {
+//     let isValid = true;
+//     const newErrors = { class_name: "" };
 
+//     if (!formData.class_name || formData.class_name === "Room Type") {
+//       newErrors.class_name = "Please select a valid room type";
+//       isValid = false;
+//     }
 
-//   useEffect(() => {
-//     const fetchRoomTypes = async () => {
-//         try {
-//             const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
-//             setRoomType(response?.data?.data || []);
-//         } catch (err) {
-//             console.log(err);
-//         }
-//     };
-//     fetchRoomTypes();
-// }, []);
+//     setErrors(newErrors);
+//     return isValid;
+//   };
 
-
-  
+//   // Handle form submission
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
+
+//     // Validate form before submission
+//     if (!validateForm()) {
+//       return;
+//     }
+
 //     const selectedRoom = roomType.find(
 //       (type) => type.room_type_id === parseInt(formData.class_name)
 //     );
@@ -108,8 +139,7 @@
 //       class_name_display: selectedRoom ? selectedRoom.room_type : "",
 //     };
 
-
-//     console.log(submitData)
+//     console.log(submitData);
 //     handleCallback(submitData);
 //     handleClose();
 //   };
@@ -137,6 +167,11 @@
 //           }))}
 //           onChange={handleChange}
 //         />
+//         {errors.class_name && (
+//           <div className="text-danger mt-1" style={{ fontSize: "14px" }}>
+//             {errors.class_name}
+//           </div>
+//         )}
 
 //         <Row className="mt-2 m-0">
 //           <Col lg={6}>
@@ -147,7 +182,7 @@
 //               value={formData.bed}
 //               onChange={handleChange}
 //               name="bed"
-//               type="number" // Ensure numeric input
+//               type="number"
 //             />
 //           </Col>
 //           <Col lg={6}>
@@ -206,7 +241,7 @@
 //               value={formData.total}
 //               name="total"
 //               type="number"
-//               disabled // Make it read-only since it's calculated
+//               disabled
 //             />
 //           </Col>
 //         </Row>
@@ -242,6 +277,7 @@
 
 
 
+
 import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "react-bootstrap";
 import { FaTimes } from "react-icons/fa";
@@ -261,6 +297,7 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
     color: "#999",
     zIndex: 10,
   };
+
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
     headers: {
@@ -268,8 +305,8 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
     },
   };
 
-  const [roomType, setRoomType] = useState([]);
-  const [formData, setFormData] = useState({
+  // Initial empty form state
+  const initialFormState = {
     billing_and_charges_no: "",
     class_name: "",
     bed: "",
@@ -279,8 +316,17 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
     bmw: "",
     total: "",
     deposit: "",
-  });
-  const [errors, setErrors] = useState({ class_name: "" }); // State for validation errors
+  };
+
+  const [roomType, setRoomType] = useState([]);
+  const [formData, setFormData] = useState(initialFormState);
+  const [errors, setErrors] = useState({ class_name: "" });
+
+  // Function to reset form
+  const resetForm = () => {
+    setFormData(initialFormState);
+    setErrors({ class_name: "" });
+  };
 
   // Update formData when rowData changes
   useEffect(() => {
@@ -299,6 +345,8 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
         total: rowData.total || "",
         deposit: rowData.deposit || "",
       });
+    } else {
+      resetForm();
     }
   }, [rowData, roomType]);
 
@@ -342,7 +390,6 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
       [name]: value,
     });
 
-    // Clear error when user selects a valid room type
     if (name === "class_name" && value) {
       setErrors((prev) => ({ ...prev, class_name: "" }));
     }
@@ -366,7 +413,6 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate form before submission
     if (!validateForm()) {
       return;
     }
@@ -379,15 +425,25 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
       class_name_display: selectedRoom ? selectedRoom.room_type : "",
     };
 
-    console.log(submitData);
     handleCallback(submitData);
+    handleModalClose();
+  };
+
+  // Handle modal close with form reset
+  const handleModalClose = () => {
+    resetForm();
     handleClose();
   };
 
   return (
-    <Modal show={show} onHide={handleClose} size="lg" dialogClassName="custom-modal">
+    <Modal 
+      show={show} 
+      onHide={handleModalClose} 
+      size="lg" 
+      dialogClassName="custom-modal"
+    >
       <div className="pe-5 ps-4 pt-3 pb-0">
-        <FaTimes style={closeIconStyle} onClick={handleClose} />
+        <FaTimes style={closeIconStyle} onClick={handleModalClose} />
         <div className="fw-semibold fs-5">Billing & Charges</div>
       </div>
 

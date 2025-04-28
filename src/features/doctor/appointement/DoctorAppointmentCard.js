@@ -56,11 +56,19 @@ function DoctorAppointmentCard({
                 </span>
               </Col>
 
-              <Col md={7} xs={12} className="gy-1">
+              {/* <Col md={7} xs={12} className="gy-1">
                 <span className="fw-semibold" style={{ fontSize: "0.9rem" }}>
                   <NavLink to={"/"} >View Documents</NavLink>
                 </span>
-              </Col>
+              </Col> */}
+
+<Col md={7} xs={12} className="gy-1">
+  <span className="fw-semibold" style={{ fontSize: "0.9rem" }}>
+    <NavLink to={`${process.env.REACT_APP_API_URL}/${appointmentData.document}`} target="_blank" rel="noopener noreferrer">
+      View Documents
+    </NavLink> 
+  </span>
+</Col>
             </Row>
 
           </div>

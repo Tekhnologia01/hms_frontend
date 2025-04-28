@@ -30,8 +30,6 @@ function DoctorDashboard() {
 
 
 
-    console.log(appointementcount)
-
 
     const fetchTodaysAppointments = async () => {
         try {

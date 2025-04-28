@@ -122,9 +122,9 @@ function DoctorsAppointment() {
             >
                 &#x2022; {item.status}
             </span></td>
-            <td>
+            {/* <td>
                 <FiEdit2 style={{ height: "23px", width: "23px" }} />
-            </td>
+            </td> */}
         </tr>
     );
 

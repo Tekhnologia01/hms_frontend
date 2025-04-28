@@ -167,9 +167,10 @@ function Login() {
                 <div className="text-center">
                   {/* <span style={{ fontWeight: "500" }}>I don’t have an account? </span> */}
                   <p>
-            <span style={{ fontWeight: "500", color: "#1D949A" ,cursor:
-              "pointer"
-            }}  onClick={()=>{navigate('/enteremail')}}>forgot password ?</span></p>
+                 <span style={{ fontWeight: "500", color: "#1D949A" ,cursor: "pointer"}}  onClick={()=>{navigate('/enteremail')}}>
+                  forgot password ?
+                  </span>
+                  </p>
                 </div> 
               </Col>
             </Row>

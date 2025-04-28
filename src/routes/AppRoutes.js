@@ -11,8 +11,6 @@ import PasswordReset from "../features/authentication/forgotPassword/PasswordRes
 import SetnewPassowrd from "../features/authentication/forgotPassword/SetnewPassword";
 import AddUsers from "../features/hospital/AddUser/index";
 import HospitalDoctorList from "../features/DoctorList";
-
-
 import Departments from "../features/hospital/Departments";
 import Department from "../features/hospital/Departments/Department";
 import Charges from "../features/hospital/BillingAndCharges/Charges";
@@ -70,10 +68,7 @@ function AppRoutes({ getDefaultRoute }) {
       <Route path="/passwordreset" element={<PasswordReset />} />
       <Route path="/setpassword" element={<SetnewPassowrd />} />
       <Route element={<DefaultLayout />}>
-
-
         {/* Hospital routes */}
-
         <Route path="/hospital" element={<HospitalDashboard />} />
         <Route path="/hospital/add_users" element={<AddUsers />} />
         <Route path="/hospital/add_users/add_doctor" element={<AddUserForm user={"Doctor"} />} />
