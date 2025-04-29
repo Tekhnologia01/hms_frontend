@@ -11,7 +11,7 @@ import { showToast } from "../../../components/common/Toaster";
 
 // Mock InputBox component; replace with your actual import if different
 const InputBox = ({ label, placeholder, isRequired, type = "text", value, onChange, name, disabled }) => (
-  
+
   <Form.Group>
     <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>
       {label} {isRequired && <span className="text-danger fw-bold">*</span>}
@@ -39,27 +39,37 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
   });
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
-//   console.log("patient data in the payment page",patient);
+
+  //   console.log("patient data in the payment page",patient);
+  // useEffect(() => {
+  //   setFormData({
+  //     name: patient?.Name || "",
+  //     amount: "",
+  //     date: "",
+  //   });
+  // }, [patient]);
   useEffect(() => {
+    // Get current date in YYYY-MM-DD format (HTML date input format)
+    const today = new Date().toISOString().split('T')[0];
+
     setFormData({
       name: patient?.Name || "",
       amount: "",
-      date: "",
+      date: today, // Set today's date as default
     });
-  }, [patient]); 
+  }, [patient]);
 
 
-//   const useEffect= useState({
-//     name: patient?.Name || "",
-//     amount: "",
-//     date: "",
-//   });
+  //   const useEffect= useState({
+  //     name: patient?.Name || "",
+  //     amount: "",
+  //     date: "",
+  //   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -88,7 +98,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    setLoading(true);    
+    setLoading(true);
     setError(null);
 
     try {
@@ -99,11 +109,11 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
       };
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/accountant/addpayment`,
-        paymentData,config
+        paymentData, config
       );
 
 
-   showToast("Payment added successfully!", "success");
+      showToast("Payment added successfully!", "success");
 
       setFormData({
         name: patient?.Name || "",
@@ -175,22 +185,22 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
 
 
 
-          {/* <Button variant="primary" type="submit" disabled={loading}>
+            {/* <Button variant="primary" type="submit" disabled={loading}>
             {loading ? "Submitting..." : "Submit Payment"}
           </Button> */}
 
 
             <CommanButton
-                                          label="Submit Payment"
-                                          className="mb-3 ps-4 pe-4 p-2 fw-bold fs-6 "
-                                          type="submit"
-                                          disabled={loading}
-                                    
-                                      />
+              label="Submit Payment"
+              className="mb-3 ps-4 pe-4 p-2 fw-bold fs-6 "
+              type="submit"
+              disabled={loading}
+
+            />
           </div>
         </Form>
       </Modal.Body>
-    
+
     </Modal>
   );
 }
