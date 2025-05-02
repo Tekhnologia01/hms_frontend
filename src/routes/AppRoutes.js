@@ -55,6 +55,7 @@ import AdmitedPatientDetails from "../features/hospital/admitedPatient/AdmitedPa
 import IpdBill from "../features/accountant/billAdmitedPatient.js/IpdBill";
 import DepositeReceipt from "../features/accountant/billAdmitedPatient.js/DepositeReceipt";
 import DischargeSummery from "../features/accountant/dischargeSummery/DischargeSummery";
+import OpdReport from "../features/accountant/report/OpdReport";
 
 
 function AppRoutes({ getDefaultRoute }) {
@@ -87,6 +88,9 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/hospital/account" element={<Account />} />
         <Route path="/hospital/settings" element={<Setting />} />
         <Route path="/hospital/room" element={<RoomInfo/>} />
+        <Route path="/hospital/payment/ipd" element={<Report/>} />
+        <Route path="/hospital/payment/opd" element={<OpdReport/>} />
+
 
         {/* Lab routes */}
         <Route path="/lab" element={<Nurse />} />
@@ -105,8 +109,6 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/lab/patient_list/:patientId" element={<LabPatientDetails />} />
         <Route path="/lab/account" element={<Account />} />
         <Route path="/lab/settings" element={<Setting />} />
-
-        
 
         
         {/* Reception routes 1 */}

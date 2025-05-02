@@ -82,15 +82,15 @@ function HospitalDoctorList() {
   return (
     <>
       <div className="py-4 px-3">
-        <div
+        {/* <div
           className="fw-semibold fs-6"
           style={{ color: "#1D949A" }}
           onClick={() => navigate(-1)}
         >
           <FaArrowLeft />
           <span className="pt-1 px-2">Doctor List</span>
-        </div>
-        <div className="fw-bold py-4 fs-4">
+        </div> */}
+        <div className="fw-bold pb-2 fs-4">
           <span>Doctors List</span>
         </div>
 
