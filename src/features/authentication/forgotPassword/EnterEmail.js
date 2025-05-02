@@ -106,7 +106,7 @@ function EnterEmail() {
                   />
                 </div>
 
-                <div className="text-center pt-3">
+                <div className="text-center pt-3" onClick={()=>{navigate('/login')}} style={{cursor:"pointer"}}>
                   <span className="pe-2" style={{ color: "#1D949A" }}>
                     <FaArrowLeft />
                   </span>

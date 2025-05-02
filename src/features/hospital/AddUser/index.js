@@ -75,7 +75,7 @@ function AddUsers() {
             { name: "Receptionist Name", accessor: "Name", class: "py-3 px-4 text-left" },
             { name: "Joining Date", accessor: "joining_date", class: "text-center px-1" },
             { name: "Mobile No", accessor: "mobile No", class: "py-3 text-center px-1" },
-            { name: "Department", accessor: "joining_date", class: "text-center px-1" },
+            // { name: "Department", accessor: "joining_date", class: "text-center px-1" },
             { name: "Shift", accessor: "shift", class: "py-3 text-center px-1" },
             { name: "Actions", accessor: "actions", class: "py-3 text-center px-1" }
         ],
@@ -284,7 +284,7 @@ function AddUsers() {
                     : "-"}
             </td>            <td className="py-3 px-2">{item?.mobile || "-"}</td>
 
-            <td className="py-3 px-2">{item?.Department_name || "-"}</td>
+            {/* <td className="py-3 px-2">{item?.Department_name || "-"}</td> */}
 
             <td className="py-3 px-2">{item.shift_name || "-"}</td>
             <td>
