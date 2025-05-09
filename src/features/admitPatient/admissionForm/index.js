@@ -375,7 +375,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                                         style={{ height: "45.5px" }}
                                         name="admit_date"
                                         type="date"
-                                        min={new Date().toISOString().split("T")[0]}
+                                        // min={new Date().toISOString().split("T")[0]}
                                         value={formData.admit_date} onChange={handleInputChange} />
                                 </Form.Group>
                             </Col>
@@ -394,7 +394,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                         {errors.admit_date && <p className="text-danger">{errors.admit_date}</p>}
                     </Col>
 
-                    <Col lg={4} md={6} className="mt-4">
+                    {/* <Col lg={4} md={6} className="mt-4">
                         <Row>
                             <Form.Label className="fw-semibold">Select Discharge Date & Time </Form.Label>
 
@@ -419,7 +419,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                             {errors.discharge_date && <p className="text-danger">{errors.discharge_date}</p>}
                         </Row>
 
-                    </Col>
+                    </Col> */}
 
                     <Col lg={4} md={6} className="mt-4">
                         <Form.Label className="fw-semibold">Mediclaim</Form.Label>
@@ -450,7 +450,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                         </Form.Group>
                     </Col>
 
-                    <Col lg={4} md={6} className="mt-4">
+                    <Col lg={4} md={6} className="mt-3">
                         {beds &&
                             <Form.Group controlId="bed_id">
                                 <Form.Label className="fw-semibold">Select Bed <span className="text-danger fw-bold">*</span></Form.Label>

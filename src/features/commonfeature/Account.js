@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
 import { Row, Col, Form } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -14,15 +15,17 @@ function Account() {
     const { user } = useSelector(state => state?.auth);
     const [bloodGroups, setBloodGroups] = useState([]);
     const [previewImage, setPreviewImage] = useState(null);
+    const [isEditable, setIsEditable] = useState(false); // State to toggle edit mode
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
     async function getProfile() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${user?.userId}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${user?.userId}`, config);
             formik.setValues(response?.data?.data);
             if (!response?.data?.data?.photo) {
                 setPreviewImage(defaultProfile);
@@ -34,7 +37,7 @@ function Account() {
 
     const fetchblood = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`, config);
             setBloodGroups(response?.data?.data);
         } catch (err) {
             console.log("Error fetching blood group:", err);
@@ -48,7 +51,7 @@ function Account() {
 
     const updateProfile = async (values) => {
         const formData = new FormData();
-        if(previewImage !== null){
+        if (previewImage !== null) {
             formData.append("photo", values?.photo);
         }
         formData.append("user_id", user?.userId);
@@ -66,16 +69,15 @@ function Account() {
                 }
             });
             if (response.data?.status) {
-                // fetchDetails();
-                // setShowPaymentModal(true);
+                showToast("Profile updated successfully!", "success");
             } else {
-                showToast("Error while completing payment!", "error");
+                showToast("Error while updating profile!", "error");
             }
         } catch (e) {
             console.log(e);
-            showToast(e.response?.data?.error ? e.response?.data?.error : "Error while completing payment!", "error");
+            showToast(e.response?.data?.error ? e.response?.data?.error : "Error while updating profile!", "error");
         }
-    }
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -96,8 +98,8 @@ function Account() {
             city: Yup.string().required("City is required"),
         }),
         onSubmit: values => {
-            console.log("Form submitted", values);
             updateProfile(values);
+            setIsEditable(!isEditable)
         },
     });
 
@@ -111,7 +113,13 @@ function Account() {
 
     return (
         <div className="pt-4">
-            <div className="fw-semibold mx-4 fs-3">Account</div>
+            <div className="d-flex justify-content-between align-items-center mx-4">
+                <div className="fw-semibold fs-3">Account</div>
+                <FaRegEdit 
+                    style={{ cursor: "pointer", fontSize: "1.5rem", color: isEditable ? "green" : "black" }}
+                    onClick={() => setIsEditable(!isEditable)}
+                />
+            </div>
             <div className="fw-semibold fs-5 mx-4 mt-3">My Profile</div>
             <div className="fs-6 mx-4">This information will be displayed publicly so be careful what you share.</div>
             <form onSubmit={formik.handleSubmit}>
@@ -133,6 +141,7 @@ function Account() {
                                 id="upload-photo"
                                 style={{ display: "none" }}
                                 onChange={handleFileChange}
+                                disabled={!isEditable}
                             />
                             <div className="d-flex gap-3">
                                 <CommanButton
@@ -143,12 +152,14 @@ function Account() {
                                         setPreviewImage(defaultProfile); // Reset preview
                                     }}
                                     style={{ borderRadius: "7px", height: "40px", fontSize: "14px", backgroundColor: "#fff", color: "black", border: "1px solid lightgray" }}
+                                    disabled={!isEditable}
                                 />
                                 <CommanButton
                                     label="Upload New Photo"
                                     className="p-1 px-4 fw-semibold"
                                     style={{ borderRadius: "7px", fontSize: "14px", height: "40px" }}
                                     onClick={() => document.getElementById("upload-photo").click()}
+                                    disabled={!isEditable}
                                 />
                             </div>
                         </div>
@@ -161,6 +172,7 @@ function Account() {
                                     placeholder="Enter your first name"
                                     isRequired={true}
                                     {...formik.getFieldProps("name")}
+                                    disabled={!isEditable} // Disable input if not editable
                                 />
                                 {formik.touched.name && formik.errors.name && (
                                     <div className="text-danger">{formik.errors.name}</div>
@@ -172,6 +184,7 @@ function Account() {
                                     placeholder="Number here..."
                                     isRequired={true}
                                     {...formik.getFieldProps("mobile")}
+                                    disabled={!isEditable} // Disable input if not editable
                                 />
                                 {formik.touched.mobile && formik.errors.mobile && (
                                     <div className="text-danger">{formik.errors.mobile}</div>
@@ -183,49 +196,43 @@ function Account() {
                                     placeholder="Email I'd here..."
                                     isRequired={true}
                                     {...formik.getFieldProps("email")}
+                                    disabled={!isEditable} // Disable input if not editable
                                 />
                                 {formik.touched.email && formik.errors.email && (
                                     <div className="text-danger">{formik.errors.email}</div>
                                 )}
                             </Col>
-                            {
-                                <Col md={6} className="gy-3">
-                                    <Form.Group controlId="idSelect">
-                                        <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>
-                                            Select Blood Group <span style={{ color: "red" }}>*</span>
-                                        </Form.Label>
-                                        <Form.Select
-                                            style={{ padding: '0.6rem' }}
-                                            name="blood_group"
-                                            isRequired={true}
-                                            {...formik.getFieldProps("blood_group")}
-                                        >
-                                            <option value="">Select Blood Group</option>
-                                            {
-                                                bloodGroups.length > 0 ? bloodGroups.map(blood => (
-                                                    <option key={blood.blood_id} value={blood.blood_id}>{blood.blood_group_name}</option>
-                                                )) : null
-                                            }
-                                        </Form.Select>
-                                    </Form.Group>
-                                    {(formik.touched.blood_group || formik.submitCount > 0) && formik.errors.blood_group && (
-                                        <div className="text-danger">{formik.errors.blood_group}</div>
-                                    )}
-                                    {/* <label className="fw-semibold pb-1 pt-1">Select Blood <span style={{ color: "red" }}>*</span></label>
-                                <SelectBox
-                                    name="blood_group"
-                                    defaultValue="Select Blood Group"
-                                    value={formik.values.blood_group}
-                                    options={bloodGroups.map(blood => ({ label: blood.blood_group_name, option: blood.blood_id }))}
-                                    onChange={formik.handleChange}
-                                /> */}
-                                </Col>}
+                            <Col md={6} className="gy-3">
+                                <Form.Group controlId="idSelect">
+                                    <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>
+                                        Select Blood Group <span style={{ color: "red" }}>*</span>
+                                    </Form.Label>
+                                    <Form.Select
+                                        style={{ padding: '0.6rem' }}
+                                        name="blood_group"
+                                        isRequired={true}
+                                        {...formik.getFieldProps("blood_group")}
+                                        disabled={!isEditable} // Disable select if not editable
+                                    >
+                                        <option value="">Select Blood Group</option>
+                                        {
+                                            bloodGroups.length > 0 ? bloodGroups.map(blood => (
+                                                <option key={blood.blood_id} value={blood.blood_id}>{blood.blood_group_name}</option>
+                                            )) : null
+                                        }
+                                    </Form.Select>
+                                </Form.Group>
+                                {(formik.touched.blood_group || formik.submitCount > 0) && formik.errors.blood_group && (
+                                    <div className="text-danger">{formik.errors.blood_group}</div>
+                                )}
+                            </Col>
                             <Col md={6} className="gy-3">
                                 <InputBox
                                     label="Address "
                                     placeholder="Enter house no / street name / area"
                                     isRequired={true}
                                     {...formik.getFieldProps("address")}
+                                    disabled={!isEditable} // Disable input if not editable
                                 />
                                 {formik.touched.address && formik.errors.address && (
                                     <div className="text-danger">{formik.errors.address}</div>
@@ -237,6 +244,7 @@ function Account() {
                                     placeholder="Enter city here..."
                                     isRequired={true}
                                     {...formik.getFieldProps("city")}
+                                    disabled={!isEditable} // Disable input if not editable
                                 />
                                 {formik.touched.city && formik.errors.city && (
                                     <div className="text-danger">{formik.errors.city}</div>
@@ -246,7 +254,13 @@ function Account() {
                     </Col>
                 </Row>
                 <div className="ps-4 justify-content-start d-flex">
-                    <CommanButton label="Save Changes" className="mb-3 ps-4 pe-4 p-2 fw-semibold fs-6" style={{ borderRadius: "7px" }} type="submit" />
+                    <CommanButton
+                        label="Save Changes"
+                        className="mb-3 ps-4 pe-4 p-2 fw-semibold fs-6"
+                        style={{ borderRadius: "7px" }}
+                        type="submit"
+                        disabled={!isEditable}
+                    />
                 </div>
             </form>
         </div>

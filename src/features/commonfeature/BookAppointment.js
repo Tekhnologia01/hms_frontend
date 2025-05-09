@@ -532,8 +532,8 @@ const BookAppointment = ({ show, handleClose }) => {
           </Col>
         </Row>
 
-        <Row className="mt-3 m-0">
-          <Col lg={6}>
+        <Row className="mt-3 m-0 ">
+          <Col lg={6} className="px-0">
             <Form.Group controlId="patientSource">
               <Form.Label className="fw-semibold">Patient Source <span style={{ color: "red" }}>*</span></Form.Label>
               <Form.Control 

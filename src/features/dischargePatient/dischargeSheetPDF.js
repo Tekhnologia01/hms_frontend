@@ -265,6 +265,12 @@ import React from "react";
 import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer";
 import Airavat from "../../assets/images/Airavat.png";
 
+const formatEpochToDate = (epoch) => {
+    if (!epoch) return '';
+    const date = new Date(epoch * 1000);
+    return date.toLocaleDateString('en-GB'); // Formats as dd/mm/yyyy
+};
+
 Font.register({
     family: 'Times New Roman',
     fonts: [
@@ -360,6 +366,8 @@ const styles = StyleSheet.create({
 });
 
 const DischargeSheetPDF = ({ data, prescription }) => {
+    const admittedDate = formatEpochToDate(data?.admitted_date);
+    const dischargeDate = formatEpochToDate(data?.discharge_date_time);
 
 
 
@@ -378,13 +386,13 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                         <Text style={styles.margin_t}><Text style={styles.header}>NAME : </Text>{data?.patient_name}</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>AGE : </Text>{data?.patient_age} YEARS</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>CONSULTANT : </Text>{data?.doctor_name}</Text>
-                        <Text style={styles.margin_t}><Text style={styles.header}>DATE OF ADMISSION : </Text>{data?.admitted_date}</Text>
+                        <Text style={styles.margin_t}><Text style={styles.header}>DATE OF ADMISSION : </Text>{admittedDate}</Text>
                     </View>
                     <View>
                         <Text style={styles.margin_t}><Text style={styles.header}>UHID : </Text>{data?.uh_id}</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>IP NO. : </Text>{data?.ipd_id}</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>DEPARTMENT : </Text>{data?.department}</Text>
-                        <Text style={styles.margin_t}><Text style={styles.header}>DATE OF DISCHARGE : </Text>{data?.discharge_date}</Text>
+                        <Text style={styles.margin_t}><Text style={styles.header}>DATE OF DISCHARGE : </Text>{dischargeDate}</Text>
                     </View>
                 </View>
                 <View style={{ width: '100%', borderTop: '1px solid #475467', marginTop: 8 }}></View>
