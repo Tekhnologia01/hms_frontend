@@ -242,7 +242,7 @@ function PatientAppointmentList() {
           }
         />
         <span className="ps-3"></span>
-        <RiDeleteBinLine style={{ height: "25px", width: "25px" }} />
+        {/* <RiDeleteBinLine style={{ height: "25px", width: "25px" }} /> */}
       </td>
     </tr>
   );
