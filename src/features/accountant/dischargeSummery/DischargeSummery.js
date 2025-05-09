@@ -163,8 +163,7 @@ function DischargeSummery() {
                 <span>Discharged Patients</span>
             </div>
 
-            <div className="mb-4" style={{width:"100%", display:"flex"}}>
-
+            <div className="mb-4" style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                 <Form>
                     <Form.Control
                         type="date"
