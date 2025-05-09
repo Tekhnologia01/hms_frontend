@@ -35,9 +35,9 @@ function RoomInfo() {
 
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     }
     ////////////////////////////////FetchData()///////////////////////////////
     const fetchdata = async () => {
@@ -52,14 +52,14 @@ function RoomInfo() {
             } else if (cardState === "Bed") {
                 endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?page=${currentPage}&limit=${limitPerPage}`;
             }
-            const response = await axios.get(endpoint,config);
+            const response = await axios.get(endpoint, config);
             setDoctors(response?.data?.data || []);
         } catch (err) {
             showToast("Error fetching data", "error");
         }
     };
 
-    
+
     useEffect(() => {
         fetchdata();
     }, [currentPage, cardState]);
@@ -67,7 +67,7 @@ function RoomInfo() {
 
     const fetchCount = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroombedcount`,config)
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroombedcount`, config)
             setUserCount(response?.data?.data);
         } catch (err) {
             showToast("Error fetching user count", "error");
@@ -227,7 +227,7 @@ function RoomInfo() {
                 "bed_name": bedData.bedName,
                 "room_id": bedData.roomId
             }
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addbed/${userId}`, data,config)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addbed/${userId}`, data, config)
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
@@ -250,7 +250,7 @@ function RoomInfo() {
                 "room_name": RoomData.room_name,
                 "max_bed": RoomData.max_bed
             }
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addroom/${userId}`, data,config)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/addroom/${userId}`, data, config)
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
@@ -273,7 +273,7 @@ function RoomInfo() {
                 "bed_id": bedData.bedId,
                 "room_id": bedData.roomId
             }
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/updatebed`, data,config)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/roombed/updatebed`, data, config)
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
@@ -297,14 +297,14 @@ function RoomInfo() {
                 "room_name": values?.room_name,
                 "max_bed": values?.max_bed
             }
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/roombed/updateroom/${room?.room_id}`,data,config)
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/roombed/updateroom/${room?.room_id}`, data, config)
             if (response.data?.status) {
                 fetchdata();
                 fetchCount();
                 showToast("Room updated successfull!", "success");
                 handleCloseModalRoom()
             } else {
-                showToast( "Error while updating bed!", "error");
+                showToast("Error while updating bed!", "error");
             }
         } catch (error) {
             showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while updating room!", "error");
@@ -315,7 +315,7 @@ function RoomInfo() {
     const handleDeleteRoom = async () => {
         try {
             if (deleteItem) {
-                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deleteroom/${deleteItem?.room_id}`,config)
+                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deleteroom/${deleteItem?.room_id}`, config)
                 if (response.data?.status) {
                     fetchdata();
                     fetchCount();
@@ -336,7 +336,7 @@ function RoomInfo() {
         try {
             if (deleteItem) {
                 if (deleteItem?.bed_id) {
-                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deletebed/${deleteItem?.bed_id}`,config)
+                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/roombed/deletebed/${deleteItem?.bed_id}`, config)
                     if (response.data?.status) {
                         fetchdata();
                         fetchCount();
@@ -427,11 +427,12 @@ function RoomInfo() {
                     {cardState === "Bed" &&
                         doctors?.data?.length > 0 && <div>
                             <CommonTable minimumWidth={"700px"} headers={columns} bodyData={doctors?.data} renderRow={renderRow} title={"Bed Information"} />
+                            <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
                         </div>
                     }
                     {
                         cardState === "Room" && doctors?.length > 0 && (
-                            
+
                             <div>
                                 <CommonTable
                                     minimumWidth={"700px"}
@@ -440,6 +441,7 @@ function RoomInfo() {
                                     renderRow={renderRowRoom}
                                     title={"Room Information"}
                                 />
+                                <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
                             </div>
                         )
                     }
@@ -453,6 +455,7 @@ function RoomInfo() {
                                     renderRow={renderRowAvailable}
                                     title={"Available Information"}
                                 />
+                                <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
                             </div>
                         )
                     }
@@ -465,13 +468,15 @@ function RoomInfo() {
                                 renderRow={renderRowAvailable}
                                 title={"Occupied Information"}
                             />
+                            <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
                         </div>
+
                     )
                     }
-                    {
+                    {/* {
                         doctors?.data?.length > 0 &&
                         <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
-                    }
+                    } */}
                 </div>
                 <AddRoom show={showModalRoom} handleClose={handleCloseModalRoom} handleRoomSubmit={handleAddRoom} room={room} openStatus={status} handleupdateroom={handleupdateRoom} />
                 <AddBed show={showModalBed} handleClose={handleCloseModalBed} handleBedSubmit={handleAddBed} bed={bed} openStatus={status} handleupdate={handleupdateBed} />
