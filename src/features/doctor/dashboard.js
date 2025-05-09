@@ -17,7 +17,7 @@ function DoctorDashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const [limitPerPage, setLimitPerPage] = useState(10);
     const [patient, setPatient] = useState([])
-    const [appointementcount,setAppointmentcount]=useState()
+    const [appointementcount, setAppointmentcount] = useState()
     const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
     const [todaysAppintments, setTodaysAppointments] = useState([]);
     const token = useSelector((state) => state.auth.currentUserToken);
@@ -211,7 +211,7 @@ function DoctorDashboard() {
             <div className="mx-4">
                 <Row>
                     <Col xl={6}>
-                        <div className="border" style={{ borderRadius: "5px", overflowX: "auto" }}>
+                        <div className="border" style={{ borderRadius: "5px", overflowX: "auto", maxHeight: "200px", overflowY: "scroll" }}>
                             <div className="border-bottom d-flex justify-content-between align-items-center">
                                 <div className="p-3 px-4 fs-5 fw-semibold">Ipd Patient</div>
                             </div>
@@ -237,17 +237,6 @@ function DoctorDashboard() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            {/* <td style={bodystyle}><span className="py-1 px-3 fw-semibold rounded-5"
-                                                style={
-                                                    patient.status === "Pending"
-                                                        ? pendingStyle
-                                                        : patient.status === "Declined"
-                                                            ? declinedStyle
-                                                            : confirmedStyle
-                                                }
-                                            >
-                                                &#x2022; {patient.status}
-                                            </span></td> */}
                                         </tr>
                                     ))}
                                 </tbody>
@@ -256,7 +245,7 @@ function DoctorDashboard() {
                         </div>
                     </Col>
                     <Col xl={6} className="mt-4 mt-xl-0">
-                        <div className="border" style={{ borderRadius: "5px", overflowX: "auto" }}>
+                        <div className="border" style={{ borderRadius: "5px", maxHeight: "200px", overflowY: "scroll", overflowX: "auto" }}>
                             <div className="border-bottom d-flex justify-content-between align-items-center">
                                 <div className="p-3 px-4 fs-5 fw-semibold">Todays Appointments</div>
                             </div>
