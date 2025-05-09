@@ -53,6 +53,7 @@ import EnterEmail from "./features/authentication/forgotPassword/EnterEmail";
 import PasswordReset from "./features/authentication/forgotPassword/PasswordReset";
 import SetnewPassowrd from "./features/authentication/forgotPassword/SetnewPassword";
 import EnterOtp from "./features/authentication/forgotPassword/CheckEmail";
+import { toast } from "react-toastify";
 
 function App() {
   const { user } = useSelector((state) => state?.auth);
