@@ -131,8 +131,9 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/reception/billing/ipd" element={<AdmitedDepatientBillDetals/>} />
         <Route path="/receptionist/bill/ipd/:admitedId" element={<IpdBill/>} />
         <Route path="/receptionist/bill/ipd/deposite/:admitedId" element={<DepositeReceipt />} />
+        <Route path="/reception/discharge_summery" element={<DischargeSummery/>} />
 
-
+        
         {/* Doctor routes */}
         <Route path="/doctor" element={<DoctorDashboard />} />
         <Route path="/doctor/appointments" element={<DoctorAppointment />} />

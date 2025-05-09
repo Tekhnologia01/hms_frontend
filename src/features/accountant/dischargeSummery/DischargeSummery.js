@@ -50,8 +50,8 @@ function DischargeSummery() {
         { name: "Admit Date", accessor: "admitted_date", class: "text-center px-1" },
         { name: "Discharge D", accessor: "actions", class: "py-3 text-center px-1" },
         { name: "Bill Status", accessor: "department", class: "py-3 text-center px-1" },
-        { name: "Discharge Status", accessor: "actions", class: "py-3 text-center px-1" },
         { name: "Discharge Summery", accessor: "actions", class: "py-3 text-center px-1" },
+        { name: "Discharge Status", accessor: "actions", class: "py-3 text-center px-1" },
 
     ];
 
@@ -66,7 +66,12 @@ function DischargeSummery() {
     const handleStatus= async(id)=>{
         try {
 
-            const response=await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`,config)
+            
+            const response=await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`,{},{
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              })
             fetchDoctors()
         } catch (error) {
             
@@ -114,8 +119,22 @@ function DischargeSummery() {
                     ? new Date(item.discharge_date * 1000).toLocaleDateString()
                     : "-"}</td>
                 {/* Department */}
+
+
                 <td className="py-3 px-2">{item.bill_status == 1 ? "Done" : "Not Done"}</td>
 
+                <td className="py-3 px-2">
+                    {item.bill_status == 1 ? (
+                        <MdAssignment
+                            style={{ width: "25px", height: "25px", cursor: "pointer" }}
+                            onClick={() => handledischarge(item?.ipd_id)}
+                        />
+                    ) : (
+                        <MdAssignment
+                            style={{ width: "25px", height: "25px", opacity: 0.5 }}
+                        />
+                    )}
+                </td>
 
                 {/* <td className="py-3 px-2">{item.discharge_status == 2 ? "Done" : "Not Done"}</td> */}
                 <td className="py-3 px-2  gap-2">
@@ -140,18 +159,6 @@ function DischargeSummery() {
 
 
 
-                <td className="py-3 px-2">
-                    {item.bill_status == 1 ? (
-                        <MdAssignment
-                            style={{ width: "25px", height: "25px", cursor: "pointer" }}
-                            onClick={() => handledischarge(item?.ipd_id)}
-                        />
-                    ) : (
-                        <MdAssignment
-                            style={{ width: "25px", height: "25px", opacity: 0.5 }}
-                        />
-                    )}
-                </td>
 
             </tr>
         );
