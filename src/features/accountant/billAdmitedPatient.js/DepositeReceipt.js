@@ -50,125 +50,302 @@ useEffect(() => {
   };
 
   // Function to handle deposit slip print with formatted layout
+  // const handlePrintDepositSlip = () => {
+  //   const printContent = `
+  //     <html>
+  //       <head>
+  //         <title>Deposit Receipt</title>
+  //         <style>
+  //           body {
+  //             font-family: Arial, sans-serif;
+  //             margin: 20px;
+  //             padding: 0;
+  //             font-size: 12pt;
+  //           }
+  //           .receipt-container {
+  //             width: 100%;
+  //             max-width: 800px;
+  //             margin: 0 auto;
+  //             border: 1px solid #ccc;
+  //             padding: 20px;
+  //           }
+  //           .header {
+  //             text-align: center;
+  //             margin-bottom: 20px;
+  //           }
+  //           .header img {
+  //             max-width: 150px;
+  //             height: auto;
+  //           }
+  //           .details-table {
+  //             width: 100%;
+  //             margin-bottom: 20px;
+  //           }
+  //           .details-table td {
+  //             padding: 5px;
+  //           }
+  //           .deposit-table {
+  //             width: 100%;
+  //             border-collapse: collapse;
+  //             margin-bottom: 20px;
+  //           }
+  //           .deposit-table th, .deposit-table td {
+  //             border: 1px solid #000;
+  //             padding: 8px;
+  //             text-align: center;
+  //           }
+  //           .deposit-table th {
+  //             background-color: #f2f2f2;
+  //           }
+  //           .total-row td {
+  //             font-weight: bold;
+  //           }
+  //           .footer {
+  //             text-align: right;
+  //             margin-top: 20px;
+  //           }
+  //           @media print {
+  //             body {
+  //               margin: 0;
+  //             }
+  //             .receipt-container {
+  //               border: none;
+  //             }
+  //           }
+  //         </style>
+  //       </head>
+  //       <body>
+  //         <div class="receipt-container">
+  //           <div class="header">
+  //             <img src="${Airavat}" alt="Airavat Logo" />
+  //             <h2>Deposit Receipt</h2>
+  //           </div>
+  //           <table class="details-table">
+  //             <tr>
+  //               <td><strong>Patient Name:</strong> ${details.Name}</td>
+  //               <td><strong>IPD ID:</strong> ${details.ipd_id}</td>
+  //             </tr>
+  //             <tr>
+  //               <td><strong>Department:</strong> ${details.department}</td>
+  //               <td><strong>Receipt No.:</strong> IPD-${details.ipd_id}</td>
+  //             </tr>
+  //             <tr>
+  //               <td><strong>Consulting Dr.:</strong> ${details.doctor_name}</td>
+  //               <td><strong>Admitted Date:</strong> ${new Date(details.admitted_date * 1000).toLocaleDateString()}</td>
+  //             </tr>
+  //           </table>
+  //           <table class="deposit-table">
+  //             <thead>
+  //               <tr>
+  //                 <th>No</th>
+  //                 <th>Date</th>
+  //                 <th>Amount</th>
+  //                 <th>Deposit ID</th>
+  //               </tr>
+  //             </thead>
+  //             <tbody>
+  //               ${details.deposits
+  //                 .map(
+  //                   (deposit, index) => `
+  //                     <tr>
+  //                       <td>${index + 1}</td>
+  //                       <td>${new Date(deposit.date * 1000).toLocaleDateString()}</td>
+  //                       <td>${deposit.amount}</td>
+  //                       <td>${deposit.deposite_id}</td>
+  //                     </tr>
+  //                   `
+  //                 )
+  //                 .join("")}
+  //               <tr class="total-row">
+  //                 <td colspan="3">Total Deposited</td>
+  //                 <td>${calculateDepositTotal()}</td>
+  //               </tr>
+  //             </tbody>
+  //           </table>
+  //           <div class="footer">
+  //             <p>Generated on: ${new Date().toLocaleString()}</p>
+  //           </div>
+  //         </div>
+  //       </body>
+  //     </html>
+  //   `;
+  //   const printWindow = window.open("", "_blank");
+  //   printWindow.document.write(printContent);
+  //   printWindow.document.close();
+  //   printWindow.print();
+  // };
+
   const handlePrintDepositSlip = () => {
     const printContent = `
-      <html>
-        <head>
-          <title>Deposit Receipt</title>
-          <style>
+    <html>
+      <head>
+        <title>Deposit Receipt</title>
+        <style>
+          body {
+            font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 12pt;
+            color: #1D2521;
+            line-height: 1.5;
+          }
+          .receipt-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 20px auto;
+            border: 1px solid #E2E8F0;
+            padding: 30px;
+            background-color: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+          }
+          .header img {
+            max-width: 160px;
+            height: auto;
+            margin-bottom: 10px;
+          }
+          .header h2 {
+            font-size: 24pt;
+            font-weight: 600;
+            color: #1D949A;
+            margin: 0;
+          }
+          .details-table {
+            width: 100%;
+            margin-bottom: 30px;
+            border-collapse: collapse;
+            table-layout: fixed; /* Ensures equal column widths */
+          }
+          .details-table tr {
+            display: flex; /* Use flexbox for better control over spacing */
+          }
+          .details-table td {
+            flex: 1; /* Each cell takes equal space */
+            padding: 8px 20px; /* Increased horizontal padding for spacing */
+            vertical-align: top;
+            font-size: 11pt;
+            border: none; /* Remove borders for cleaner look */
+          }
+          .details-table td:first-child {
+            margin-right: 200px; /* Adds gap between left and right columns */
+          }
+          .details-table td strong {
+            color: #475467;
+            font-weight: 600;
+          }
+          .deposit-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+          }
+          .deposit-table th, .deposit-table td {
+            border: 1px solid #E2E8F0;
+            padding: 10px;
+            text-align: center;
+            font-size: 11pt;
+          }
+          .deposit-table th {
+            background-color: #F9FAFB;
+            color: #475467;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
+          .deposit-table td {
+            color: #1D2521;
+          }
+          .total-row td {
+            font-weight: 600;
+            background-color: #F9FAFB;
+            color: #1D2521;
+          }
+          .total-row td:first-child {
+            text-align: right;
+          }
+          .footer {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 10pt;
+            color: #6B7280;
+          }
+          .footer p {
+            margin: 0;
+          }
+          @media print {
             body {
-              font-family: Arial, sans-serif;
-              margin: 20px;
+              margin: 0;
               padding: 0;
-              font-size: 12pt;
             }
             .receipt-container {
-              width: 100%;
-              max-width: 800px;
-              margin: 0 auto;
-              border: 1px solid #ccc;
+              border: none;
+              box-shadow: none;
+              margin: 0;
               padding: 20px;
             }
-            .header {
-              text-align: center;
-              margin-bottom: 20px;
+            @page {
+              margin: 1cm;
             }
-            .header img {
-              max-width: 150px;
-              height: auto;
-            }
-            .details-table {
-              width: 100%;
-              margin-bottom: 20px;
-            }
-            .details-table td {
-              padding: 5px;
-            }
-            .deposit-table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-bottom: 20px;
-            }
-            .deposit-table th, .deposit-table td {
-              border: 1px solid #000;
-              padding: 8px;
-              text-align: center;
-            }
-            .deposit-table th {
-              background-color: #f2f2f2;
-            }
-            .total-row td {
-              font-weight: bold;
-            }
-            .footer {
-              text-align: right;
-              margin-top: 20px;
-            }
-            @media print {
-              body {
-                margin: 0;
-              }
-              .receipt-container {
-                border: none;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="receipt-container">
-            <div class="header">
-              <img src="${Airavat}" alt="Airavat Logo" />
-              <h2>Deposit Receipt</h2>
-            </div>
-            <table class="details-table">
-              <tr>
-                <td><strong>Patient Name:</strong> ${details.Name}</td>
-                <td><strong>IPD ID:</strong> ${details.ipd_id}</td>
-              </tr>
-              <tr>
-                <td><strong>Department:</strong> ${details.department}</td>
-                <td><strong>Receipt No.:</strong> IPD-${details.ipd_id}</td>
-              </tr>
-              <tr>
-                <td><strong>Consulting Dr.:</strong> ${details.doctor_name}</td>
-                <td><strong>Admitted Date:</strong> ${new Date(details.admitted_date * 1000).toLocaleDateString()}</td>
-              </tr>
-            </table>
-            <table class="deposit-table">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Deposit ID</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${details.deposits
-                  .map(
-                    (deposit, index) => `
-                      <tr>
-                        <td>${index + 1}</td>
-                        <td>${new Date(deposit.date * 1000).toLocaleDateString()}</td>
-                        <td>${deposit.amount}</td>
-                        <td>${deposit.deposite_id}</td>
-                      </tr>
-                    `
-                  )
-                  .join("")}
-                <tr class="total-row">
-                  <td colspan="3">Total Deposited</td>
-                  <td>${calculateDepositTotal()}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="footer">
-              <p>Generated on: ${new Date().toLocaleString()}</p>
-            </div>
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt-container">
+          <div class="header">
+            <img src="${Airavat}" alt="Airavat Logo" />
+            <h2>Deposit Receipt</h2>
           </div>
-        </body>
-      </html>
-    `;
+          <table class="details-table">
+            <tr>
+              <td><strong>Patient Name:</strong> ${details.Name}</td>
+              <td><strong>IPD ID:</strong> ${details.ipd_id}</td>
+            </tr>
+            <tr>
+              <td><strong>Department:</strong> ${details.department}</td>
+              <td><strong>Receipt No.:</strong> IPD-${details.ipd_id}</td>
+            </tr>
+            <tr>
+              <td><strong>Consulting Dr.:</strong> ${details.doctor_name}</td>
+              <td><strong>Admitted Date:</strong> ${new Date(details.admitted_date * 1000).toLocaleDateString()}</td>
+            </tr>
+          </table>
+          <table class="deposit-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Deposit ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${details.deposits
+        .map(
+          (deposit, index) => `
+                    <tr>
+                      <td>${index + 1}</td>
+                      <td>${new Date(deposit.date * 1000).toLocaleDateString()}</td>
+                      <td>${deposit.amount}</td>
+                      <td>${deposit.deposite_id}</td>
+                    </tr>
+                  `
+        )
+        .join("")}
+              <tr class="total-row">
+                <td colspan="3">Total Deposited</td>
+                <td>${calculateDepositTotal()}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="footer">
+            <p>Generated on: ${new Date().toLocaleString()}</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
     const printWindow = window.open("", "_blank");
     printWindow.document.write(printContent);
     printWindow.document.close();

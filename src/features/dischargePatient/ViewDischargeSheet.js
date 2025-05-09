@@ -25,7 +25,7 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
                 `${process.env.REACT_APP_API_URL}/patient/get_ipd_details?ipd_id=${ipd_id}`,config);
 
             setDetails(response?.data?.data)
-            // console.log(response?.data?.data)
+            console.log("discharge shot",response?.data?.data)
         } catch (error) {
             showToast("Error while retrieving data", "error");
             console.error("API Error:", error);

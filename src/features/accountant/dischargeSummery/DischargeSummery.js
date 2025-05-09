@@ -163,7 +163,7 @@ function DischargeSummery() {
                 <span>Discharged Patients</span>
             </div>
 
-            <div className="mb-4">
+            <div className="mb-4" style={{width:"100%", display:"flex"}}>
 
                 <Form>
                     <Form.Control

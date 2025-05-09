@@ -25,6 +25,23 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
       },
     }
 
+    const getCurrentDateTime = () => {
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const timeStr = `${hours}:${minutes}`;
+
+        return { dateStr, timeStr };
+    };
+
+    const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();
+
     const initialState = {
         uh_id: "",
         department_id: "",
@@ -36,8 +53,8 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
         bed_id: "",
         room_type: "",
         occupation: "",
-        admit_date: "",
-        admit_time: "",
+        admit_date: currentDate,
+        admit_time: currentTime,
         discharge_date: null,
         discharge_time: null,
         relative_name: "",
@@ -73,6 +90,8 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
 
     useEffect(() => {
         if (appointmentData) {
+            const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();
+
             setFormData({
                 uh_id: appointmentData?.uh_id,
                 appointment_id: appointmentData?.Appointment_Id,
@@ -85,8 +104,8 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                 bed_id: "",
                 room_type: "",
                 occupation: "",
-                admit_date: "",
-                admit_time: "",
+                admit_date: currentDate,
+                admit_time: currentTime,
                 discharge_date: null,
                 discharge_time: null,
                 relative_name: "",
@@ -259,7 +278,13 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     }
 
     const closeModal = () => {
-        setFormData(initialState);
+        const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();
+
+        setFormData({
+            ...initialState,
+            admit_date: currentDate,
+            admit_time: currentTime
+        });
         setErrors({});
         handleClose()
     }

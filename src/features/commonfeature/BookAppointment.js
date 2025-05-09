@@ -323,6 +323,7 @@ import { useSelector } from "react-redux";
 import { validateAppointmentForm } from '../../validation/BookAppiotmentValidattion';
 import CommonToast, { showToast } from "../../components/common/Toaster";
 
+
 const BookAppointment = ({ show, handleClose }) => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [departments, setDepartments] = useState([]);
@@ -336,13 +337,30 @@ const BookAppointment = ({ show, handleClose }) => {
       Authorization: `Bearer ${token}`,
     },
   }
+
+  const getCurrentDateTime = () => {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const timeStr = `${hours}:${minutes}`;
+
+    return { dateStr, timeStr };
+  };
+  const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();
+
   const [errors, setErrors] = useState({});
   const initialState = {
     patientId: "",
     disease: "",
     departmentId: "",
     doctorId: "",
-    appointmentTime: "",
+    appointmentTime: currentTime,
     consultationReason: "",
     patientSource: "",
     visitType: "New",

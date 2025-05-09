@@ -113,20 +113,18 @@ function AppointmentSlider({ slides, heading }) {
                             >
                                 <div
                                     className="w-50 ms-2"
-                                    style={{ borderRight: "1px solid #1E959B4D" }}
+                                    style={{ borderRight: "1px solid #1E959B4D", display: "flex", alignItems: "center" }}
                                 >
                                     <CiCalendarDate />{" "}
                                     <span
-                                        style={{ color: "#075C55", fontWeight: "500" }}
+                                        style={{ color: "#075C55", fontWeight: "500", marginLeft: "5px" }}
                                     >
                                         {today}
                                     </span>
                                 </div>
-                                <div className="w-50 ms-2">
-                                    <MdOutlineAccessTime />{" "}
-                                    <span
-                                        style={{ color: "#075C55", fontWeight: "500" }}
-                                    >
+                                <div className="w-50 ms-2" style={{ display: "flex", alignItems: "center" }}>
+                                    <MdOutlineAccessTime />
+                                    <span style={{ color: "#075C55", fontWeight: "500", marginLeft: "5px" }}>
                                         {s.Doctor_Time}
                                     </span>
                                 </div>
