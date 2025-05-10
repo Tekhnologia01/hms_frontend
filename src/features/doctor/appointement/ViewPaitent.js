@@ -36,7 +36,7 @@ function ViewPatient() {
   const handleCloseModalPrescription = () => setShowModalPrescription(false);
 
   const handleShowModalAdmit = () => setShowAdmitModal(true);
-  const handleCloseModalAdmit = () => {setShowAdmitModal(false)};
+  const handleCloseModalAdmit = () => { setShowAdmitModal(false) };
   const [isUpdate, setIsUpdate] = useState(false);
   const [testData, setTestData] = useState([]);
   const [appointmentData, setAppointmentData] = useState([]);
@@ -45,10 +45,10 @@ function ViewPatient() {
 
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
   const initialState = {
     report_photo: "",
@@ -136,7 +136,7 @@ function ViewPatient() {
               central_nervous_system: examinationData?.central_nervous_system,
               per_abdomen: examinationData?.per_abdomen
             };
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/appointment/examination_update?userId=${user?.userId}`, payload,config);
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/appointment/examination_update?userId=${user?.userId}`, payload, config);
             if (response?.data?.status) {
               showToast("Changes Saved Successfully", "success");
               handleShowModalbill()
@@ -160,7 +160,7 @@ function ViewPatient() {
               central_nervous_system: examinationData?.central_nervous_system,
               per_abdomen: examinationData?.per_abdomen
             };
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/appointment/monitor?userId=${user?.userId}`, payload,config);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/appointment/monitor?userId=${user?.userId}`, payload, config);
             if (response?.data?.status) {
               showToast("Changes Saved Successfully", "success");
               handleShowModalbill()
@@ -177,7 +177,7 @@ function ViewPatient() {
 
   async function getAppointementDetail() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`, config);
       setAppointmentData(response?.data?.data);
 
     } catch (error) {
@@ -188,7 +188,7 @@ function ViewPatient() {
 
   async function getPrescriptionTest() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${params?.appointmentId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${params?.appointmentId}`, config);
       if (response?.data?.data?.prescription?.length !== 0) { setPrescriptionData(response?.data?.data?.prescription); }
       setTestData(response?.data?.data?.Test);
     } catch (error) {
@@ -203,7 +203,7 @@ function ViewPatient() {
 
   async function getExaminationDetails() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/get_examination_details?appointment_id=${params?.appointmentId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/get_examination_details?appointment_id=${params?.appointmentId}`, config);
       if (response?.data?.status && response?.data?.data?.length > 0) {
         console.log(response?.data?.data[0])
         const newData = {
@@ -262,7 +262,7 @@ function ViewPatient() {
       formDataToUpload.append("user_id", user?.userId);
       // window.open(URL.createObjectURL(pdfBlob), "_blank");
 
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/bill/createbill`, { appointment_id: params.appointmentId, total_amount: totalBill, chargesList: formData?.chargesList, user_id: user?.userId },config);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/bill/createbill`, { appointment_id: params.appointmentId, total_amount: totalBill, chargesList: formData?.chargesList, user_id: user?.userId }, config);
       if (response.data?.status) {
         showToast("End Appointment")
         handleCloseModalbill();
@@ -581,9 +581,9 @@ function ViewPatient() {
       </Row>
 
       <ExaminationForm formData={examinationData} setFormData={setExaminationData} />
-      <Row className="px-3">
-        <Col className="px-3">
-          {(prescriptionData) && <AddPrescriptionTable rows={prescriptionData} setRows={setPrescriptionData} appointmentId={appointmentData?.Appointment_Id} role={user?.RoleId} appointmentData = {appointmentData} />}
+      <Row>
+        <Col >
+          {<AddPrescriptionTable rows={prescriptionData} setRows={setPrescriptionData} appointmentId={appointmentData?.Appointment_Id} role={user?.RoleId} appointmentData={appointmentData} />}
         </Col>
       </Row>
 
