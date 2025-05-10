@@ -4,11 +4,11 @@ import { FaTimes } from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import CommanButton from "../../../components/common/form/commonButtton";
-import Note from "../../../components/common/form/textarea";
 import SelectBox from "../../../components/common/form/selectBox/SelectBox";
 import { convertDateTimeToEpoch, epochToTime, timeToEpoch } from "../../../utils/epochToDate";
 import { validateAdmitForm } from "../../../validation/PatientValidation";
 import { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     const [departments, setDepartments] = useState([]);
@@ -20,9 +20,9 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     const [errors, setErrors] = useState({});
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     }
 
     const getCurrentDateTime = () => {
@@ -79,7 +79,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     // Fetch room types
     async function getRoomTypes() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`, config);
             if (response.status) {
                 setRoomTypes(response?.data?.data);
             }
@@ -127,7 +127,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     // Fetch departments
     async function getDepartments() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`, config);
             setDepartments(response?.data?.data);
         } catch (err) {
             console.log("Error fetching departments:", err);
@@ -138,7 +138,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     async function getBeds(id) {
         try {
 
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/get_available_beds?room_type=${+formData.room_type}&admit_date=${convertDateTimeToEpoch(formData.admit_date, formData.admit_time)}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/get_available_beds?room_type=${+formData.room_type}&admit_date=${convertDateTimeToEpoch(formData.admit_date, formData.admit_time)}`, config);
             if (response.data?.status) {
                 setBeds(response?.data?.data);
             }
@@ -152,7 +152,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     // Fetch patients
     async function getPatients() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/getAll`, config);
             setPatients(response?.data?.data?.data);
         } catch (err) {
             console.log("Error fetching patients:", err);
@@ -163,7 +163,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     async function getDoctors(departmentId) {
         try {
             if (!departmentId) return;
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsDepartmentwise?dep_id=${departmentId}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsDepartmentwise?dep_id=${departmentId}`, config);
             setDoctors(response?.data?.data?.data);
         } catch (err) {
             console.log("Error fetching doctors:", err);
@@ -244,16 +244,16 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                 other_relation: formData.other_relation,
             };
 
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/admit/${user?.userId}`, payload,config);
-            // alert(response?.data?.message);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/admit/${user?.userId}`, payload, config);
+       
             setFormData(initialState);
-            showToast(response?.data?.message);
-            
             handleClose();
+            toast.success(response?.data?.message || 'Admit patient successfully!');
         } catch (error) {
-            showToast(error?.response?.data?.message);
 
-            alert("Error booking appointment");
+            toast.error(error?.response?.data?.message || 'Error in Admit patient !');
+
+
         }
     };
 
@@ -270,12 +270,12 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
         }
     };
 
-    const handleDischargeTimeChange = (e) => {
-        const selectedTime = e.target.value; // Get time in HH:MM format
-        if (selectedTime) {
-            setFormData({ ...formData, discharge_time: selectedTime })
-        }
-    }
+    // const handleDischargeTimeChange = (e) => {
+    //     const selectedTime = e.target.value; // Get time in HH:MM format
+    //     if (selectedTime) {
+    //         setFormData({ ...formData, discharge_time: selectedTime })
+    //     }
+    // }
 
     const closeModal = () => {
         const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();
@@ -419,33 +419,6 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                         {errors.admit_date && <p className="text-danger">{errors.admit_date}</p>}
                     </Col>
 
-                    {/* <Col lg={4} md={6} className="mt-4">
-                        <Row>
-                            <Form.Label className="fw-semibold">Select Discharge Date & Time </Form.Label>
-
-                            <Col md={6}>
-                                <Form.Group controlId="discharge_date">
-                                    <Form.Control
-                                        min={formData.admit_date}
-                                        style={{ height: "45.5px" }} name="discharge_date" type="date" value={formData.discharge_date} onChange={handleInputChange} />
-                                </Form.Group>
-                            </Col>
-                            <Col md={6}>
-                                <Form.Group className="">
-                                    <Form.Control
-                                        name="discharge_time"
-                                        type="time"
-                                        value={formData.discharge_time}
-                                        onChange={handleDischargeTimeChange}
-                                        style={{ height: "45.5px" }}
-                                    />
-                                </Form.Group>
-                            </Col>
-                            {errors.discharge_date && <p className="text-danger">{errors.discharge_date}</p>}
-                        </Row>
-
-                    </Col> */}
-
                     <Col lg={4} md={6} className="mt-4">
                         <Form.Label className="fw-semibold">Mediclaim</Form.Label>
                         <div className="d-flex align-items-center" style={{ height: "45.5px" }}>
@@ -453,12 +426,12 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                             <Form.Check inline type="radio" label="No" name="mediclaim" id="Yes" value="No" checked={formData.mediclaim === "No"} onChange={handleVisitTypeChange} />
                         </div>
                     </Col>
-                    </Row>
-                    <hr className="pt-2"></hr>
-                    <div className="pt-1 pb-2 fs-5 fw-semibold">
-                        Room Info
-                    </div>
-                    <Row>
+                </Row>
+                <hr className="pt-2"></hr>
+                <div className="pt-1 pb-2 fs-5 fw-semibold">
+                    Room Info
+                </div>
+                <Row>
 
                     <Col lg={4} md={6} className="mt-3">
                         <Form.Group controlId="room_type">
