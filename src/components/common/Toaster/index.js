@@ -7,6 +7,10 @@ const CommonToast = () => {
 };
 
 export const showToast = (message, type = "success", autoClose = 3000) => {
+
+
+  console.log(message)
+  
   switch (type) {
     case "success":
       toast.success(message, { autoClose });
