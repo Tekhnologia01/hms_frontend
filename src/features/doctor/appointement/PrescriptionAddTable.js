@@ -11,6 +11,7 @@ import { FaFilePrescription } from "react-icons/fa";
 import PrescriptionPDF from "./PrescriptionPDF";
 import { PDFViewer } from "@react-pdf/renderer";
 import { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appointmentData, isIPD }) => {
     const inputRefs = useRef([]);
@@ -71,7 +72,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${appointmentId}`, config);
             if (response?.data?.data?.prescription?.length !== 0) { setRows(response?.data?.data?.prescription); }
         } catch (error) {
-            showToast(error?.response?.data?.error || "Failed to fetch prescription data", "error");
+            toast.error(error?.response?.data?.error || "Failed to fetch prescription data");
         }
     }
 
@@ -82,7 +83,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                 setRows(response?.data?.data);
             }
         } catch (error) {
-            showToast(error?.response?.data?.error || "Failed to fetch prescription data", "error");
+            toast.error(error?.response?.data?.error || "Failed to fetch prescription data");
         }
     }
 
@@ -92,11 +93,11 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                 if (row?.Prescription_Id) {
                     const response = await axios.put(`${process.env.REACT_APP_API_URL}/prescription/update_ipd_prescription?prescription_id=${row?.Prescription_Id}`, row, config);
                     if (!response?.data?.status) {
-                        showToast("Failed to update prescription", "error");
+                        toast.error("Failed to update prescription");
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         setEditableRowIndex(-1);
                     } else {
-                        showToast("Prescription updated successfully", "success");
+                        toast.success("Prescription updated successfully");
                         // Update the row in local state
                         setRows(prevRows => {
                             const updatedRows = [...prevRows];
@@ -108,11 +109,11 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                 } else {
                     const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/ipd_add?ipd_id=${ipd_id}&&created_by=${userId}`, row, config);
                     if (!response?.data?.status) {
-                        showToast("Failed to add prescription", "error");
+                        toast.error("Failed to add prescription");
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         setEditableRowIndex(-1);
                     } else {
-                        showToast("Prescription added successfully", "success");
+                        toast.success("Prescription added successfully");
                         // Set the returned prescription (with id) in the row
                         if (response.data?.data) {
                             setRows(prevRows => {
@@ -125,16 +126,16 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                     }
                 }
             } catch (error) {
-                showToast(error?.response?.data?.message || "Failed to save prescription", "error");
+                toast.error(error?.response?.data?.message || "Failed to save prescription");
             }
         } else {
             try {
                 if (row?.Prescription_Id) {
                     const response = await axios.put(`${process.env.REACT_APP_API_URL}/prescription/update_prescription?prescription_id=${row?.Prescription_Id}`, row, config);
                     if (!response?.data?.status) {
-                        showToast("Failed to update prescription", "error");
+                        toast.error("Failed to update prescription");
                     } else {
-                        showToast("Prescription updated successfully", "success");
+                        toast.success("Prescription updated successfully");
                         // Update the row in local state
                         setRows(prevRows => {
                             const updatedRows = [...prevRows];
@@ -146,11 +147,11 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                 } else {
                     const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/add?appointment_id=${appointmentId}&&created_by=${userId}`, row, config);
                     if (!response.data?.status) {
-                        showToast("Failed to add prescription", "error");
+                        toast.error("Failed to add prescription");
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         setEditableRowIndex(-1);
                     } else {
-                        showToast("Prescription added successfully", "success");
+                        toast.success("Prescription added successfully");
                         // Set the returned prescription (with id) in the row
                         if (response.data?.data) {
                             setRows(prevRows => {
@@ -163,7 +164,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                     }
                 }
             } catch (error) {
-                showToast(error?.response?.data?.error || "Failed to save prescription", "error");
+                toast.error(error?.response?.data?.error || "Failed to save prescription");
             }
         }
 
@@ -193,26 +194,26 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                     const response = await axios.delete(`${process.env.REACT_APP_API_URL}/prescription/delete_ipd?prescription_id=${row?.Prescription_Id}`, config);
                     if (response.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
-                        showToast("Prescription deleted successfully", "success");
+                        toast.success("Prescription deleted successfully");
                     }
                 } else {
                     setRows(rows.filter((_, rowIndex) => rowIndex !== index));
-                    showToast("Prescription removed successfully", "success");
+                    toast.success("Prescription removed successfully");
                 }
             } else {
                 if (row?.Prescription_Id) {
                     const response = await axios.delete(`${process.env.REACT_APP_API_URL}/prescription/delete?prescription_id=${row?.Prescription_Id}`, config);
                     if (response.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
-                        showToast("Prescription deleted successfully", "success");
+                        toast.success("Prescription deleted successfully", "success");
                     }
                 } else {
                     setRows(rows.filter((_, rowIndex) => rowIndex !== index));
-                    showToast("Prescription removed successfully", "success");
+                    toast.success("Prescription removed successfully");
                 }
             }
         } catch (error) {
-            showToast(error?.response?.data?.error || "Failed to delete prescription", "error");
+            toast.error(error?.response?.data?.error || "Failed to delete prescription");
         }
     };
 

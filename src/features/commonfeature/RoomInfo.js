@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import DeleteConfirmationModal from "../../components/common/DeleteModal";
 import { showToast } from "../../components/common/Toaster";
 import { ListGroup } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function RoomInfo() {
     const [status, setStatus] = useState(1);
@@ -55,7 +56,7 @@ function RoomInfo() {
             const response = await axios.get(endpoint, config);
             setDoctors(response?.data?.data || []);
         } catch (err) {
-            showToast("Error fetching data", "error");
+            toast.error("Error fetching data");
         }
     };
 
@@ -70,7 +71,7 @@ function RoomInfo() {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroombedcount`, config)
             setUserCount(response?.data?.data);
         } catch (err) {
-            showToast("Error fetching user count", "error");
+            toast.error("Error fetching user count");
         }
     }
 
@@ -231,13 +232,13 @@ function RoomInfo() {
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
-                showToast("Bed added successfull!", "success");
+                toast.success("Bed added successfull!");
                 handleCloseModalBed()
             } else {
-                showToast("Error while adding bed!", "error");
+                toast.error("Error while adding bed!");
             }
         } catch (error) {
-            showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while adding bed!", "error");
+            toast.error(error?.response?.data?.message ? error?.response?.data?.message : "Error while adding bed!");
         }
     }
 
@@ -254,13 +255,13 @@ function RoomInfo() {
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
-                showToast("Room added successfull!", "success");
+                toast.success("Room added successfull!");
                 handleCloseModalRoom()
             } else {
-                showToast("Error while adding room!", "error");
+                toast.error("Error while adding room!");
             }
         } catch (error) {
-            showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while adding room!", "error");
+            toast.error(error?.response?.data?.message ? error?.response?.data?.message : "Error while adding room!");
         }
     }
 
@@ -277,13 +278,13 @@ function RoomInfo() {
             if (response?.data?.status) {
                 fetchdata();
                 fetchCount();
-                showToast("Bed updated successfull!", "success");
+                toast.success("Bed updated successfull!");
                 handleCloseModalBed()
             } else {
-                showToast("Error while updating bed!", "error");
+                toast.error("Error while updating bed!");
             }
         } catch (error) {
-            showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while updating bed!", "error");
+            toast.error(error?.response?.data?.message ? error?.response?.data?.message : "Error while updating bed!");
         }
     }
 
@@ -301,13 +302,13 @@ function RoomInfo() {
             if (response.data?.status) {
                 fetchdata();
                 fetchCount();
-                showToast("Room updated successfull!", "success");
+                toast.success("Room updated successfull!");
                 handleCloseModalRoom()
             } else {
-                showToast("Error while updating bed!", "error");
+                toast.error("Error while updating bed!");
             }
         } catch (error) {
-            showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while updating room!", "error");
+            toast.error(error?.response?.data?.message ? error?.response?.data?.message : "Error while updating room");
         }
     }
 
@@ -319,14 +320,14 @@ function RoomInfo() {
                 if (response.data?.status) {
                     fetchdata();
                     fetchCount();
-                    showToast("Room deleted successfully!", "success");
+                    toast.success("Room deleted successfully!");
 
                 } else {
-                    showToast("Error while deleting room!", "error");
+                    toast.error("Error while deleting room!");
                 }
             }
         } catch (error) {
-            showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while deleting room!", "error");
+            toast.error(error?.response?.data?.message ? error?.response?.data?.message : "Error while deleting room!");
         }
     }
 
@@ -340,18 +341,18 @@ function RoomInfo() {
                     if (response.data?.status) {
                         fetchdata();
                         fetchCount();
-                        showToast("Bed deleted successfully!", "success");
+                        toast.success("Bed deleted successfully!");
 
                     } else {
-                        showToast("Error while deleting bed!", "error");
+                        toast.error("Error while deleting bed!");
                     }
                 } else {
-                    showToast("Bed not found!", "error");
+                    toast.error("Bed not found!");
                 }
 
             }
         } catch (error) {
-            showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while deleting bed!", "error");
+            toast.error(error?.response?.data?.message ? error?.response?.data?.message : "Error while deleting bed!");
         }
     }
 

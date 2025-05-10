@@ -6,6 +6,7 @@ import Note from "../../../components/common/form/textarea";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 
 const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
@@ -58,20 +59,32 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
         });
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        formData.appointment_id = +params.appointmentId;
 
-        if (formData?.medicine_name !== "" && formData?.dosage !== "" && formData?.duration !== ""
-            && formData?.food_intake !== "" && formData?.common_note !== "") {
-            handlePrescriptionSubmit(formData);
+        try {
+            if (!formData?.medicine_name || !formData?.dosage || !formData?.duration ||
+                !formData?.food_intake || !formData?.common_note) {
+                throw new Error("Please fill all fields");
+            }
+
+            const submissionData = {
+                ...formData,
+                appointment_id: +params.appointmentId
+            };
+
+            await handlePrescriptionSubmit(submissionData);
             handleClose();
+            toast.success("Prescription submitted successfully");
+
+        } catch (error) {
+            if (error.message === "Please fill all fields") {
+                toast.error(error.message);
+            } else {
+                toast.error("Failed to submit prescription. Please try again.");
+            }
         }
-        else{
-            alert("Please Fill All Fields");
-        }
-       
-    }
+    };
 
 
     return (

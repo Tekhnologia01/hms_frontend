@@ -20,6 +20,7 @@ import ChangeRoom from "../../commonfeature/ChangeRoom";
 import { FaPlusSquare } from "react-icons/fa";
 import AddCharges from "../../commonfeature/AddCharges";
 import { CiMedicalClipboard } from "react-icons/ci";
+import { toast } from "react-toastify";
 
 function PatientAppointmentList() {
   const [showModal, setShowModal] = useState(false);
@@ -354,10 +355,10 @@ function PatientAppointmentList() {
         patientId: patient.Patient_ID
       };
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/update`, patientData, config)
-      showToast(response?.data?.message);
+      toast.success(response?.data?.message);
       getPatients()
     } catch (error) {
-      showToast(error?.response?.data?.message, "error");
+      toast.error(error?.response?.data?.message);
 
     }
   }

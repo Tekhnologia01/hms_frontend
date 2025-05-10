@@ -7,6 +7,7 @@ import NewCommonPagination from "../../../components/pagination/NewCommonPaginat
 import CommanButton from "../../../components/common/form/commonButtton";
 import AddChargesModal from "./AddChargesModal";
 import CommonTable from "../../../components/table/CommonTable";
+import { toast } from "react-toastify";
 
 function AddCharges() {
     const user =useSelector(state => state?.auth?.user)    
@@ -81,6 +82,7 @@ function AddCharges() {
             await axios.post(`${process.env.REACT_APP_API_URL}/fees/addcharges`, data,config);
             fetchChargesData();
             handleCloseModal();
+            toast.success("Added successfully");
         } catch (error) {
             console.error(error);
         }
@@ -98,6 +100,7 @@ function AddCharges() {
             await axios.post(`${process.env.REACT_APP_API_URL}/fees/updatedcharges`, data,config);
             fetchChargesData();
             handleCloseModal();
+            toast.success("Updated successfully");
         } catch (error) {
             console.error(error);
         }
@@ -107,6 +110,7 @@ function AddCharges() {
         try {
             await axios.delete(`${process.env.REACT_APP_API_URL}/fees/deletecharges/${id}`,config);
             fetchChargesData();
+            toast.success("Deleted successfully");
         } catch (error) {
             console.error(error);
         }
