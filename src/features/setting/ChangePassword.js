@@ -4,6 +4,7 @@ import CommanButton from "../../components/common/form/commonButtton";
 import PasswordInput from "../../components/common/form/password";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function ChangePassword() {
   const [formData, setFormData] = useState({
@@ -60,16 +61,13 @@ if (!formData.newPassword.trim()) {
         }
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/changepassword`, payload, config);
 
-
-
         if (response?.data?.status) {
-          alert(response?.data?.message);
+          toast.success(response?.data?.message || "Change password successfully! ")
         }
       }
     } catch (error) {
+          toast.error(error?.response?.data?.message|| " Error in Change password ")
 
-      console.log(error?.response?.data?.status)
-      alert(error?.response?.data?.message);
 
 
     }

@@ -8,6 +8,7 @@ import ViewDischargeSheet from "../../dischargePatient/ViewDischargeSheet";
 import { FaCheck } from "react-icons/fa";
 import { Tooltip } from 'react-bootstrap';
 import { useSelector } from "react-redux";
+import { CiReceipt } from "react-icons/ci";
 function DischargeSummery() {
     const [doctors, setDoctors] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -62,22 +63,6 @@ function DischargeSummery() {
     }
 
 
-
-    const handleStatus = async (id) => {
-        try {
-
-
-            const response = await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            fetchDoctors()
-        } catch (error) {
-
-        }
-
-    }
     const renderRow = (item, index) => {
         return (
             <tr key={item.id || index} className="border-bottom text-center">
@@ -156,15 +141,24 @@ function DischargeSummery() {
                         </>
                     )} */}
 
-                    {item.bill_report  ? (
-                        <MdAssignment
+                    {item.bill_report ? (
+                        <CiReceipt
                             style={{ width: "25px", height: "25px", cursor: "pointer" }}
                             onClick={() => window.open(`${process.env.REACT_APP_API_URL}/Uploads/${item.bill_report}`, "_blank", "noopener,noreferrer")}
                         />
                     ) : (
-                        <MdAssignment
-                            style={{ width: "25px", height: "25px", opacity: 0.5 }}
-                        />
+                        <>
+
+                            <OverlayTrigger
+                                placement="top"
+                                overlay={<Tooltip>Bill Status Not Compeleted</Tooltip>}
+                            >
+                                <CiReceipt
+                                    style={{ width: "25px", height: "25px", opacity: 0.5 }}
+                                />
+
+                            </OverlayTrigger>
+                        </>
                     )}
 
                 </td>
@@ -178,7 +172,7 @@ function DischargeSummery() {
                 <span>Discharged Patients</span>
             </div>
 
-            <div className="mb-4" style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+            <div className="mb-4 " style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                 <Form>
                     <Form.Control
                         type="date"

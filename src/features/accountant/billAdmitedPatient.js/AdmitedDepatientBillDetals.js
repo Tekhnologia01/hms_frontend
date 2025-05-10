@@ -208,11 +208,7 @@ function AdmitedDepatientBillDetals() {
                 />
               </td> : <td>
 
-                {/* <GiCheckMark
-                style={{ height: "25px", width: "25px", cursor: "pointer", color: "green" }}
-              // onClick={() => handleShowPaymentModal(item)}
-              /> */}
-
+   
                 <CommanButton
                   label={`Complete`}
                   className="fw-bold fs-6 "

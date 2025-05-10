@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import vijay from "../../assets/images/avatars/vijay.jpg";
+import vijay from "../../assets/images/avatars/vijay1.jpg";
 import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";

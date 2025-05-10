@@ -8,6 +8,7 @@ import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { useSelector } from "react-redux";
 import { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 // Mock InputBox component; replace with your actual import if different
 const InputBox = ({ label, placeholder, isRequired, type = "text", value, onChange, name, disabled }) => (
@@ -111,10 +112,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
         `${process.env.REACT_APP_API_URL}/accountant/addpayment`,
         paymentData, config
       );
-
-
-      showToast("Payment added successfully!", "success");
-
+      toast.success("Payment added successfully!")
       setFormData({
         name: patient?.Name || "",
         amount: "",
@@ -123,9 +121,8 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
 
       handleClose();
     } catch (err) {
-      setError("Error adding payment: " + (err.response?.data?.message || err.message));
-      showToast("Payment issue", "error");
 
+      toast.error("Issue in payment process")
     } finally {
       setLoading(false);
     }

@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { validatePatientForm } from '../../validation/PatientValidation'
 import SelectBox from "../../components/common/form/selectBox/SelectBox";
 import { showToast } from "../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 function AddPatient() {
   const [errors, setErrors] = useState({});
@@ -84,8 +85,7 @@ function AddPatient() {
           },
         }
       );
-      showToast(response?.data?.message);
-      // alert(response?.data?.message);
+      toast.success(response?.data?.message || 'Patient added successfully!');
       setFormData({
         patient_name: "",
         patient_phone_no: "",
@@ -99,18 +99,16 @@ function AddPatient() {
         patient_blood_group: ""
       })
     } catch (err) {
-      // console.log("Error adding patient => ", err);
-
-
-      // console.log(err?.response?.data?.message)
-      showToast(err?.response?.data?.message , "error");
-
+      toast.error(err?.response?.data?.message|| 'Error in patient add');
     }
   };
+
 const fetchblood=async()=>{
   try{
     const response=await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`,config)
     setBloodGroup(response?.data?.data)
+
+
   }
   catch(err){
     console.log("Error fetching blood group => ", err)

@@ -8,6 +8,7 @@ import NewCommonPagination from "../../../components/pagination/NewCommonPaginat
 import axios from "axios";
 import ViewOPDBill from "./ViewOPDBill";
 import { useSelector } from "react-redux";
+import { LuReceiptIndianRupee } from "react-icons/lu";
 
 function ReceptionistBillList() {
   const navigate = useNavigate();
@@ -23,14 +24,14 @@ function ReceptionistBillList() {
 
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
   const fetchDetails = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getappointmentdatewise?appointment_date=${selectedDate}&page=${currentPage}&limit=${limitPerPage}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getappointmentdatewise?appointment_date=${selectedDate}&page=${currentPage}&limit=${limitPerPage}`, config);
 
       setDoctors(response?.data?.data);
     } catch (err) {
@@ -87,9 +88,23 @@ function ReceptionistBillList() {
       <td className="py-3 px-2" style={{ width: "180px" }}>{item.doctor_name ?? "-"}</td>
       <td className="py-3 px-2" style={{ width: "160px" }}>{item.appo_biil_status ?? "-"}</td>
       <td style={{ width: "80px" }}>
-        <NavLink to={`/reception/billing/opd/${item.Appo_id}`} className={"text-decoration-none text-black"}>
+        {item.appo_biil_status == "Pending" ? <NavLink to={`/reception/billing/opd/${item.Appo_id}`} className={"text-decoration-none text-black"}>
           <IoReceiptOutline style={{ height: "23px", width: "23px", cursor: "pointer" }} />
-        </NavLink>
+        </NavLink> :
+          <a
+            href={`${process.env.REACT_APP_API_URL}/uploads/${item.bill_report}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary text-decoration-underline"
+          >
+            <LuReceiptIndianRupee style={{ height: "23px", width: "23px", cursor: "pointer" }} />
+          </a>
+
+
+        }
+
+
+
       </td>
     </tr>
 
