@@ -8,6 +8,7 @@ import InputBox from "../../../components/common/form/inputbox";
 import MultiSelectWithDropdown from "../../../components/common/form/multiselect";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const AddTest = ({ show, handleClose, handleTestSave }) => {
 
@@ -72,8 +73,9 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
     if (formData.labTestIds.length > 0 && formData?.recommendationDate !== "" && formData?.testReason !== "" ) {
       handleTestSave(formData);
       handleClose();
+      toast.success("Test added successfully");
     }else{
-      alert("Please fill all fields");
+      toast.error("Please fill all fields");
     }
   }
 

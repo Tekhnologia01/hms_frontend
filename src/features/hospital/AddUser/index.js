@@ -11,6 +11,7 @@ import { showToast } from "../../../components/common/Toaster";
 import UpdateUser from "./UpdateUser";
 import { useSelector } from "react-redux";
 import UpdateDoctor from "./UpdateDoctor";
+import { toast } from "react-toastify";
 
 function AddUsers() {
     const navigate = useNavigate();
@@ -97,7 +98,7 @@ function AddUsers() {
             );
             setUsers(response?.data?.data || { data: [], pagination: {} });
         } catch (err) {
-            showToast("Error fetching data", "error");
+            toast.error("Error fetching data", "error");
             console.error("Error fetching data:", err);
             setUsers({ data: [], pagination: {} });
         } finally {
@@ -367,7 +368,7 @@ function AddUsers() {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/receptionist/updateuser`, data, config);
             console.log(response)
             fetchData()
-            showToast("user updated successfully", "success");
+            toast.success("Updated successfully");
 
         } catch (error) {
 
@@ -380,10 +381,10 @@ function AddUsers() {
             const response = await axios.delete(`${process.env.REACT_APP_API_URL}/doctor/delete/${id}`, config);
             fetchCount();
             fetchData()
-            showToast("User deleted successfully", "success");
+            toast.success("Deleted successfully");
 
         } catch (err) {
-            showToast("Error deleting user", "error");
+            toast.error("Error deleting user");
             console.error("Error deleting user:", err);
         }
     };
@@ -392,18 +393,15 @@ function AddUsers() {
 
     const handleEditDoctor = async (data) => {
         try {
-
-
             console.log(data)
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/doctor/updatedoctor`, data, config);
             fetchData()
-            showToast("Doctor updated successfully", "success");
-
+            toast.success("Doctor updated successfully");
         } catch (error) {
-
+            toast.error(error)
         }
     };
-    
+
     return (
         <div className="py-4">
             <div className="fw-semibold fs-5 px-3">Add Users</div>
@@ -479,7 +477,7 @@ function AddUsers() {
 
 
 
-             <UpdateDoctor
+            <UpdateDoctor
                 status={currentState}
                 show={showDoctorModal}
                 handleClose={handleCloseDoctorModal}

@@ -6,6 +6,7 @@ import { FaTimes } from "react-icons/fa";
 import CommanButton from "../../../components/common/form/commonButtton";
 import InputBox from "../../../components/common/form/inputbox";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const UpdateDoctor = ({ show = false, handleClose, user, patientUpdate, status }) => {
 
@@ -39,7 +40,7 @@ const UpdateDoctor = ({ show = false, handleClose, user, patientUpdate, status }
 
   const validateForm = () => {
     let newErrors = {};
-    
+
     if (!formData.name.trim()) newErrors.name = "Patient name is required";
 
     if (!formData.phone_no) {

@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { Modal, Button, Form } from "react-bootstrap";
 import { RxCross2 } from "react-icons/rx";
-import { FiEdit } from "react-icons/fi";
+import { MdOutlineModeEdit } from "react-icons/md";
+
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -203,7 +204,7 @@ function Departments() {
                 }}
                 style={{ cursor: "pointer" }}
               >
-                <FiEdit className="fs-5" />
+                <MdOutlineModeEdit className="fs-5" style={{color:'gray', opacity:'0.7'}} />
               </button>
               {/* <button
                 className="border-0 bg-transparent p-0"
@@ -245,7 +246,7 @@ function Departments() {
           </Form>
         </div>
         <div className="m-3 d-flex align-items-center gap-3 justify-content-end ">
-          <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+          <Button  onClick={() => setShowAddModal(false)} style={{backgroundColor:'white', color:"black"}}>
             Cancel
           </Button>
           <CommanButton onClick={handleAddDepartment} label={"Add Department"} />
@@ -286,7 +287,7 @@ function Departments() {
           </Form>
         </div>
         <div className="m-3 d-flex align-items-center gap-3 justify-content-end ">
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+          <Button  onClick={() => setShowEditModal(false)} style={{backgroundColor:'white', color:"black"}}>
             Cancel
           </Button>
           <CommanButton

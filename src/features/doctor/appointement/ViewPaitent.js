@@ -15,6 +15,7 @@ import AdmitPatient from "../../admitPatient/admissionForm";
 import BillPDF from "./OPDBill";
 import { pdf } from "@react-pdf/renderer";
 import { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 function ViewPatient() {
   const inputstyle = {
@@ -87,7 +88,6 @@ function ViewPatient() {
       await axios.post(`${process.env.REACT_APP_API_URL}/lab/addlabtest`, newData, config);
 
       getPrescriptionTest();
-      alert("Test Added Successfully")
     } catch (error) {
 
     }
@@ -101,7 +101,7 @@ function ViewPatient() {
       try {
         await axios.delete(`${process.env.REACT_APP_API_URL}/lab/delete_patient_test?test_id=${filteredData?.lab_id}`, config);
         getPrescriptionTest();
-        alert("Test Deleted Successfully");
+        toast.success("Test Deleted Successfully");
       } catch (error) {
         console.error(error);
         return;

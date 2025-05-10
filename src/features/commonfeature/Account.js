@@ -71,14 +71,14 @@ function Account() {
             });
             if (response.data?.status) {
 
-                toast.success("Update User Information");
+                toast.success("Profile updated successfully");
 
             } else {
-                toast.error("Error while updating profile!");
+                toast.error("Error updating profile");
             }
         } catch (e) {
             console.log(e);
-            toast.error(e.response?.data?.error || 'Error while updating profile!');
+            toast.error(e.response?.data?.error || 'Error updating profile');
         }
     };
 

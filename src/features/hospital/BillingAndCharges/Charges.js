@@ -8,6 +8,7 @@ import CommanButton from "../../../components/common/form/commonButtton";
 import CommonTable from "../../../components/table/CommonTable";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify"; // <-- add this line
 
 function Charges() {
   const user = useSelector(state => state?.auth?.user);
@@ -20,26 +21,19 @@ function Charges() {
   const [isEdit, setIsEdit] = useState(false);
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   const handleEditClass = async (newData) => {
-    // Add your Edit Class logic here
-
     try {
-      // const config = {
-      //   headers: { "Content-Type": "application/json" }
-      // }
+      const response = isEdit
+        ? await axios.put(`${process.env.REACT_APP_API_URL}/bill/UpdateBillingAndCharges/${newData?.billing_and_charges_no}`, newData, config)
+        : await axios.post(`${process.env.REACT_APP_API_URL}/bill/BillingAndCharges`, newData, config);
 
-      const response = isEdit ?
-        await axios.put(`${process.env.REACT_APP_API_URL}/bill/UpdateBillingAndCharges/${newData?.billing_and_charges_no}`, newData, config) :
-        await axios.post(`${process.env.REACT_APP_API_URL}/bill/BillingAndCharges`, newData, config);
-      // setChargesData({
-      //   ...chargesData      
-      // })
+        toast.success(isEdit ? "Charges updated successfully" : "Charges added successfully");
     } catch (error) {
-
+      toast.error(error?.response?.data?.error || "Something went wrong. Please try again.");
     }
 
     handleCloseModal();
@@ -51,11 +45,11 @@ function Charges() {
   const fetchChargesData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/bill/GetAllBillingAndCharges`,config
+        `${process.env.REACT_APP_API_URL}/bill/GetAllBillingAndCharges`, config
       )
       setChargesData(response?.data?.data[0]);
     } catch (err) {
-      console.log(err);
+      toast.error("Failed to fetch billing and charges data");
     }
   }
 
@@ -83,9 +77,9 @@ function Charges() {
       : [])
   ];
 
-  const renderRow = (item) => (
-    <tr key={item.room_id} className="border-bottom">
-      <td className="py-3 px-2 text-center">{item?.billing_and_charges_no}</td>
+  const renderRow = (item, index) => (
+    <tr key={index} className="border-bottom">
+      <td className="py-3 px-2 text-center">{index + 1}</td>
       <td className="py-3 px-2 text-left">{item?.room_type}</td>
       <td className="py-3 px-2 text-center">{item?.bed}</td>
       <td className="py-3 px-2 text-center">{item?.nursing}</td>
