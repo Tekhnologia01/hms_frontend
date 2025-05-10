@@ -21,9 +21,9 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-      }
+    }
 
     const addRow = () => {
         if (isIPD) {
@@ -68,7 +68,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
 
     async function getPrescriptionTest() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${appointmentId}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${appointmentId}`, config);
             if (response?.data?.data?.prescription?.length !== 0) { setRows(response?.data?.data?.prescription); }
         } catch (error) {
             showToast(error?.response?.data?.error || "Failed to fetch prescription data", "error");
@@ -77,7 +77,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
 
     async function getPrescription() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${ipd_id}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${ipd_id}`, config);
             if (response?.data?.data !== 0) {
                 setRows(response?.data?.data);
             }
@@ -97,17 +97,31 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         setEditableRowIndex(-1);
                     } else {
                         showToast("Prescription updated successfully", "success");
-                        // getPrescription();
+                        // Update the row in local state
+                        setRows(prevRows => {
+                            const updatedRows = [...prevRows];
+                            updatedRows[index] = { ...row };
+                            return updatedRows;
+                        });
+                        setEditableRowIndex(-1);
                     }
                 } else {
-                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/ipd_add?ipd_id=${ipd_id}&&created_by=${userId}`, row,config);
+                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/ipd_add?ipd_id=${ipd_id}&&created_by=${userId}`, row, config);
                     if (!response?.data?.status) {
                         showToast("Failed to add prescription", "error");
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         setEditableRowIndex(-1);
                     } else {
                         showToast("Prescription added successfully", "success");
-                        getPrescription();
+                        // Set the returned prescription (with id) in the row
+                        if (response.data?.data) {
+                            setRows(prevRows => {
+                                const updatedRows = [...prevRows];
+                                updatedRows[index] = { ...response.data.data };
+                                return updatedRows;
+                            });
+                        }
+                        setEditableRowIndex(-1);
                     }
                 }
             } catch (error) {
@@ -116,21 +130,36 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         } else {
             try {
                 if (row?.Prescription_Id) {
-                    const response = await axios.put(`${process.env.REACT_APP_API_URL}/prescription/update_prescription?prescription_id=${row?.Prescription_Id}`, row,config);
+                    const response = await axios.put(`${process.env.REACT_APP_API_URL}/prescription/update_prescription?prescription_id=${row?.Prescription_Id}`, row, config);
                     if (!response?.data?.status) {
                         showToast("Failed to update prescription", "error");
                     } else {
                         showToast("Prescription updated successfully", "success");
+                        // Update the row in local state
+                        setRows(prevRows => {
+                            const updatedRows = [...prevRows];
+                            updatedRows[index] = { ...row };
+                            return updatedRows;
+                        });
+                        setEditableRowIndex(-1);
                     }
                 } else {
-                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/add?appointment_id=${appointmentId}&&created_by=${userId}`,row,config);
+                    const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/add?appointment_id=${appointmentId}&&created_by=${userId}`, row, config);
                     if (!response.data?.status) {
                         showToast("Failed to add prescription", "error");
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         setEditableRowIndex(-1);
                     } else {
                         showToast("Prescription added successfully", "success");
-                        getPrescriptionTest();
+                        // Set the returned prescription (with id) in the row
+                        if (response.data?.data) {
+                            setRows(prevRows => {
+                                const updatedRows = [...prevRows];
+                                updatedRows[index] = { ...response.data.data };
+                                return updatedRows;
+                            });
+                        }
+                        setEditableRowIndex(-1);
                     }
                 }
             } catch (error) {
@@ -161,7 +190,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         try {
             if (isIPD && ipd_id) {
                 if (row?.Prescription_Id) {
-                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/prescription/delete_ipd?prescription_id=${row?.Prescription_Id}` ,config);
+                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/prescription/delete_ipd?prescription_id=${row?.Prescription_Id}`, config);
                     if (response.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         showToast("Prescription deleted successfully", "success");
@@ -172,7 +201,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                 }
             } else {
                 if (row?.Prescription_Id) {
-                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/prescription/delete?prescription_id=${row?.Prescription_Id}`,config);
+                    const response = await axios.delete(`${process.env.REACT_APP_API_URL}/prescription/delete?prescription_id=${row?.Prescription_Id}`, config);
                     if (response.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         showToast("Prescription deleted successfully", "success");
@@ -248,13 +277,18 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                 />
                                             </td>
                                             <td>
-                                                <Form.Control
-                                                    type="text"
+                                                <Form.Select
                                                     value={row.medicine_type}
                                                     onChange={(e) => handleChange(index, "medicine_type", e.target.value)}
-                                                    placeholder="Type"
                                                     disabled={index !== editableRowIndex}
-                                                />
+                                                >
+                                                    <option value="">Select</option>
+                                                    <option value="Tablet">Tablet</option>
+                                                    <option value="Liquid">Liquid</option>
+                                                    <option value="Injection">Injection</option>
+                                                    <option value="Powder">Powder</option>
+                                                    <option value="Other">Other</option>
+                                                </Form.Select>
                                             </td>
                                             <td>
                                                 <Form.Control
