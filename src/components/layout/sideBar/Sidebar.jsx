@@ -255,6 +255,8 @@ import { GiPayMoney } from "react-icons/gi";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import CommanButton from "../../common/form/commonButtton";
+import { FaRegMoneyBill1 } from "react-icons/fa6";
+
 
 function Sidebar({ isVisible, isCompact, role }) {
   const location = useLocation();
@@ -355,6 +357,9 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/accountant", label: "Dashboard", icon: <CgLoadbarSound /> },
       { path: "/accountant/bill", label: "Billing", icon: <FaReceipt /> },
       { path: "/accountant/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
+      {
+        path: "/accountant/payment", label: "Payment History", icon: <FaRegMoneyBill1 />
+      },
       { path: "/accountant/report", label: "Report", icon: <AiOutlineBarChart /> },
       {
         label: "Billing & Charges",
@@ -498,7 +503,7 @@ function Sidebar({ isVisible, isCompact, role }) {
           <CommanButton
             label={`Cancel`}
             className="fw-bold fs-6 "
-            style={{ borderRadius: "8px",background:"white" ,color:"#1D949A"}}
+            style={{ borderRadius: "8px", background: "white", color: "#1D949A" }}
             type="submit"
             onClick={() => setShowLogoutModal(false)}
           />
