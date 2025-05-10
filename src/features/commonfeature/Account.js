@@ -8,8 +8,9 @@ import CommanButton from "../../components/common/form/commonButtton";
 import InputBox from "../../components/common/form/inputbox";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import SelectBox from "../../components/common/form/selectBox/SelectBox";
 import { showToast } from "../../components/common/Toaster";
+import { toast } from "react-toastify";
+import { CLSThresholds } from "web-vitals";
 
 function Account() {
     const { user } = useSelector(state => state?.auth);
@@ -69,13 +70,15 @@ function Account() {
                 }
             });
             if (response.data?.status) {
-                showToast("Profile updated successfully!", "success");
+
+                toast.success("Update User Information");
+
             } else {
-                showToast("Error while updating profile!", "error");
+                toast.error("Error while updating profile!");
             }
         } catch (e) {
             console.log(e);
-            showToast(e.response?.data?.error ? e.response?.data?.error : "Error while updating profile!", "error");
+            toast.error(e.response?.data?.error || 'Error while updating profile!');
         }
     };
 
@@ -115,7 +118,7 @@ function Account() {
         <div className="pt-4">
             <div className="d-flex justify-content-between align-items-center mx-4">
                 <div className="fw-semibold fs-3">Account</div>
-                <FaRegEdit 
+                <FaRegEdit
                     style={{ cursor: "pointer", fontSize: "1.5rem", color: isEditable ? "green" : "black" }}
                     onClick={() => setIsEditable(!isEditable)}
                 />
