@@ -16,16 +16,16 @@ function DischargeSummery() {
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     }
     // Function to fetch discharged patients based on selected date
     const fetchDoctors = async () => {
         try {
             // Convert selected date to Unix timestamp (seconds)
             const dateTimestamp = Math.floor(new Date(selectedDate).getTime() / 1000);
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`, config);
 
             setDoctors(response?.data?.data[0]);
         } catch (err) {
@@ -51,7 +51,7 @@ function DischargeSummery() {
         { name: "Discharge D", accessor: "actions", class: "py-3 text-center px-1" },
         { name: "Bill Status", accessor: "department", class: "py-3 text-center px-1" },
         { name: "Discharge Summery", accessor: "actions", class: "py-3 text-center px-1" },
-        { name: "Discharge Status", accessor: "actions", class: "py-3 text-center px-1" },
+        { name: "Bill Reciept", accessor: "actions", class: "py-3 text-center px-1" },
 
     ];
 
@@ -63,18 +63,18 @@ function DischargeSummery() {
 
 
 
-    const handleStatus= async(id)=>{
+    const handleStatus = async (id) => {
         try {
 
-            
-            const response=await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`,{},{
+
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`, {}, {
                 headers: {
-                  Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
-              })
+            })
             fetchDoctors()
         } catch (error) {
-            
+
         }
 
     }
@@ -138,7 +138,7 @@ function DischargeSummery() {
 
                 {/* <td className="py-3 px-2">{item.discharge_status == 2 ? "Done" : "Not Done"}</td> */}
                 <td className="py-3 px-2  gap-2">
-                    {item.discharge_status === 2 ? (
+                    {/* {item.discharge_status === 2 ? (
                         "Done"
                     ) : (
                         <>
@@ -154,12 +154,20 @@ function DischargeSummery() {
                                 />
                             </OverlayTrigger>
                         </>
+                    )} */}
+
+                    {item.bill_report  ? (
+                        <MdAssignment
+                            style={{ width: "25px", height: "25px", cursor: "pointer" }}
+                            onClick={() => window.open(`${process.env.REACT_APP_API_URL}/Uploads/${item.bill_report}`, "_blank", "noopener,noreferrer")}
+                        />
+                    ) : (
+                        <MdAssignment
+                            style={{ width: "25px", height: "25px", opacity: 0.5 }}
+                        />
                     )}
+
                 </td>
-
-
-
-
             </tr>
         );
     };

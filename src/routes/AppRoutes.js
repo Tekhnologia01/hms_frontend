@@ -56,6 +56,7 @@ import IpdBill from "../features/accountant/billAdmitedPatient.js/IpdBill";
 import DepositeReceipt from "../features/accountant/billAdmitedPatient.js/DepositeReceipt";
 import DischargeSummery from "../features/accountant/dischargeSummery/DischargeSummery";
 import OpdReport from "../features/accountant/report/OpdReport";
+import Payment from "../features/accountant/paymentHistory/index"
 
 
 function AppRoutes({ getDefaultRoute }) {
@@ -163,6 +164,7 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/accountant/settings" element={<Setting />} />
         <Route path="/accountant/billing/ipd" element={<Charges />} />
         <Route path="/accountant/billing/opd" element={<AddCharges />} />
+        <Route path="/accountant/payment" element={<Payment />} />
       </Route>
 
 

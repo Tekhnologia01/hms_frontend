@@ -11,6 +11,9 @@ import PatientInfoModal from "./PatientInfoModal"; // Existing modal
 import PaymentModal from "./PaymentModal"; // New payment modal
 import { MdPayments } from "react-icons/md";
 import { GiCheckMark } from "react-icons/gi";
+import CommanButton from "../../../components/common/form/commonButtton";
+import { Modal } from "react-bootstrap";
+import './discharge.css'
 
 function AdmitedDepatientBillDetals() {
   const navigate = useNavigate();
@@ -19,6 +22,8 @@ function AdmitedDepatientBillDetals() {
   const [showInfoModal, setShowInfoModal] = useState(false); // State for info modal
   const [showPaymentModal, setShowPaymentModal] = useState(false); // State for payment modal
   const [selectedPatient, setSelectedPatient] = useState(null); // State for selected patient
+  const [show, setShow] = useState(false)
+
   const limitPerPage = 10;
   const { user } = useSelector((state) => state?.auth);
   const token = useSelector((state) => state.auth.currentUserToken);
@@ -26,6 +31,18 @@ function AdmitedDepatientBillDetals() {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  }
+
+  const handleStatus = async (id) => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      fetchDoctors()
+    } catch (error) {
+    }
   }
 
   const fetchDoctors = async () => {
@@ -80,10 +97,14 @@ function AdmitedDepatientBillDetals() {
     setSelectedPatient(null);
   };
 
-const handleClose =()=>{
-  handleClosePaymentModal()
-  fetchDoctors()
-}
+  const handleClose = () => {
+    handleClosePaymentModal()
+    fetchDoctors()
+  }
+
+  const handleConfirmModal = () => {
+    setShow(false)
+  }
 
 
   const renderRow = (item, index) => {
@@ -103,109 +124,156 @@ const handleClose =()=>{
     const remainingAmount = totalAmount - totalDeposits;
 
     return (
-      <tr key={item.id || index} className="border-bottom text-center">
-        {/* Patient Information */}
-        <td className="px-2 text-start">
-          <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
-            <img
-              src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
-              alt={item.uh_id}
-              style={{
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-              className="ms-lg-3 mb-2 mb-lg-0"
-            />
-            <div className="d-flex flex-column ms-lg-2 text-center">
-              <p className="fw-semibold mb-0">{item.Name}</p>
-              <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
-                {item.uh_id}
-              </p>
+      <>
+        <tr key={item.id || index} className="border-bottom text-center">
+          {/* Patient Information */}
+          <td className="px-2 text-start">
+            <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
+              <img
+                src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
+                alt={item.uh_id}
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
+                className="ms-lg-3 mb-2 mb-lg-0"
+              />
+              <div className="d-flex flex-column ms-lg-2 text-center">
+                <p className="fw-semibold mb-0">{item.Name}</p>
+                <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
+                  {item.uh_id}
+                </p>
+              </div>
             </div>
-          </div>
-        </td>
+          </td>
 
-        {/* Patient Sex */}
-        <td className="py-3 px-2">{item.patient_sex ?? "-"}</td>
+          {/* Patient Sex */}
+          <td className="py-3 px-2">{item.patient_sex ?? "-"}</td>
 
-        {/* Admitted Date */}
-        <td className="py-3 px-2">
-          {item.admitted_date
-            ? new Date(item.admitted_date * 1000).toLocaleDateString()
-            : "-"}
-        </td>
+          {/* Admitted Date */}
+          <td className="py-3 px-2">
+            {item.admitted_date
+              ? new Date(item.admitted_date * 1000).toLocaleDateString()
+              : "-"}
+          </td>
 
-        {/* Department */}
-        <td className="py-3 px-2">{item.department ?? "-"}</td>
+          {/* Department */}
+          <td className="py-3 px-2">{item.department ?? "-"}</td>
 
-        {/* Total Deposits */}
-        <td className="py-3 px-2">{totalDeposits || "-"}</td>
+          {/* Total Deposits */}
+          <td className="py-3 px-2">{totalDeposits || "-"}</td>
 
-        {/* Remaining Amount */}
-        <td className="py-3 px-2">{remainingAmount >= 0 ? remainingAmount : "-"}</td>
+          {/* Remaining Amount */}
+          <td className="py-3 px-2">{remainingAmount >= 0 ? remainingAmount : "-"}</td>
 
-        {/* Total Amount */}
-        <td className="py-3 px-2">{totalAmount || "-"}</td>
+          {/* Total Amount */}
+          <td className="py-3 px-2">{totalAmount || "-"}</td>
 
-        {/* Actions */}
-        <td>
-          <IoReceiptSharp
-            style={{ height: "25px", width: "25px", cursor: "pointer" }}
-            onClick={() =>
-              user.RoleId == 4
-                ? navigate(`/receptionist/bill/ipd/${item.admitted_patient_id}`)
-                : navigate(`/accountant/bill/ipd/${item.admitted_patient_id}`)
-            }
-          />
-        </td>
-
-
-{
-  item.bill_status==0 ?
-  <td>
+          {/* Actions */}
+          <td>
+            <IoReceiptSharp
+              style={{ height: "25px", width: "25px", cursor: "pointer" }}
+              onClick={() =>
+                user.RoleId == 4
+                  ? navigate(`/receptionist/bill/ipd/${item.admitted_patient_id}`)
+                  : navigate(`/accountant/bill/ipd/${item.admitted_patient_id}`)
+              }
+            />
+          </td>
 
 
-  <FaAmazonPay
-    style={{ height: "25px", width: "25px", cursor: "pointer" }}
+          {
+            item.bill_status == 0 ?
+              <td>
 
 
-
-    onClick={() =>
-      user.RoleId == 4
-        ? navigate(`/receptionist/bill/ipd/deposite/${item.admitted_patient_id}`)
-        : navigate(`/accountant/bill/ipd/deposite/${item.admitted_patient_id}`)
-    }
-  />
-
-  <span className="ps-3"></span>
-  <MdPayments
-    style={{ height: "25px", width: "25px", cursor: "pointer" }}
-    onClick={() => handleShowPaymentModal(item)}
-  />
-</td>:<td>
-  
-<GiCheckMark 
-    style={{ height: "25px", width: "25px", cursor: "pointer",color:"green" }}
-    // onClick={() => handleShowPaymentModal(item)}
-  />
-</td>
-
-}
-    
+                <FaAmazonPay
+                  style={{ height: "25px", width: "25px", cursor: "pointer" }}
 
 
 
+                  onClick={() =>
+                    user.RoleId == 4
+                      ? navigate(`/receptionist/bill/ipd/deposite/${item.admitted_patient_id}`)
+                      : navigate(`/accountant/bill/ipd/deposite/${item.admitted_patient_id}`)
+                  }
+                />
 
-      </tr>
+                <span className="ps-3"></span>
+                <MdPayments
+                  style={{ height: "25px", width: "25px", cursor: "pointer" }}
+                  onClick={() => handleShowPaymentModal(item)}
+                />
+              </td> : <td>
+
+                {/* <GiCheckMark
+                style={{ height: "25px", width: "25px", cursor: "pointer", color: "green" }}
+              // onClick={() => handleShowPaymentModal(item)}
+              /> */}
+
+                <CommanButton
+                  label={`Complete`}
+                  className="fw-bold fs-6 "
+                  style={{ borderRadius: "8px" }}
+                  onClick={() => setShow(true)}
+                // onClick={() => handleStatus(item.admitted_patient_id)}
+                />
+              </td>
+          }
+        </tr>
+
+        <Modal
+          show={show}
+          onHide={handleConfirmModal}
+          centered
+          size="md"
+          className="confirmation-modal"
+          aria-labelledby="confirmation-modal-title"
+        >
+          <Modal.Header closeButton className="border-0 pb-2">
+            <Modal.Title
+              id="confirmation-modal-title"
+              className="fw-bold"
+              style={{ fontSize: "1.5rem", color: "#1D949A" }}
+            >
+              Confirmation
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="pt-2 pb-4">
+            <p
+              className="fw-semibold text-dark"
+              style={{ fontSize: "1.1rem", lineHeight: "1.6" }}
+            >
+              Are you sure you want to complete all the processes for this patient?
+            </p>
+          </Modal.Body>
+          <Modal.Footer className="border-0 pt-0">
+            <CommanButton
+              label="Cancel"
+              className="me-3 ps-4 pe-4 py-2 fw-semibold fs-6 text-dark bg-white"
+              type="button"
+              onClick={() => handleConfirmModal()}
+            />
+            <CommanButton
+              label="Complete"
+              className="ps-4 pe-4 py-2 fw-semibold fs-6"
+              type="button"
+              variant="primary"
+              onClick={() => handleStatus(item.admitted_patient_id)}
+              style={{ backgroundColor: "#1D949A", borderColor: "#1D949A" }}
+            />
+          </Modal.Footer>
+        </Modal>
+      </>
     );
   };
 
   return (
     <>
       <div className="px-3">
-   
+
         <div className="fw-bold py-4 fs-4">
           <span>Admited Patient List</span>
         </div>
@@ -244,8 +312,10 @@ const handleClose =()=>{
         handleClose={handleClose}
         patient={selectedPatient}
       />
+
     </>
   );
+
 }
 
 export default AdmitedDepatientBillDetals;
