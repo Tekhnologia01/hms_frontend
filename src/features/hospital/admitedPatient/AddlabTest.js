@@ -97,21 +97,25 @@ function AddLabTest() {
             <td className="py-3 px-2">{item?.test_name}</td>
             <td className="py-3 px-2">{epochTimeToDate(item?.recommendation_date)}</td>
             <td className="py-3 px-2">{item?.status}</td>
+
+
+
             <td className="py-3 px-2">
-  <a 
-    href={`${process.env.REACT_APP_API_URL}/${item.rep_ipd_photo}`} 
-    target="_blank" 
-    rel="noopener noreferrer"
-    className="text-primary text-decoration-underline"
-  >
-    <FaEye style={{height:"20px",width:"20px"}}/>
-  </a>
-</td>
+                {
+                    item?.status == "Pending" ? <>
+                        <FaEye style={{ height: "20px", width: "20px", opacity: "0.5" }} />
+                    </> : <a
+                        href={`${process.env.REACT_APP_API_URL}/${item.rep_ipd_photo}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary text-decoration-underline"
+                    >
+                        <FaEye style={{ height: "20px", width: "20px" }} />
+                    </a>
+                }
+            </td>
         </tr>
     );
-
-
-
 
     return (
         <div className="py-4">
@@ -125,7 +129,7 @@ function AddLabTest() {
                             label: test.test_name
                         }))}
                         onDayChange={handleTestChange}
-              
+
                     />
                 </Col>
 
@@ -139,7 +143,7 @@ function AddLabTest() {
                     />
                 </Col>
 
-                <Col lg={4} style={{paddingTop:"2rem"}}>
+                <Col lg={4} style={{ paddingTop: "2rem" }}>
                     <CommanButton
                         label="Add Test"
                         variant="#7B3F0080"
@@ -149,34 +153,20 @@ function AddLabTest() {
                     />
                 </Col>
             </Row>
-{/* 
-{admitedData.length >0 &&
-            <div className='p-2'>
-                <CommonTable
-                    minimumWidth={"100%"}
-                    headers={columns}
-                    bodyData={admitedData}
-                    renderRow={renderRow}
-                    title={"Lab Test List"}
-                />
-            </div>
 
 
 
-} */}
-
-
-{admitedData.length > 0 &&
-    <div className='p-2'>
-        <CommonTable
-            minimumWidth={"100%"}
-            headers={columns}
-            bodyData={admitedData}
-            renderRow={renderRow}
-            title={"Lab Test List"}
-        />
-    </div>
-}
+            {admitedData.length > 0 &&
+                <div className='p-2'>
+                    <CommonTable
+                        minimumWidth={"100%"}
+                        headers={columns}
+                        bodyData={admitedData}
+                        renderRow={renderRow}
+                        title={"Lab Test List"}
+                    />
+                </div>
+            }
 
 
         </div>

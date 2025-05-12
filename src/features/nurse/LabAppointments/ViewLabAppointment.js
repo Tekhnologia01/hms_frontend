@@ -9,6 +9,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { epochTimeToDate } from "../../../utils/epochToDate";
 import { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 function ViewLabAppointment({ type }) {
   const boxStyle = {
@@ -49,7 +50,8 @@ function ViewLabAppointment({ type }) {
     report_test_id: +params.IpdLabId,
     report_appo_id: +params.appointmentId,
   }
-  const [formData, setFormData] = useState(initialState);
+
+const [formData, setFormData] = useState(initialState);
 
   const handleSave = async () => {
     try {
@@ -62,7 +64,12 @@ function ViewLabAppointment({ type }) {
           }
         });
         if (response?.data?.status) {
-          alert(response?.data?.message)
+
+      toast.success(response?.data?.message)
+
+          // alert(response?.data?.message)
+
+
           const payload = {
             labAppoiId: +params?.appointmentId,
             labTestId: +params?.IpdLabId,
@@ -105,8 +112,9 @@ function ViewLabAppointment({ type }) {
         }
       });
 
-      showToast(response?.data?.message);
+      // showToast(response?.data?.message);
 
+      toast.success(response?.data?.message)
       setFormData(initialState);
       navigate(-1);
 
@@ -114,8 +122,6 @@ function ViewLabAppointment({ type }) {
       showToast(error?.response?.data?.message || "An error occurred", "error");
     }
   };
-
-
 
 
   async function getAppointementDetail() {
@@ -126,9 +132,6 @@ function ViewLabAppointment({ type }) {
 
     }
   }
-
-
-
 
   useEffect(() => {
     getAppointementDetail();
