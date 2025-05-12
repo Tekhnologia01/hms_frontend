@@ -14,6 +14,7 @@ import CommanButton from "../../../components/common/form/commonButtton";
 import Setdicharge from "../../commonfeature/Setdischarge";
 import { useSelector } from "react-redux";
 import AddLabTest from "./AddlabTest";
+import { toast } from "react-toastify";
 function AdmitedPatientDetails() {
     const { admitedId } = useParams()
     const [patient, setPatient] = useState();
@@ -334,6 +335,7 @@ function AdmitedPatientDetails() {
                 handleClose={() => {
                     handledischargedateCloseModal();
                     fetchpatient()
+                    toast.success('Successfully recorded the discharge date.')
                 }}
             />
 

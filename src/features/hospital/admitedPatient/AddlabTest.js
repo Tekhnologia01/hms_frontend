@@ -10,6 +10,7 @@ import { epochTimeToDate } from '../../../utils/epochToDate';
 import CommonTable from '../../../components/table/CommonTable';
 import { FaEye } from 'react-icons/fa';
 import { showToast } from '../../../components/common/Toaster';
+import { toast } from 'react-toastify';
 
 function AddLabTest() {
     const { admitedId } = useParams();
@@ -79,9 +80,9 @@ function AddLabTest() {
             };
             await axios.post(`${process.env.REACT_APP_API_URL}/lab/addipdlabtest`, newData, config);
             getAppointmentDetails();
-            showToast("Test Added Successfully!", "success");
+            toast.success("Test Added Successfully!");
         } catch (error) {
-            console.error('Failed to add test', error);
+            toast.error('Failed to add test', error);
         }
     };
 
