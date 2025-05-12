@@ -1,11 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Form, Button, ListGroup, InputGroup, Row, Col, Alert, Spinner } from 'react-bootstrap';
+import { Container, Form, Button, ListGroup, InputGroup, Row, Col, Spinner, Modal } from 'react-bootstrap';
 import { FaPlus, FaEdit, FaTrash, FaSave, FaBook } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import CommanButton from '../../../components/common/form/commonButtton';
+
 function CourseDetails() {
   const { admitedId } = useParams();
   const [courseDetails, setCourseDetails] = useState('');
@@ -15,16 +16,19 @@ function CourseDetails() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [pointToDelete, setPointToDelete] = useState(null);
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const fetchCourseData = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${admitedId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${admitedId}`, config);
       setCourseDetails(response?.data?.data?.course_details || '');
     } catch (error) {
       setSaveStatus({ variant: 'danger', message: error.message || 'Failed to load course' });
@@ -35,7 +39,7 @@ function CourseDetails() {
 
   const fetchTreatmentPoints = useCallback(async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/gettreatmnts?admited_id=${admitedId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/gettreatmnts?admited_id=${admitedId}`, config);
       if (response.data?.data) {
         setTreatmentPoints(response.data.data);
       }
@@ -45,9 +49,6 @@ function CourseDetails() {
     }
   }, [admitedId]);
 
-
-
-  
   useEffect(() => {
     const loadData = async () => {
       await fetchCourseData();
@@ -56,22 +57,19 @@ function CourseDetails() {
     loadData();
   }, [fetchCourseData, fetchTreatmentPoints]);
 
-
-
-const addTreatmentPoint = async () => {
+  const addTreatmentPoint = async () => {
     if (!editText.trim()) {
       setSaveStatus({ variant: 'warning', message: 'Please enter treatment point text' });
       return;
     }
-  
+
     try {
       setIsSaving(true);
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/treatment/addtreatment`, {
         admited_id: admitedId,
         treatment_point: editText
-      },config);
-  
-      // Even if response doesn't contain data key, assume success for now
+      }, config);
+
       await fetchTreatmentPoints();
       setSaveStatus({ variant: 'success', message: 'Treatment point added successfully' });
     } catch (error) {
@@ -83,7 +81,6 @@ const addTreatmentPoint = async () => {
     }
   };
 
-
   const startEditing = (point) => {
     setEditingPoint(point.id);
     setEditText(point.point_text || '');
@@ -94,16 +91,16 @@ const addTreatmentPoint = async () => {
       setSaveStatus({ variant: 'warning', message: 'Please enter treatment point text' });
       return;
     }
-    
+
     try {
       setIsSaving(true);
       await axios.put(`${process.env.REACT_APP_API_URL}/treatment/updatetreatment`, {
         treatment_id: editingPoint,
         treatment_point: editText
-      },config);
+      }, config);
 
-      setTreatmentPoints(prev => 
-        prev.map(point => 
+      setTreatmentPoints(prev =>
+        prev.map(point =>
           point.id === editingPoint ? { ...point, point_text: editText } : point
         )
       );
@@ -122,18 +119,17 @@ const addTreatmentPoint = async () => {
   };
 
   const deletePoint = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this treatment point?')) return;
-    
+    setIsSaving(true);
     try {
-      setIsSaving(true);
-
-      await axios.delete(`${process.env.REACT_APP_API_URL}/treatment/deletetreatment?treatment_id=${id}`,config);
-      fetchTreatmentPoints()
+      await axios.delete(`${process.env.REACT_APP_API_URL}/treatment/deletetreatment?treatment_id=${id}`, config);
+      setTreatmentPoints(prev => prev.filter(point => point.id !== id));
       setSaveStatus({ variant: 'success', message: 'Treatment point deleted successfully' });
     } catch (error) {
       setSaveStatus({ variant: 'danger', message: error.message || 'Failed to delete treatment point' });
     } finally {
       setIsSaving(false);
+      setShowDeleteModal(false);
+      setPointToDelete(null);
     }
   };
 
@@ -146,15 +142,15 @@ const addTreatmentPoint = async () => {
     try {
       setIsSaving(true);
       setSaveStatus(null);
-      
+
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/treatment/addcourse`, {
         course_details: courseDetails,
         admited_id: admitedId
-      },config);
+      }, config);
 
-      setSaveStatus({ 
-        variant: 'success', 
-        message: 'Course updated successfully!' 
+      setSaveStatus({
+        variant: 'success',
+        message: 'Course updated successfully!'
       });
     } catch (error) {
       setSaveStatus({ variant: 'danger', message: error.message || 'Failed to save course' });
@@ -181,8 +177,8 @@ const addTreatmentPoint = async () => {
               <FaBook className="me-2 text-primary" />
               Course Details
             </h2>
-            <Button 
-              variant="success" 
+            <Button
+              variant="success"
               onClick={saveCourseData}
               disabled={isSaving}
               className="d-flex align-items-center"
@@ -200,12 +196,6 @@ const addTreatmentPoint = async () => {
               )}
             </Button>
           </div>
-
-          {/* {saveStatus && (
-            <Alert variant={saveStatus.variant} className="mt-3" onClose={() => setSaveStatus(null)} dismissible>
-              {saveStatus.message}
-            </Alert>
-          )} */}
 
           <Form.Group controlId="courseDetails">
             <Form.Control
@@ -225,40 +215,17 @@ const addTreatmentPoint = async () => {
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h2 className="h4">Treatment Plan</h2>
 
-
             <CommanButton
-                        label="Add Point"
-                        variant="#7B3F0080"
-                        className="ps-3 pe-3 p-2 fw-semibold"
-                        style={{ borderRadius: "5px" }}
-                        onClick={() => {
-                          setEditText('');
-                          setEditingPoint('new');
-                        }}
-                        disabled={isSaving}
-
-                        // onClick={handleTestSubmit}
-                    />
-
-
-
-
-
-            {/* <Button 
-              variant="primary" 
+              label="Add Point"
+              variant="#7B3F0080"
+              className="ps-3 pe-3 p-2 fw-semibold"
+              style={{ borderRadius: "5px" }}
               onClick={() => {
                 setEditText('');
                 setEditingPoint('new');
               }}
-              className="d-flex align-items-center"
               disabled={isSaving}
-            >
-
-
-
-              <FaPlus className="me-2" />
-              Add Point
-            </Button> */}
+            />
           </div>
 
           {editingPoint === 'new' && (
@@ -273,16 +240,15 @@ const addTreatmentPoint = async () => {
                   placeholder="Enter treatment point details..."
                   className="shadow-none"
                 />
-                <Button 
-                  variant="success" 
-                  size="sm" 
+                <Button
+                  variant="success"
+                  size="sm"
                   onClick={addTreatmentPoint}
                   className="me-2"
                   disabled={isSaving || !editText.trim()}
                 >
                   {isSaving ? <Spinner size="sm" /> : <FaSave />}
                 </Button>
-
 
                 <Button
                   variant="danger"
@@ -292,7 +258,6 @@ const addTreatmentPoint = async () => {
                 >
                   <MdCancel />
                 </Button>
-
               </InputGroup>
             </div>
           )}
@@ -304,8 +269,8 @@ const addTreatmentPoint = async () => {
           ) : (
             <ListGroup as="ol" numbered className="shadow-sm">
               {treatmentPoints.map((point) => (
-                <ListGroup.Item 
-                  key={point.id} 
+                <ListGroup.Item
+                  key={point.id}
                   className="py-3 pe-4"
                   variant={editingPoint === point.id ? 'light' : ''}
                 >
@@ -320,9 +285,9 @@ const addTreatmentPoint = async () => {
                         placeholder="Enter treatment point details..."
                         className="shadow-none"
                       />
-                      <Button 
-                        variant="success" 
-                        size="sm" 
+                      <Button
+                        variant="success"
+                        size="sm"
                         onClick={saveEdit}
                         className="me-2"
                         disabled={isSaving || !editText.trim()}
@@ -339,33 +304,33 @@ const addTreatmentPoint = async () => {
                       </Button>
                     </InputGroup>
                   ) : (
-
-                    
                     <div className="d-flex justify-content-between align-items-start">
                       <div className="me-3">
                         {point.point_text || <span className="text-muted fst-italic">Empty point</span>}
                       </div>
                       <div className="d-flex">
-                        <Button 
-                          variant="outline-primary" 
-                          size="sm" 
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
                           onClick={() => startEditing(point)}
                           className="me-2"
                           disabled={isSaving}
                         >
                           <FaEdit />
                         </Button>
-                        <Button 
-                          variant="outline-danger" 
-                          size="sm" 
-                          onClick={() => deletePoint(point.id)}
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                            setPointToDelete(point.id);
+                          }}
                           disabled={isSaving}
                         >
                           <FaTrash />
                         </Button>
                       </div>
                     </div>
-
                   )}
                 </ListGroup.Item>
               ))}
@@ -373,6 +338,23 @@ const addTreatmentPoint = async () => {
           )}
         </Col>
       </Row>
+
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Treatment Point</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this treatment point?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setShowDeleteModal(false)} disabled={isSaving} style={{backgroundColor:"white", color:'black'}}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={() => deletePoint(pointToDelete)} disabled={isSaving}>
+            {isSaving ? <Spinner size="sm" /> : "Delete"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
