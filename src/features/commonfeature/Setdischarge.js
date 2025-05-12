@@ -5,18 +5,35 @@ import InputBox from "../../components/common/form/inputbox";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => {
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const getCurrentTime = () => {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+    };
+
     const [formData, setFormData] = useState({
         patient_name: "",
-        discharge_date: "",
-        discharge_time: "",
+        discharge_date: getCurrentDate(),
+        discharge_time: getCurrentTime(),
     });
     const [errors, setErrors] = useState({});
     const user = useSelector((state) => state?.auth?.user?.userId);
@@ -30,14 +47,12 @@ const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => 
         }
     }, [admited]);
 
-    // Convert date and time to epoch
     const convertToEpoch = (date, time) => {
         if (!date) return null;
         const dateTimeString = time ? `${date}T${time}:00` : `${date}T00:00:00`;
-        return new Date(dateTimeString).getTime() / 1000; // Convert to seconds if API expects it
+        return new Date(dateTimeString).getTime() / 1000;
     };
 
-    // Handle form input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -45,13 +60,11 @@ const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => 
             [name]: value,
         }));
 
-        // Clear error when user starts typing
         if (errors[name]) {
             setErrors((prev) => ({ ...prev, [name]: "" }));
         }
     };
 
-    // Validate form before submission
     const validateForm = () => {
         let newErrors = {};
         if (!formData.patient_name.trim()) newErrors.patient_name = "Patient name is required";
@@ -61,28 +74,32 @@ const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => 
         return Object.keys(newErrors).length === 0;
     };
 
-    // Handle form submission
     const handleSubmit = async () => {
-        if (!validateForm()) return;
+        if (!validateForm()) {
+            toast.error("Please fill all required fields");
+            return;
+        }
 
         try {
             const submitData = {
                 admited_id: +admited?.admitted_patient_id,
-                // Assuming charge_id is not needed for discharge; adjust if required
                 date: convertToEpoch(formData.discharge_date, formData.discharge_time),
                 created_by: user,
             };
 
             const response = await axios.put(
-                `${process.env.REACT_APP_API_URL}/patient/setdischargedate`, 
-                submitData,config
+                `${process.env.REACT_APP_API_URL}/patient/setdischargedate`,
+                submitData,
+                config
             );
 
+            toast.success("Discharge date set successfully!");
             if (patientUpdate) patientUpdate();
             handleClose();
         } catch (error) {
             console.error("Error setting discharge date:", error);
-            setErrors({ submit: "Failed to set discharge date" });
+            const errorMessage = error.response?.data?.message || "Failed to set discharge date";
+            toast.error(errorMessage);
         }
     };
 
@@ -127,14 +144,13 @@ const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => 
                             name="discharge_date"
                             type="date"
                             value={formData.discharge_date}
-                            min={new Date().toISOString().split("T")[0]} // Set today as min date
+                            min={new Date().toISOString().split("T")[0]}
                             onChange={handleInputChange}
                         />
                         {errors.discharge_date && (
                             <div className="text-danger">{errors.discharge_date}</div>
                         )}
                     </Col>
-
 
                     <Col md={6} className="gy-3">
                         <label className="fw-semibold pb-1 pt-1">Discharge Time</label>
@@ -147,8 +163,6 @@ const SetDischarge = ({ show = false, handleClose, admited, patientUpdate }) => 
                         />
                     </Col>
                 </Row>
-
-                {errors.submit && <div className="text-danger text-center mb-3">{errors.submit}</div>}
 
                 <div className="d-flex justify-content-end pt-lg-4">
                     <CommanButton

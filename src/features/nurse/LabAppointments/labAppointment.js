@@ -17,9 +17,9 @@ function LabAppointmentDetail({ appointmenttype }) {
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-      }
+    }
     const labData = {
         labName: "Covid RT-PCR",
         description: "Infectious Diseases Hub aims to provide up-to-date, essential research and on aspects of microbiology, virology, and parasitology.",
@@ -69,16 +69,19 @@ function LabAppointmentDetail({ appointmenttype }) {
             <td className="py-3 px-2">{item.patient_sex}</td>
             <td className="py-3 px-2">{item.lab_test_status}</td>
             <td>
-                
-                
                 {item.lab_test_status == "Completed" ?
                     <>
-                        <FiEye style={{ "margin-top": "-8px", height: "20px", width: "20px" }} onClick={() => navigate(`${item?.admitted_patient_id}`)} /> <span className="ps-3"></span>
+                        <FiEye style={{ "margin-top": "-8px", height: "20px", width: "20px" }}
+                            onClick={() => window.open(
+                                `${process.env.REACT_APP_API_URL}/${item.report_photo}`,
+                                "_blank",
+                                "noopener,noreferrer"
+                            )}
+                        /> <span className="ps-3"></span>
                         <FiEdit2 style={{ "margin-top": "-8px", height: "20px", width: "20px" }} onClick={() => navigate(`${item?.appo_id}/${item?.lab_id}/update`)} /></> :
                     <MdOutlineOpenWith style={{ "margin-top": "-8px", height: "20px", width: "20px" }} onClick={() => navigate(`${item?.appo_id}/${item?.lab_id}/add`)} />
                 }
-                
-                </td>
+            </td>
         </tr>
     );
 
@@ -111,7 +114,15 @@ function LabAppointmentDetail({ appointmenttype }) {
             <td>
                 {item.status == "Completed" ?
                     <>
-                        <FiEye style={{ "margin-top": "-8px", height: "20px", width: "20px" }} onClick={() => navigate(`${item?.admitted_patient_id}`)} /> <span className="ps-3"></span>
+                        <FiEye style={{ "margin-top": "-8px", height: "20px", width: "20px" }}
+                            onClick={() => window.open(
+                                `${process.env.REACT_APP_API_URL}/${item.report_photo}`,
+                                "_blank",
+                                "noopener,noreferrer"
+                            )}
+                        />
+
+                        <span className="ps-3"></span>
                         <FiEdit2 style={{ "margin-top": "-8px", height: "20px", width: "20px" }} onClick={() => navigate(`${item?.admitted_patient_id}/${item?.ipd_lab_id}/update`)} /></> :
                     <MdOutlineOpenWith style={{ "margin-top": "-8px", height: "20px", width: "20px" }} onClick={() => navigate(`${item?.admitted_patient_id}/${item?.ipd_lab_id}/add`)} />
                 }
@@ -128,7 +139,7 @@ function LabAppointmentDetail({ appointmenttype }) {
                 url = `${process.env.REACT_APP_API_URL}/lab/getipdlabtest?test_id=${params?.labId}`;
             }
 
-            const response = await axios.get(url,config);
+            const response = await axios.get(url, config);
             setPatientList(response?.data?.data?.data);
             setTestData(response?.data?.data?.test[0]);
         } catch (error) {

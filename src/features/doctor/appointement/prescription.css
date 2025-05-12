@@ -22,3 +22,90 @@
     outline: #98DBDE !important;
     box-shadow: 0 0 0 .05rem #98DBDE;
 }
+
+/* Modern Input Styling */
+.modern-input {
+    border: 1px solid #d1d5db; /* Tailwind gray-300 */
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .modern-input:focus {
+    outline: none;
+    border-color: #1d949a; /* Brand color */
+    box-shadow: 0 0 0 3px rgba(29, 148, 154, 0.1);
+  }
+  
+  /* Modern Dropdown Styling */
+  .modern-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99999; 
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 4px;
+    animation: slideDown 0.2s ease-out;
+  }
+  
+  /* Scrollbar Styling */
+  .modern-dropdown::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .modern-dropdown::-webkit-scrollbar-track {
+    background: #f1f5f9; /* Tailwind slate-100 */
+    border-radius: 8px;
+  }
+  
+  .modern-dropdown::-webkit-scrollbar-thumb {
+    background: #cbd5e1; /* Tailwind slate-300 */
+    border-radius: 8px;
+  }
+  
+  .modern-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; /* Tailwind slate-400 */
+  }
+  
+  /* Dropdown Item Styling */
+  .dropdown-item {
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #1f2a44; /* Dark text for readability */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dropdown-item:hover {
+    background: #f1f5f9; /* Tailwind slate-100 */
+  }
+  
+  .dropdown-item.selected {
+    background: #e6f7fa; /* Light brand color for selected item */
+    font-weight: 500;
+  }
+  
+  /* Animation for Dropdown */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Ensure table cells don't overflow */
+  .prescription_tbl td {
+    position: relative;
+    vertical-align: middle;
+  }

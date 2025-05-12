@@ -363,7 +363,7 @@ function AccountantDashboard() {
 
 
 
-                <div className="mt-4">
+                <div className="mt-4 pb-4">
                     <div>
                         <CommonTable minimumWidth={"800px"} headers={columns} bodyData={discharge} renderRow={renderRow} title={"Discharge Patient"} />
                     </div>

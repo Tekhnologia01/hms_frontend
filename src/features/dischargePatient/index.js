@@ -48,17 +48,60 @@ const DischargePatient = () => {
     const { user } = useSelector(state => state?.auth);
     const navigate = useNavigate();
 
+    // const validationSchema = Yup.object({
+    //     diagnosisDetails: Yup.string().required("Diagnosis is required"),
+    //     chiefComplaints: Yup.string().required("Chief Complaints are required"),
+    //     discharge_date: Yup.date().required("Discharge date is required"),
+    //     discharge_time: Yup.string().required("Admit time is required"),
+    //     follow_up_date: Yup.date().required("Follow Up date is required"),
+    //     follow_up_time: Yup.string().required("Follow Up time is required"),
+    //     temperature: Yup.string().required("Temperature is required"),
+    //     pulse: Yup.number().required("Pulse is required"),
+    //     blood_pressure: Yup.string().required("Blood Pressure is required"),
+    //     respiratory_rate: Yup.number().required("Respiratory Rate is required"),
+    //     local_examination: Yup.string().required("Local Examination is required"),
+    //     discharge_advice: Yup.string().required("Discharge Advice is required"),
+    // });
+
     const validationSchema = Yup.object({
         diagnosisDetails: Yup.string().required("Diagnosis is required"),
         chiefComplaints: Yup.string().required("Chief Complaints are required"),
-        discharge_date: Yup.date().required("Discharge date is required"),
-        discharge_time: Yup.string().required("Admit time is required"),
-        follow_up_date: Yup.date().required("Follow Up date is required"),
-        follow_up_time: Yup.string().required("Follow Up time is required"),
-        temperature: Yup.string().required("Temperature is required"),
-        pulse: Yup.number().required("Pulse is required"),
-        blood_pressure: Yup.string().required("Blood Pressure is required"),
-        respiratory_rate: Yup.number().required("Respiratory Rate is required"),
+
+        // Date and Time validations
+        discharge_date: Yup.date()
+            .required("Discharge date is required")
+            .min(new Date(), "Discharge date cannot be in the past"),
+
+        discharge_time: Yup.string()
+            .required("Discharge time is required")
+            .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
+
+        follow_up_date: Yup.date()
+            .required("Follow Up date is required")
+            .min(Yup.ref('discharge_date'), "Follow-up must be after discharge"),
+
+        follow_up_time: Yup.string()
+            .required("Follow Up time is required")
+            .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
+
+        temperature: Yup.number()
+            .required("Temperature is required"),
+
+        pulse: Yup.number()
+            .required("Pulse is required")
+            .min(30, "Pulse cannot be below 30 bpm")
+            .max(200, "Pulse cannot exceed 200 bpm")
+            .integer("Must be a whole number"),
+
+        blood_pressure: Yup.string()
+            .required("Blood Pressure is required"),
+
+        respiratory_rate: Yup.number()
+            .required("Respiratory Rate is required")
+            .min(8, "RR cannot be below 8 breaths/min")
+            .max(60, "RR cannot exceed 60 breaths/min")
+            .integer("Must be a whole number"),
+
         local_examination: Yup.string().required("Local Examination is required"),
         discharge_advice: Yup.string().required("Discharge Advice is required"),
     });

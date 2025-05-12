@@ -335,7 +335,6 @@ function AdmitedPatientDetails() {
                 handleClose={() => {
                     handledischargedateCloseModal();
                     fetchpatient()
-                    toast.success('Successfully recorded the discharge date.')
                 }}
             />
 

@@ -27,10 +27,6 @@ function DoctorDashboard() {
         },
     }
 
-
-
-
-
     const fetchTodaysAppointments = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${todaysDate}`, config)
@@ -39,8 +35,6 @@ function DoctorDashboard() {
             console.log("Error fetching appointments => ", err)
         }
     }
-
-
 
     const fetchIpdPatient = async () => {
         try {
@@ -51,7 +45,6 @@ function DoctorDashboard() {
         }
     }
 
-
     const fetchPatient = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_patient_createdby?userId=${user?.userId}`, config)
@@ -61,8 +54,6 @@ function DoctorDashboard() {
         }
     }
 
-
-    
     const fetchappointmentcount = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_appointment_count?userId=${user?.userId}`, config)
@@ -72,17 +63,12 @@ function DoctorDashboard() {
         }
     }
 
-
-
-
     useEffect(() => {
         fetchTodaysAppointments();
         fetchIpdPatient();
         fetchPatient();
         fetchappointmentcount()
     }, []);
-
-
 
     useEffect(() => {
         const handleResize = () => {
@@ -96,16 +82,12 @@ function DoctorDashboard() {
         };
     }, []);
 
-
-
-
-
     const dataForBargraph = {
         labels: appointementcount?.month,
         datasets: [
             {
                 label: "Active Doctors",
-                data: appointementcount?.count, 
+                data: appointementcount?.count,
                 backgroundColor: "#1D949A", // Bar color
                 borderColor: "#1D949A", // Border color
                 barPercentage: 1.0, // Maximize bar width relative to category
@@ -122,10 +104,6 @@ function DoctorDashboard() {
 
     };
 
-
-
-
-
     const nameStyle = {
         fontWeight: "500",
         color: "#101828"
@@ -138,9 +116,6 @@ function DoctorDashboard() {
         color: "#475467"
     };
 
-
-
-
     const columns = [
         { name: "Patient Name", accessor: "doctorName", class: "py-3 w-50 ps-5 text-left" },
         { name: "UH ID", accessor: "uhId", class: "text-center px-1" },
@@ -152,7 +127,6 @@ function DoctorDashboard() {
         <tr key={item.id} className="border-bottom text-center">
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
-
                     <img
                         src={vijay}
                         alt={item.patient_image}
@@ -175,7 +149,6 @@ function DoctorDashboard() {
             <td className="py-3 px-2">{item.patient_sex}</td>
         </tr>
     );
-
 
     return (
         <>
@@ -241,7 +214,6 @@ function DoctorDashboard() {
                                     ))}
                                 </tbody>
                             </Table>
-
                         </div>
                     </Col>
                     <Col xl={6} className="mt-4 mt-xl-0">
@@ -280,11 +252,10 @@ function DoctorDashboard() {
                     </Col>
                 </Row>
 
-                <div className="mt-4">
+                <div className="mt-4 pb-4">
                     <div>
                         <CommonTable minimumWidth={"800px"} headers={columns} bodyData={patient} renderRow={renderRow} title={"Recent Patients List"} />
                     </div>
-
                 </div>
             </div>
         </>

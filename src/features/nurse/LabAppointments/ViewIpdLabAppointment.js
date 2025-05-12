@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 function ViewIpdLabAppointment({ type }) {
     const boxStyle = {
@@ -60,11 +61,10 @@ function ViewIpdLabAppointment({ type }) {
                         "Content-Type": "multipart/form-data"
                     }
                 });
-                alert(response?.data?.message)
-
+                toast.success(response?.data?.message)
 
             } else {
-                alert("Please Upload Report");
+                toast.info("Please Upload Report");
             }
 
         } catch (error) {

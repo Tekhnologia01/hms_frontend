@@ -346,8 +346,8 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
                                     )}
                                 </Col>
                             </Row>
-                            <Row className="pt-3 m-0">
-                                <Col lg={6}>
+                            <Row className="pt-3 m-0 ">
+                                <Col lg={6} className="px-0">
                                     <InputBox
                                         placeholder="Bed Name"
                                         isRequired={true}

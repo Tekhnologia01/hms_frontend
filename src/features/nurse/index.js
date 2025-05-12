@@ -5,12 +5,42 @@ import { Table, Pagination } from "react-bootstrap";
 import { FaArrowDown } from "react-icons/fa";
 import vijay from "../../assets/images/avatars/vijay.jpg";
 import CommonTable from "../../components/table/CommonTable";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 function Nurse() {
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const params = useParams();
+    const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    const [ipdPatients, setIpdPatients] = useState([]);
+    const [opdPatients, setOpdPatients] = useState([]);
+
+
+    async function getPatientsData() {
+        try {
+            const opdResponse = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getopdappointment`, config);
+            setOpdPatients(opdResponse?.data?.data[0] || []);
+
+            const ipdResponse = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getipdappointment`, config);
+            setIpdPatients(ipdResponse?.data?.data[0] || []);
+        } catch (error) {
+            console.error("Error fetching lab test data:", error);
+        }
+    }
+
+    useEffect(() => {
+        getPatientsData();
+    }, [])
 
     useEffect(() => {
         const handleResize = () => {
@@ -47,53 +77,39 @@ function Nurse() {
 
     };
 
-    // Example data for the table
-    const patients = [
-        {
-            patientName: "John Doe",
-            uhId: "UH12345",
-            patientSex: "Male",
-            patientAge: 35,
-            testName: "Hypertension",
-            price: 6000,
-            consultantDoctor: "Dr. Smith",
-        },
-        {
-            patientName: "Jane Smith",
-            uhId: "UH67890",
-            patientSex: "Female",
-            patientAge: 29,
-            testName: "Diabetes",
-            price: 4000,
-            consultantDoctor: "Dr. Brown",
-        },
-    ];
-
-    // Calculate pagination data
-    const totalItems = patients.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentPatients = patients.slice(startIndex, endIndex);
-    const handlePageChange = (page) => setCurrentPage(page);
-
     const columns = [
-        { name: "Patients Name", accessor: "patientName", class: "py-3 w-25 text-left px-2" },
+        { name: "Patients Name", accessor: "patientName", class: "py-3 w-35 text-left px-1" },
         { name: "Test Name", accessor: "testName", class: "text-center px-1" },
-        { name: "Age", accessor: "patientAge", class: "text-center px-1" },
-        { name: "Sex", accessor: "patientSex", class: "text-center px-1" },
-        { name: "Consultant Doctor", accessor: "consultantDoctor", class: "text-center px-1" },
-        { name: "Price", accessor: "price", class: "text-center px-1" },
+        { name: "Doctor", accessor: "consultantDoctor", class: "text-center px-1" },
     ];
+
+    const currentOpdPatients = opdPatients
+    const currentIpdPatients = ipdPatients;
 
     const renderRow = (item, index) => (
-        <tr key={item.patientId} className="border-bottom text-center">
-            <td className="py-3 px-2 text-start">{item.patientName}</td>
-            <td className="py-3 px-2">{item.testName}</td>
-            <td className="py-3 px-2">{item.patientAge}</td>
-            <td className="py-3 px-2">{item.patientSex}</td>
-            <td className="py-3 px-2">{item.consultantDoctor}</td>
-            <td className="py-3 px-2">{item.price}</td>
+        <tr key={item.patientId || index} className="border-bottom text-center">
+            <td className="py-3 px-2 text-start">
+
+                <div className="d-flex align-items-center">
+                    <img
+                        src={`${process.env.REACT_APP_API_URL}/${item.patient_image}`}
+                        alt={item.Name}
+                        style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                        }}
+                        className="ms-3"
+                    />
+                    <div className="d-flex flex-column ms-2" style={{ height: "40px", alignItems: "center" }}>
+                        <p className="fw-semibold  pt-2">{item.patient_name}</p>
+                    </div>
+                </div>
+
+            </td>
+            <td className="py-3 px-2">{item.testName || item.test_name}</td>
+            <td className="py-3 px-2">{item.DoctorName || item.Doctor_name}</td>
         </tr>
     );
 
@@ -128,8 +144,25 @@ function Nurse() {
                 </div>
             </div >
 
-            <div className="mx-lg-4 m-3 pb-4">
-                <CommonTable minimumWidth={"700px"} headers={columns} bodyData={patients} renderRow={renderRow} title={"Patients List"} />
+            <div className="d-flex">
+                <div className="mx-lg-4 m-3 pb-4" style={{ overflowY: "auto" , maxHeight:'250px', overflowX:'auto'}}>
+                    <CommonTable
+                        minimumWidth={"400px"}
+                        headers={columns}
+                        bodyData={currentIpdPatients}
+                        renderRow={renderRow}
+                        title={"IPD Tests"}
+                    />
+                </div>
+                <div className="mx-lg-4 m-3 pb-4" style={{ overflowY: "auto", maxHeight: '300px', overflowX: 'auto' }}>
+                    <CommonTable
+                        minimumWidth={"400px"}
+                        headers={columns}
+                        bodyData={currentOpdPatients}
+                        renderRow={renderRow}
+                        title={"OPD Tests"}
+                    />
+                </div>
             </div>
         </>
     )

@@ -14,12 +14,20 @@ import { toast } from 'react-toastify';
 
 function AddLabTest() {
     const { admitedId } = useParams();
-    console.log("admitedId", admitedId)
+    console.log("admitedId", admitedId);
     const token = useSelector((state) => state.auth.currentUserToken);
+    
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
 
     const [formData, setFormData] = useState({
         labTestIds: [],
-        recommendationDate: ''
+        recommendationDate: getCurrentDate(),
     });
 
     const [tests, setTests] = useState([]);
@@ -69,8 +77,6 @@ function AddLabTest() {
         }));
     };
 
-
-
     const handleTestSubmit = async () => {
         try {
             const newData = {
@@ -89,8 +95,8 @@ function AddLabTest() {
     const columns = [
         { name: "Test Name", accessor: "uh_id", class: "text-center" },
         { name: "Date", accessor: "date", class: "text-center px-1" },
-        { name: "Status", accessor: "status", class: "text-center  py-2" },
-        { name: "Report", accessor: "action", class: "py-3 text-center " },
+        { name: "Status", accessor: "status", class: "text-center py-2" },
+        { name: "Report", accessor: "action", class: "py-3 text-center" },
     ];
 
     const renderRow = (item) => (
@@ -98,9 +104,6 @@ function AddLabTest() {
             <td className="py-3 px-2">{item?.test_name}</td>
             <td className="py-3 px-2">{epochTimeToDate(item?.recommendation_date)}</td>
             <td className="py-3 px-2">{item?.status}</td>
-
-
-
             <td className="py-3 px-2">
                 {
                     item?.status == "Pending" ? <>
@@ -125,12 +128,11 @@ function AddLabTest() {
                     <Form.Label className="fw-semibold">Select Test</Form.Label>
                     <MultiSelectWithDropdown
                         selectedDays={formData.labTestIds}
-                        options={tests.map(test => ({
+                        options={tests.map((test) => ({
                             value: test.test_id,
-                            label: test.test_name
+                            label: test.test_name,
                         }))}
                         onDayChange={handleTestChange}
-
                     />
                 </Col>
 
@@ -155,10 +157,8 @@ function AddLabTest() {
                 </Col>
             </Row>
 
-
-
-            {admitedData.length > 0 &&
-                <div className='p-2'>
+            {admitedData.length > 0 && (
+                <div className="p-2">
                     <CommonTable
                         minimumWidth={"100%"}
                         headers={columns}
@@ -167,9 +167,7 @@ function AddLabTest() {
                         title={"Lab Test List"}
                     />
                 </div>
-            }
-
-
+            )}
         </div>
     );
 }

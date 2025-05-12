@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -18,6 +18,9 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
     const [editableRowIndex, setEditableRowIndex] = useState(); // Default to last row being editable
     const [prevRowValues, setPrevRowValues] = useState();
     const [showPrescription, setShowPrescription] = useState(false);
+    const [medicineList, setMedicineList] = useState([]);
+    const [medicineSearch, setMedicineSearch] = useState("");
+    const [showMedicineDropdown, setShowMedicineDropdown] = useState(false);
     const userId = useSelector(state => state?.auth?.user?.userId);
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
@@ -40,8 +43,6 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
             ]);
             setEditableRowIndex(rows.length + 1);
         }
-
-        // setEditableRowIndex(rows.length); // Make the newly added row editable
     };
 
     const handleChange = (index, field, value) => {
@@ -66,6 +67,19 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         }
     }
 
+    const fetchMedicines = useCallback(async () => {
+        if (medicineList.length === 0) {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_API_URL}/prescription/getmedicine`,
+                    config
+                );
+                setMedicineList(response.data?.data || []);
+            } catch (error) {
+                setMedicineList([]);
+            }
+        }
+    }, [medicineList.length, config]);
 
     async function getPrescriptionTest() {
         try {
@@ -237,7 +251,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
 
             <div className="mt-2">
                 <div className="border rounded-2">
-                    <div style={{ overflowX: "auto" }}>
+                    <div >
                         {rows && (
                             <table className="bordered w-100 prescription_tbl" style={{ tableLayout: "fixed", minWidth: "800px" }}>
                                 <thead>
@@ -257,16 +271,67 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                     {rows.map((row, index) => (
                                         <tr key={index}>
                                             <td className="text-center">{index + 1}</td>
-                                            <td >
-                                                <Form.Control
-                                                    type="text"
-                                                    value={row.medicine_name}
-                                                    onChange={(e) => handleChange(index, "medicine_name", e.target.value)}
-                                                    ref={(el) => (inputRefs.current[index] = el)}
-                                                    placeholder="Medicine Name"
-                                                    disabled={index !== editableRowIndex}
-
-                                                />
+                                            <td style={{ position: "relative" }}>
+                                                {index === editableRowIndex ? (
+                                                    <>
+                                                        <Form.Control
+                                                            type="text"
+                                                            value={row.medicine_name}
+                                                            onFocus={() => {
+                                                                fetchMedicines();
+                                                                setShowMedicineDropdown(true);
+                                                            }}
+                                                            onChange={(e) => {
+                                                                handleChange(index, "medicine_name", e.target.value);
+                                                                setMedicineSearch(e.target.value);
+                                                                setShowMedicineDropdown(true);
+                                                            }}
+                                                            onBlur={() => setTimeout(() => setShowMedicineDropdown(false), 200)}
+                                                            placeholder="Search Medicine"
+                                                            autoComplete="off"
+                                                            className="modern-input"
+                                                        />
+                                                        {showMedicineDropdown && (
+                                                            <div className="modern-dropdown">
+                                                                {medicineList
+                                                                    .filter((med) =>
+                                                                        (medicineSearch || row.medicine_name || "")
+                                                                            .toLowerCase()
+                                                                            .trim() === ""
+                                                                            ? true
+                                                                            : med.medicine_name
+                                                                                .toLowerCase()
+                                                                                .includes(
+                                                                                    (medicineSearch || row.medicine_name || "").toLowerCase()
+                                                                                )
+                                                                    )
+                                                                    .slice(0, 20)
+                                                                    .map((med, i) => (
+                                                                        <div
+                                                                            key={med.medicine_id || med.medicine_name + i}
+                                                                            className={`dropdown-item ${row.medicine_name === med.medicine_name ? "selected" : ""
+                                                                                }`}
+                                                                            onMouseDown={() => {
+                                                                                handleChange(index, "medicine_name", med.medicine_name);
+                                                                                setMedicineSearch(med.medicine_name);
+                                                                                setShowMedicineDropdown(false);
+                                                                            }}
+                                                                        >
+                                                                            {med.medicine_name}
+                                                                        </div>
+                                                                    ))}
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <Form.Control
+                                                        type="text"
+                                                        value={row.medicine_name}
+                                                        disabled
+                                                        placeholder="Medicine Name"
+                                                        className="modern-input"
+                                                    />
+                                                )}
                                             </td>
                                             <td>
                                                 <Form.Control
