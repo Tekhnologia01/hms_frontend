@@ -234,8 +234,12 @@ function IpdBill() {
                                     )} 
                                     
                                     <tr>
-                                        <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Grand Total</td>
+                                        <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Balance Amount</td>
                                         <td className="text-center">{totalAmount-totalDeposit}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Grand Total</td>
+                                        <td className="text-center">{totalAmount  + discountAmount}</td>
                                     </tr>
                                 </tbody>
                             </Table>

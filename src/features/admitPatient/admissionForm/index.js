@@ -49,6 +49,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
         mediclaim: "No",
         mlc_no: "",
         tpa: "",
+        mrd_no: "",
         reference_doctor: "",
         bed_id: "",
         room_type: "",
@@ -100,6 +101,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                 mediclaim: "No",
                 mlc_no: "",
                 tpa: "",
+                mrd_no: "",
                 reference_doctor: "",
                 bed_id: "",
                 room_type: "",
@@ -242,6 +244,10 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                 other_relative_age: formData.other_relative_age,
                 other_relative_gender: formData.other_relative_gender,
                 other_relation: formData.other_relation,
+                mrd_no: formData.mrd_no,
+                tpa: formData.tpa,
+                mlc_no: formData.mlc_no,
+                occupation: formData.occupation,
             };
 
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/admit/${user?.userId}`, payload, config);
@@ -417,6 +423,13 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                             </Col>
                         </Row>
                         {errors.admit_date && <p className="text-danger">{errors.admit_date}</p>}
+                    </Col>
+
+                    <Col lg={4} md={6} className="mt-4">
+                        <Form.Group controlId="mrd_no">
+                            <Form.Label className="fw-semibold">MRD No. </Form.Label>
+                            <Form.Control type="text" style={{ height: "45.5px" }} placeholder="Enter MRD" name="mrd_no" value={formData.mrd_no} onChange={handleInputChange} />
+                        </Form.Group>
                     </Col>
 
                     <Col lg={4} md={6} className="mt-4">
