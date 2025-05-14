@@ -28,6 +28,13 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
     zIndex: 10, // Ensure it appears above content
   };
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const [tests, setTests] = useState([]);
 
@@ -37,6 +44,7 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
     recommendationDate: "",
     testReason: "",
   })
+
 
 
 
@@ -60,7 +68,7 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
 
   async function getTest() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`, config);
       setTests(response?.data?.data);
     } catch (error) {
 
@@ -70,11 +78,11 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
   const handleSave = (e) => {
     e.preventDefault();
 
-    if (formData.labTestIds.length > 0 && formData?.recommendationDate !== "" && formData?.testReason !== "" ) {
+    if (formData.labTestIds.length > 0 && formData?.recommendationDate !== "" && formData?.testReason !== "") {
       handleTestSave(formData);
       handleClose();
       toast.success("Test added successfully");
-    }else{
+    } else {
       toast.error("Please fill all fields");
     }
   }
@@ -83,7 +91,7 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
     getTest();
     setFormData({
       labTestIds: [],
-      recommendationDate: "",
+      recommendationDate: getCurrentDate(),
       testReason: "",
     })
   }, [handleClose])
@@ -106,7 +114,7 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
       <div className="pe-5 ps-5 pb-5 pt-3">
         {/* Close Button */}
         <Row>
-          
+
         </Row>
 
         {/* <div className=" fw-semibold pt-4 pb-3">Doctor Details</div> */}
@@ -124,23 +132,23 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
           </Col> */}
 
 
-<Col lg={6}>
+          <Col lg={6}>
             <Form.Label className="fw-semibold">Select Test</Form.Label>
             <MultiSelectWithDropdown
-       
+
               selectedDays={formData?.labTestIds}
               options={tests?.map(test => ({
                 value: test.test_id,
                 label: test.test_name
               }))}
               onDayChange={handleTestChange}
-              style={{padding:"8px"}}
+              style={{ padding: "8px" }}
             />
           </Col>
           <Col lg={6}>
             <Form.Group controlId="datePicker">
               <InputBox
-              className=""
+                className=""
                 type="date"
                 label={"Recommendation Date"}
                 value={formData.recommendationDate}

@@ -2,7 +2,7 @@
 // import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer";
 // // import Airavat from "../../../assets/images/Airavat.png";
 // import Airavat from "../../assets/images/Airavat.png";
- 
+
 // Font.register({
 //     family: 'Times New Roman',  // Define font family name
 //     fonts: [
@@ -16,7 +16,7 @@
 //         },
 //     ],
 // });
- 
+
 // // Define styles for the PDF document
 // const styles = StyleSheet.create({
 //     page: {
@@ -98,12 +98,12 @@
 //         marginLeft: 10,
 //     },
 // });
- 
+
 // // PDF Component
 // const DischargeSheetPDF = ({ data, prescription }) => {
 
 
- 
+
 //     return (
 //         <Document>
 //             <Page size="A4" style={styles.page}>
@@ -119,7 +119,7 @@
 //                         <Text style={styles.margin_t}><Text style={styles.header}>AGE : </Text>{data?.patient_age} YEARS</Text>
 //                         <Text style={styles.margin_t}><Text style={styles.header}>CONSULTANT. : </Text>{data?.doctor_name}</Text>
 //                         <Text style={styles.margin_t}><Text style={styles.header}>DATE OF ADMISSION : </Text>{data?.admitted_date}</Text>
- 
+
 //                     </View>
 //                     <View>
 //                         <Text style={styles.margin_t}><Text style={styles.header}>UHID : </Text>{data?.uh_id}</Text>
@@ -136,14 +136,14 @@
 //                         {data?.diagnosis}
 //                     </Text>
 //                 </View>
- 
+
 //                 <View style={{ marginBottom: 10, marginTop: 10 }}>
 //                     <Text style={[styles.subHeader, styles.margin_t]}>Chief complaints</Text>
 //                     <Text>
 //                         {data?.chief_complaints}
 //                     </Text>
 //                 </View>
- 
+
 //                 <View style={{ marginTop: 10 }}>
 //                     <Text style={[styles.subHeader, styles.margin_t]}>Physical examination</Text>
 //                     <View style={{ marginBottom: 10, marginTop: 10 }}>
@@ -160,14 +160,14 @@
 //                         <View>
 //                             <Text style={styles.margin_t}><Text style={styles.header}>Temperature : </Text>{data?.temprature}</Text>
 //                             <Text style={styles.margin_t}><Text style={styles.header}>Pulse : </Text>{data?.pulse}</Text>
- 
+
 //                         </View>
 //                         <View>
 //                             <Text style={styles.margin_t}><Text style={styles.header}>Blood Pressure : </Text>{data?.blood_pressure}</Text>
 //                             <Text style={styles.margin_t}><Text style={styles.header}>Respiratory Rate : </Text>{data?.respiratory_rate}</Text>
 //                         </View>
 //                     </View>
- 
+
 //                     <View style={{ marginBottom: 10, marginTop: 10 }}>
 //                         <Text style={styles.margin_t}><Text style={styles.header}>Cardiovascular System (CVS) : </Text>{data?.cvs}</Text>
 //                         <Text style={styles.margin_t}><Text style={styles.header}>Respiratory System (RS) : </Text>{data?.rs}</Text>
@@ -189,7 +189,7 @@
 //                         {data?.discharge_advice}
 //                     </Text>
 //                 </View>
- 
+
 //                 {prescription?.length > 0 &&
 //                     <View style={{ marginBottom: 10, marginTop: 10 }}>
 //                         <Text style={[styles.subHeader, styles.margin_t]}>Prescription</Text>
@@ -204,7 +204,7 @@
 //                                 <Text style={[styles.tableCol, { fontWeight: "bold", width: "11%" }]}>Quantity</Text>
 //                                 <Text style={[styles.remarksCol, { fontWeight: "bold" }]}>Remarks</Text>
 //                             </View>
- 
+
 //                             {/* Table Rows */}
 //                             {prescription?.map((prescription, index) => (
 //                                 <View style={styles.tableRow} key={prescription.Prescription_Id}>
@@ -220,10 +220,10 @@
 //                             ))}
 //                         </View>
 //                     </View>}
- 
+
 //                 <View style={{ marginBottom: 10, marginTop: 10 }}>
 //                     <Text style={[styles.subHeader, styles.margin_t]}>Further Follow-up</Text>
- 
+
 //                     <Text>
 //                         ALL INVESTIGATION REPORTS AND IMAGES OF RADIOLOGICAL INVESTIGATIONS HAVE BEEN HANDED OVER TOTHE PATIENT/PATIENT ATTENDANT.
 //                     </Text>
@@ -248,7 +248,7 @@
 //                         <Text>(Patient / Relative signature)</Text>
 //                     </View>
 //                 </View>
- 
+
 //                 <View style={{ marginBottom: 10, marginTop: 10 }}>
 //                     <Text>
 //                         I have understood the instructions given about the medication dosage and post discharge care.</Text>
@@ -257,7 +257,7 @@
 //         </Document>
 //     )
 // };
- 
+
 // export default DischargeSheetPDF;
 
 
@@ -630,6 +630,7 @@ const styles = StyleSheet.create({
 const DischargeSheetPDF = ({ data, prescription }) => {
     const admittedDate = formatEpochToDate(data?.admitted_date);
     const dischargeDate = formatEpochToDate(data?.discharge_date_time);
+    const followUpDate = formatEpochToDate(data?.follow_up_date_time);
 
     return (
         <Document>
@@ -696,7 +697,7 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                         <Text>{data?.past_history || "None provided"}</Text>
                     </View>
                     <View style={{ marginBottom: 6, marginTop: 6 }}>
-                        <Text style={[styles.subHeader, styles.margin_t]}>Course Treatment</Text>
+                        <Text style={[styles.subHeader, styles.margin_t]}>Course in hospital</Text>
                         <Text>{data?.course_details}</Text>
                         {data?.treatment_point?.length > 0 && (
                             <View style={{ marginTop: 4 }}>
@@ -747,6 +748,9 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                 <View style={{ marginBottom: 6, marginTop: 6 }}>
                     <Text style={[styles.subHeader, styles.margin_t]}>Further Follow-up</Text>
                     <Text>ALL INVESTIGATION REPORTS AND IMAGES OF RADIOLOGICAL INVESTIGATIONS HAVE BEEN HANDED OVER TO THE PATIENT/PATIENT ATTENDANT.</Text>
+                </View>
+                <View style={{ marginBottom: 6, marginTop: 6 }}>
+                    <Text style={[styles.subHeader, styles.margin_t]}>Follow-up Date : <Text style={{ fontWeight: "normal" }}>{followUpDate}</Text></Text>
                 </View>
                 <View style={{ marginBottom: 6, marginTop: 6, display: "flex", flexDirection: 'row', gap: 15 }}>
                     <Text style={styles.margin_t}>Prepared by: {data?.doctor_name}</Text>

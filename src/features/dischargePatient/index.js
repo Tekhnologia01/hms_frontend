@@ -41,6 +41,7 @@ const DischargePatient = () => {
         discharge_advice: "",
         discharge_date_time: "",
         follow_up_date_time: "",
+        icd_code:"",
     });
     const [showDischargeSheet, setShowDischargeSheet] = useState(false);
 
@@ -164,6 +165,7 @@ const DischargePatient = () => {
                     discharge_advice: response?.data?.data?.discharge_advice,
                     discharge_date_time: response?.data?.data?.discharge_date_time,
                     follow_up_date_time: response?.data?.data?.follow_up_date_time,
+                    icd_code: response?.data?.data?.icd_code,
                 });
             }
         } catch (error) {
@@ -195,7 +197,8 @@ const DischargePatient = () => {
                 "past_history": values?.past_history,
                 "discharge_advice": values?.discharge_advice,
                 "discharge_date": convertDateTimeToEpoch(values?.discharge_date, values?.discharge_time),
-                "follow_up_date": convertDateTimeToEpoch(values?.follow_up_date, values?.follow_up_time)
+                "follow_up_date": convertDateTimeToEpoch(values?.follow_up_date, values?.follow_up_time),
+                "icd_code": values?.icd_code,
             };
 
             let response;
@@ -479,6 +482,20 @@ const DischargePatient = () => {
                                         />
                                         <ErrorMessage name="discharge_advice" component="div" className="text-danger" />
                                     </Col>
+
+                                    <Col md={4} lg={6} className="mb-2">
+                                        <Form.Group controlId="icd_code">
+                                            <Form.Label className="fw-semibold">ICD Code</Form.Label>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter ICD Code"
+                                                className="rounded-3"
+                                                name='icd_code'
+                                                value={values.icd_code}
+                                                onChange={handleChange} />
+                                        </Form.Group>
+                                    </Col>
+
                                     <Col md={6}>
                                         <Row className="gy-4">
                                             <Form.Label className="fw-semibold">Select Discharge Date & Time <span className="text-danger fw-bold">*</span></Form.Label>

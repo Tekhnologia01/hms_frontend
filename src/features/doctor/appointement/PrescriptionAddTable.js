@@ -350,6 +350,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                 >
                                                     <option value="">Select</option>
                                                     <option value="Tablet">Tablet</option>
+                                                    <option value="Capsule">Capsule</option>
                                                     <option value="Liquid">Liquid</option>
                                                     <option value="Injection">Injection</option>
                                                     <option value="Powder">Powder</option>
