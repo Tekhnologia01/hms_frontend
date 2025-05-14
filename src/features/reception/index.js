@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Table, Pagination, Row, Col } from "react-bootstrap";
-import { FaArrowDown } from "react-icons/fa";
-import vijay from "../../assets/images/avatars/vijay.jpg";
-import { FiEdit2 } from "react-icons/fi";
-import { RiDeleteBinLine } from "react-icons/ri";
+import { useEffect, useState } from "react";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import AppointmentSlider from "../commonfeature/AppointmentSlider";
 import CommonTable from "../../components/table/CommonTable";
 import NewCommonPagination from "../../components/pagination/NewCommonPagination";
-import { addYears } from "date-fns";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -64,25 +58,13 @@ function ReceptionDashboard() {
 
     const fetchPatient=async()=>{
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd`,config);
             setPatients(response?.data?.data);
             setTotalPages(response?.data?.data?.pagination?.TotalPages);
           } catch (err) {
             console.log("Error fetching departments:", err);
           }
     }
-
-
-
-    // const fetchDoctor=async()=>{
-    //     try {
-    //         const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=2025-04-08`,config);
-    //         setDoctorsData(response?.data?.data);
-    //         setTotalPages(response?.data?.data?.pagination?.TotalPages);
-    //       } catch (err) {
-    //         console.log("Error fetching departments:", err);
-    //       }
-    // }
 
 
     const fetchDoctor = async () => {
@@ -148,7 +130,7 @@ function ReceptionDashboard() {
                     </div> */}
                     <img
                         src={`${process.env.REACT_APP_API_URL}/${item?.patient_image}`}
-                        alt={item.patientName}
+                        alt={item?.patient_name}
                         style={{
                             width: "40px",
                             height: "40px",
@@ -158,7 +140,7 @@ function ReceptionDashboard() {
                         className="ms-3"
                     />
                     <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                        <p className="fw-semibold">{item.patientName}</p>
+                        <p className="fw-semibold">{item?.patient_name}</p>
                         <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>Appointment for {item.user_name}</p>
                     </div>
                 </div>
