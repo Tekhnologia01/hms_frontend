@@ -208,12 +208,6 @@ function PatientAppointmentList() {
     <tr key={item.id} className="border-bottom text-center">
       <td className="px-2 text-start lh-1">
         <div className="d-flex align-items-center">
-          <div className="ps-2">
-            <input
-              type="checkbox"
-              style={{ transform: "scale(1.5)", cursor: "pointer" }}
-            />
-          </div>
           <img
             src={item?.Photo ? `${process.env.REACT_APP_API_URL}/${item?.Photo}` : vijay}
             alt={item?.Name}

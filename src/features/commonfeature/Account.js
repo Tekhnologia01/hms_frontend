@@ -335,7 +335,7 @@ function Account() {
     const updateProfile = async (values) => {
         setIsLoading(true);
         const formData = new FormData();
-        if (previewImage !== null && previewImage !== defaultProfile) {
+        if (previewImage !== null) {
             formData.append("photo", values?.photo);
         }
         formData.append("user_id", user?.userId);
@@ -562,13 +562,13 @@ function Account() {
                                         <option value="">Select Blood Group</option>
                                         {bloodGroups.length > 0
                                             ? bloodGroups.map((blood) => (
-                                                  <option
-                                                      key={blood.blood_id}
-                                                      value={blood.blood_id}
-                                                  >
-                                                      {blood.blood_group_name}
-                                                  </option>
-                                              ))
+                                                <option
+                                                    key={blood.blood_id}
+                                                    value={blood.blood_id}
+                                                >
+                                                    {blood.blood_group_name}
+                                                </option>
+                                            ))
                                             : null}
                                     </Form.Select>
                                 </Form.Group>
@@ -622,11 +622,11 @@ function Account() {
                         />
                     )}
                     <CommanButton
-                        label={isEditable ? "Save Changes" : "Edit Profile"}
+                        label={"Save Changes"}
                         className="mb-3 ps-4 pe-4 p-2 fw-semibold fs-6"
                         style={{ borderRadius: "7px" }}
                         type={isEditable ? "submit" : "button"}
-                        onClick={!isEditable ? () => setIsEditable(true) : undefined}
+                        // onClick={!isEditable ? () => setIsEditable(true) : undefined}
                         loading={isLoading}
                         disabled={isLoading}
                     />

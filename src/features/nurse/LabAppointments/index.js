@@ -58,7 +58,7 @@ function LabAppointments() {
                         </div>
                     </div>
                     <div className="d-flex gap-2 justify-content-end">
-                        <InputBox
+                        {/* <InputBox
                             style={{ height: "40px" }}
                             placeholder="olivia@untitledui.com"
                             // value={values.cafeName}
@@ -69,7 +69,7 @@ function LabAppointments() {
                             label="Filter "
                             className="p-1 px-4 fw-semibold"
                             style={{ borderRadius: "7px", height: "40px", fontSize: "14px", backgroundColor: "#fff", color: "black", border: "1px solid lightgray" }}
-                        />
+                        /> */}
                         <CommanButton
                             label="+ Add Lab Test"
                             className="p-1 px-4 fw-semibold"

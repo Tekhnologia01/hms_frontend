@@ -1,6 +1,3 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { MdPayments } from "react-icons/md";
@@ -37,6 +34,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
     name: patient?.Name || "",
     amount: "",
     date: "",
+    mode: "",
   });
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
@@ -61,7 +59,8 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
     setFormData({
       name: patient?.Name || "",
       amount: "",
-      date: today, // Set today's date as default
+      date: today,
+      mode: "",
     });
   }, [patient]);
 
@@ -87,6 +86,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = "Patient name is required";
+    if (!formData.mode) newErrors.mode = "Payment mode is required";
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
       newErrors.amount = "A valid amount greater than 0 is required";
     }
@@ -107,6 +107,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
         admitedId: patient.admitted_patient_id,
         amount: parseFloat(formData.amount),
         date: formData.date,
+        mode: formData.mode,
       };
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/accountant/addpayment`,
@@ -117,6 +118,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
         name: patient?.Name || "",
         amount: "",
         date: "",
+        mode: "",
       });
 
       handleClose();
@@ -139,7 +141,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
       <Modal.Body>
         <Form onSubmit={handlePaymentSubmit}>
           <Row className="m-0 pb-3">
-            <Col md={4} className="gy-3">
+            <Col md={6} className="gy-3">
               <InputBox
                 label="Admitted Patient Name"
                 placeholder="Patient Name here..."
@@ -151,7 +153,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
               />
               {errors.name && <p className="text-danger">{errors.name}</p>}
             </Col>
-            <Col md={4} className="gy-3">
+            <Col md={6} className="gy-3">
               <InputBox
                 label="Amount"
                 placeholder="Enter payment amount"
@@ -164,7 +166,9 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
               />
               {errors.amount && <p className="text-danger">{errors.amount}</p>}
             </Col>
-            <Col md={4} className="gy-3">
+          </Row>
+          <Row className="m-0 pb-3">
+            <Col md={6} className="gy-3">
               <InputBox
                 label="Payment Date"
                 placeholder="Select date"
@@ -176,28 +180,32 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
               />
               {errors.date && <p className="text-danger">{errors.date}</p>}
             </Col>
+            <Col md={6} className="gy-3">
+              <InputBox
+                label="Payment Mode"
+                placeholder="payment mode"
+                isRequired={true}
+                value={formData.mode}
+                onChange={handleInputChange}
+                name="mode"
+              />
+              {errors.mode && <p className="text-danger">{errors.mode}</p>}
+            </Col>
           </Row>
           {error && <p className="text-danger">{error}</p>}
-          <div>
 
-
-
-            {/* <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? "Submitting..." : "Submit Payment"}
-          </Button> */}
-
-
+          <div className="d-flex justify-content-end">
             <CommanButton
               label="Submit Payment"
               className="mb-3 ps-4 pe-4 p-2 fw-bold fs-6 "
+              style={{marginRight:"10px"}}
               type="submit"
               disabled={loading}
-
             />
           </div>
+
         </Form>
       </Modal.Body>
-
     </Modal>
   );
 }
