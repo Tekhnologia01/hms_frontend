@@ -24,6 +24,7 @@ function AdmitedDepatientBillDetals() {
   const [selectedPatient, setSelectedPatient] = useState(null); // State for selected patient
   const [show, setShow] = useState(false)
 
+  const [patientid,setPatientid]=useState(null)
   const limitPerPage = 10;
   const { user } = useSelector((state) => state?.auth);
   const token = useSelector((state) => state.auth.currentUserToken);
@@ -213,55 +214,14 @@ function AdmitedDepatientBillDetals() {
                   label={`Complete`}
                   className="fw-bold fs-6 "
                   style={{ borderRadius: "8px" }}
-                  onClick={() => setShow(true)}
-                // onClick={() => handleStatus(item.admitted_patient_id)}
+                  onClick={() => {setPatientid(item.admitted_patient_id);
+                    setShow(true)}}
                 />
               </td>
           }
         </tr>
 
-        <Modal
-          show={show}
-          onHide={handleConfirmModal}
-          centered
-          size="md"
-          className="confirmation-modal"
-          aria-labelledby="confirmation-modal-title"
-        >
-          <Modal.Header closeButton className="border-0 pb-2">
-            <Modal.Title
-              id="confirmation-modal-title"
-              className="fw-bold"
-              style={{ fontSize: "1.5rem", color: "#1D949A" }}
-            >
-              Confirmation
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="pt-2 pb-4">
-            <p
-              className="fw-semibold text-dark"
-              style={{ fontSize: "1.1rem", lineHeight: "1.6" }}
-            >
-              Are you sure you want to complete all the processes for this patient?
-            </p>
-          </Modal.Body>
-          <Modal.Footer className="border-0 pt-0">
-            <CommanButton
-              label="Cancel"
-              className="me-3 ps-4 pe-4 py-2 fw-semibold fs-6 text-dark bg-white"
-              type="button"
-              onClick={() => handleConfirmModal()}
-            />
-            <CommanButton
-              label="Complete"
-              className="ps-4 pe-4 py-2 fw-semibold fs-6"
-              type="button"
-              variant="primary"
-              onClick={() => handleStatus(item.admitted_patient_id)}
-              style={{ backgroundColor: "#1D949A", borderColor: "#1D949A" }}
-            />
-          </Modal.Footer>
-        </Modal>
+     
       </>
     );
   };
@@ -309,6 +269,53 @@ function AdmitedDepatientBillDetals() {
         patient={selectedPatient}
       />
 
+
+
+
+   <Modal
+          show={show}
+          onHide={handleConfirmModal}
+          centered
+          size="md"
+          className="confirmation-modal"
+          aria-labelledby="confirmation-modal-title"
+        >
+          <Modal.Header closeButton className="border-0 pb-2">
+            <Modal.Title
+              id="confirmation-modal-title"
+              className="fw-bold"
+              style={{ fontSize: "1.5rem", color: "#1D949A" }}
+            >
+              Confirmation
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="pt-2 pb-4">
+            <p
+              className="fw-semibold text-dark"
+              style={{ fontSize: "1.1rem", lineHeight: "1.6" }}
+            >
+              Are you sure you want to complete all the processes for this patient?
+            </p>
+          </Modal.Body>
+          <Modal.Footer className="border-0 pt-0">
+            <CommanButton
+              label="Cancel"
+              className="me-3 ps-4 pe-4 py-2 fw-semibold fs-6 text-dark bg-white"
+              type="button"
+              onClick={() => handleConfirmModal()}
+            />
+            <CommanButton
+              label="Complete"
+              className="ps-4 pe-4 py-2 fw-semibold fs-6"
+              type="button"
+              variant="primary"
+              onClick={() => {handleStatus(patientid);
+                handleConfirmModal()
+              }}
+              style={{ backgroundColor: "#1D949A", borderColor: "#1D949A" }}
+            />
+          </Modal.Footer>
+        </Modal>
     </>
   );
 

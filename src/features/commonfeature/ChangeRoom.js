@@ -145,28 +145,59 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
   };
 
   // Handle form submission
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
+//   const handleSubmit = async () => {
+//     if (!validateForm()) return;
     
-    try {
+//     try {
 
-      const submitData = {
-        admited_id: +admited?.admitted_patient_id,
-        ipd_id:admited.ipd_id,
-        bed_id:+formData?.bedName,
-        start_date: convertToEpoch(formData.discharge_date, formData.discharge_time)
-      };
+//       const submitData = {
+//         admited_id: +admited?.admitted_patient_id,
+//         ipd_id:admited.ipd_id,
+//         bed_id:+formData?.bedName,
+//         start_date: convertToEpoch(formData.discharge_date, formData.discharge_time)
+//       };
       
 
-    const response= await axios.post(`${process.env.REACT_APP_API_URL}/roombed/changebed`,submitData,config)
-console.log(response)
+//     const response= await axios.post(`${process.env.REACT_APP_API_URL}/roombed/changebed`,submitData,config)
+// console.log(response)
 
-      handleClose();
-    } catch (error) {
-      console.error("Error updating patient:", error);
-      setErrors({ submit: "Failed to update patient" });
-    }
-  };
+//       handleClose();
+//     } catch (error) {
+//       console.error("Error updating patient:", error);
+//       setErrors({ submit: "Failed to update patient" });
+//     }
+//   };
+
+
+const handleSubmit = async () => {
+  if (!validateForm()) return;
+
+  try {
+    // Combine discharge date and time into a single Date object
+    const combinedDateTime = new Date(`${formData.discharge_date}T${formData.discharge_time}`);
+
+    // Convert to epoch time in seconds
+    const epochTime = Math.floor(combinedDateTime.getTime() / 1000);
+
+    const submitData = {
+      admited_id: +admited?.admitted_patient_id,
+      ipd_id: admited.ipd_id,
+      bed_id: +formData?.bedName,
+      start_date: epochTime, // in seconds
+    };
+
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/roombed/changebed`,
+      submitData,
+      config
+    );
+    console.log(response);
+    handleClose();
+  } catch (error) {
+    console.error("Error updating patient:", error);
+    setErrors({ submit: "Failed to update patient" });
+  }
+};
 
   return (
     <Modal show={show} onHide={handleClose} size="lg" dialogClassName="custom-modal">
