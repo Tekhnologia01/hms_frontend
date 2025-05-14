@@ -375,7 +375,19 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                     disabled={index !== editableRowIndex}
                                                 />
                                             </td>
-                                            <td className="text-center">{row.quantity}</td>
+                                            <td className="text-center">
+                                                {["Liquid", "Powder"].includes(row.medicine_type) && index === editableRowIndex ? (
+                                                    <Form.Control
+                                                        type="number"
+                                                        value={row.quantity}
+                                                        onChange={(e) => handleChange(index, "quantity", e.target.value)}
+                                                        placeholder="Quantity"
+                                                        min={1}
+                                                    />
+                                                ) : (
+                                                    row.quantity
+                                                )}
+                                            </td>
                                             <td>
                                                 <Form.Control
                                                     type="text"
