@@ -190,8 +190,9 @@ useEffect(() => {
               <tr>
                 <th>No</th>
                 <th>Date</th>
-                <th>Amount</th>
                 <th>Deposit ID</th>
+                <th>Mode</th>
+                <th>Amount</th>
               </tr>
             </thead>
             <tbody>
@@ -201,14 +202,15 @@ useEffect(() => {
                     <tr>
                       <td>${index + 1}</td>
                       <td>${new Date(deposit.date * 1000).toLocaleDateString()}</td>
-                      <td>${deposit.amount}</td>
                       <td>${deposit.deposite_id}</td>
+                      <td>${deposit.mode}</td>
+                      <td>${deposit.amount}</td>
                     </tr>
                   `
         )
         .join("")}
               <tr class="total-row">
-                <td colspan="3">Total Deposited</td>
+                <td colspan="4">Total Deposited</td>
                 <td>${calculateDepositTotal()}</td>
               </tr>
             </tbody>
@@ -264,6 +266,7 @@ useEffect(() => {
                   <tr>
                     <th className="text-center p-3" style={{ background: "#F9FAFB" }}>No</th>
                     <th className="text-center p-3" style={{ background: "#F9FAFB" }}>Date</th>
+                    <th className="text-center p-3" style={{ background: "#F9FAFB" }}>Mode</th>
                     <th className="text-center p-3" style={{ background: "#F9FAFB" }}>Amount</th>
                
                   </tr>
@@ -272,13 +275,14 @@ useEffect(() => {
                   {details.deposits?.map((deposit, index) => (
                     <tr key={`deposit-${index}`}>
                       <td className="text-center">{index + 1}</td>
-                      <td>{epochTimeToDate(deposit.date)}</td>
+                      <td className="text-center">{epochTimeToDate(deposit.date)}</td>
+                      <td className="text-center">{deposit?.mode}</td>
                       <td className="text-center">{deposit.amount}</td>
           
                     </tr>
                   ))}
                   <tr>
-                    <td colSpan={2} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Total Deposited</td>
+                    <td colSpan={3} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Total Deposited</td>
                     <td className="text-center">{totalDeposits}</td>
                   </tr>
                 </tbody>

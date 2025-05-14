@@ -18,7 +18,7 @@ function AccountantDashboard() {
     const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
     const [todaysAppintments, setTodaysAppointments] = useState([]);
 
-    const [discharge,setDischarge]=useState()
+    const [discharge, setDischarge] = useState()
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
@@ -37,18 +37,18 @@ function AccountantDashboard() {
     }
 
 
-    const fetchTodayDischargepatients= async () => {
+    const fetchTodayDischargepatients = async () => {
         try {
-            const today = new Date().toISOString().slice(0, 10); 
+            const today = new Date().toISOString().slice(0, 10);
             const dateTimestamp = Math.floor(new Date(today).getTime() / 1000);
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`, config);
             setDischarge(response?.data?.data[0]);
         } catch (err) {
             console.log("Error fetching doctors => ", err);
         }
     };
 
- 
+
 
     const fetchReport = async () => {
         const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
@@ -206,13 +206,13 @@ function AccountantDashboard() {
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
                     <div className="ps-2">
-                                        </div>
+                    </div>
                     <img
-                       src={
-                        item.Photo
-                            ? `${process.env.REACT_APP_API_URL}/${item.Photo}`
-                            : vijay
-                    }
+                        src={
+                            item.Photo
+                                ? `${process.env.REACT_APP_API_URL}/${item.Photo}`
+                                : vijay
+                        }
                         alt={item.name}
                         style={{
                             width: "40px",
@@ -272,99 +272,99 @@ function AccountantDashboard() {
                 <Row>
                     <Col xl={6} className="mt-4 mt-xl-0">
                         <h5 className="mb-3">Today Payment Report</h5>
-                        <Table className="custom-table  border">
-                        <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {reportData?.map((patient) => (
-                                    <tr key={patient.ipd_id}>
-                                        <td >
-                                            <div className="d-flex align-items-center">
-                                                <img
-                                                    src={
-                                                        patient.patient_image
-                                                            ? `${process.env.REACT_APP_API_URL}/${patient.patient_image}`
-                                                            : vijay
-                                                    }
-                                                    alt={patient?.patient_name}
-                                                    style={{
-                                                        width: "40px",
-                                                        height: "40px",
-                                                        borderRadius: "50%",
-                                                        objectFit: "cover",
-                                                    }}
-                                                />
-                                                <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                    <p style={nameStyle}>{patient.patient_name}</p>
-                                                    <p style={{ marginTop: "-20px", color: "#475467", fontSize: "14px" }}>
-                                                        UH_ID: {patient.uh_id}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td >
-                                            <span className="py-1 px-3 fw-semibold rounded-5">
-                                                ₹{patient.amount}
-                                            </span>
-                                        </td>
+                        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                            <Table className="custom-table border">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Amount</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>
+                                </thead>
+                                <tbody>
+                                    {reportData?.map((patient) => (
+                                        <tr key={patient.ipd_id}>
+                                            <td >
+                                                <div className="d-flex align-items-center">
+                                                    <img
+                                                        src={
+                                                            patient.patient_image
+                                                                ? `${process.env.REACT_APP_API_URL}/${patient.patient_image}`
+                                                                : vijay
+                                                        }
+                                                        alt={patient?.patient_name}
+                                                        style={{
+                                                            width: "40px",
+                                                            height: "40px",
+                                                            borderRadius: "50%",
+                                                            objectFit: "cover",
+                                                        }}
+                                                    />
+                                                    <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
+                                                        <p style={nameStyle}>{patient.patient_name}</p>
+                                                        <p style={{ marginTop: "-20px", color: "#475467", fontSize: "14px" }}>
+                                                            UH_ID: {patient.uh_id}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td >
+                                                <span className="py-1 px-3 fw-semibold rounded-5">
+                                                    ₹{patient.amount}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </div>
                     </Col>
 
                     <Col xl={6} className="mt-4 mt-xl-0">
                         <h5 className="mb-3">Admitted Patients</h5>
-                        <Table className="custom-table border">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Doctor Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {todaysAppintments?.map((patient) => (
-                                    <tr key={patient.Patient_Id}>
-                                        <td>
-                                            <div className="d-flex align-items-center">
-                                                <img
-                                                    src={patient.Photo ? `${process.env.REACT_APP_API_URL}/${patient.Photo}` : vijay}
-                                                    alt={patient.name}
-                                                    style={{
-                                                        width: "40px",
-                                                        height: "40px",
-                                                        borderRadius: "50%",
-                                                        objectFit: "cover",
-                                                    }}
-                                                />
-                                                <div className="d-flex flex-column ms-2">
-                                                    <span className="fw-semibold">{patient.Name}</span>
-                                                    <span style={{ marginTop: "-4px", color: "#475467", fontSize: "14px" }}>
-                                                        Disease: {patient.Disease}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="fw-semibold align-middle">{patient.doctor_name}</td>
+                        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                            <Table className="custom-table border">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Doctor Name</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>
+                                </thead>
+                                <tbody>
+                                    {todaysAppintments?.map((patient) => (
+                                        <tr key={patient.Patient_Id}>
+                                            <td>
+                                                <div className="d-flex align-items-center">
+                                                    <img
+                                                        src={patient.Photo ? `${process.env.REACT_APP_API_URL}/${patient.Photo}` : vijay}
+                                                        alt={patient.name}
+                                                        style={{
+                                                            width: "40px",
+                                                            height: "40px",
+                                                            borderRadius: "50%",
+                                                            objectFit: "cover",
+                                                        }}
+                                                    />
+                                                    <div className="d-flex flex-column ms-2">
+                                                        <span className="fw-semibold">{patient.Name}</span>
+                                                        <span style={{ marginTop: "-4px", color: "#475467", fontSize: "14px" }}>
+                                                            Disease: {patient.Disease}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="fw-semibold align-middle">{patient.doctor_name}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </div>
                     </Col>
-
                 </Row>
-
-
 
                 <div className="mt-4 pb-4">
                     <div>
                         <CommonTable minimumWidth={"800px"} headers={columns} bodyData={discharge} renderRow={renderRow} title={"Discharge Patient"} />
                     </div>
-                 
                 </div>
             </div>
         </>
