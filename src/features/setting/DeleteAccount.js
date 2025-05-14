@@ -48,7 +48,6 @@ function DeleteAccount() {
         config
       );
 
-      // Show success message
       setMessage({
         text: "Account deleted successfully!",
         type: "success"
@@ -74,7 +73,6 @@ function DeleteAccount() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear messages when user starts typing
     if (message.text) {
       setMessage({ text: "", type: "" });
     }
@@ -83,7 +81,6 @@ function DeleteAccount() {
   const validateForm = () => {
     let newErrors = {};
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
-
     if (!formData.password.trim()) {
       newErrors.password = "New password is required";
     } else if (!passwordPattern.test(formData.password)) {

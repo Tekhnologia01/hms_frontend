@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk(
             const decodedToken = decodeToken(token);
                console.log("decodedToken",decodedToken)
             if (decodedToken) {
-                sessionStorage.setItem("token", JSON.stringify(token));
+                // sessionStorage.setItem("token", JSON.stringify(token));
 
                 return {
                     token,

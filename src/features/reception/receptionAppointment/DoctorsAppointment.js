@@ -1,14 +1,12 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import vijay from "../../../assets/images/avatars/vijay.jpg";
+import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { LuStethoscope } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
-import { Col, Pagination, Row, Table } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { FaArrowLeft, FaCalendarCheck } from "react-icons/fa";
 import { TbFileDescription } from "react-icons/tb";
-import { FiEdit2 } from "react-icons/fi";
 import { useEffect, useState } from "react";
-import document from "../../../assets/images/avatars/document.png"
-import Slider from "../../commonfeature/Slider";
+
 import CommanButton from "../../../components/common/form/commonButtton";
 import DateSlider from "../../../components/common/DateSlider";
 import { format } from "date-fns";
@@ -30,11 +28,11 @@ function DoctorsAppointment() {
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-      }
+    }
 
-    
+
     useEffect(() => {
         setFormattedDate(format(currentDate, "yyyy-MM-dd"));
     }, [currentDate])
@@ -43,7 +41,7 @@ function DoctorsAppointment() {
 
     async function getAppointmentsData() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsAppointmentByDate?doctor_id=${doctorId}&appointment_date=${formattedDate}&page=${currentPage}&page_size=${limitPerPage}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getDoctorsAppointmentByDate?doctor_id=${doctorId}&appointment_date=${formattedDate}&page=${currentPage}&page_size=${limitPerPage}`, config);
             setAppointmentData(response?.data?.data);
         } catch (err) {
             console.log("Error fetching departments:", err);
@@ -229,90 +227,7 @@ function DoctorsAppointment() {
                         }
                     </div>
 
-                    {/* <Col lg={6}>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="p-3 px-2 fs-5 fw-semibold">Prescription</div>
-                                <div>
-                                    <CommanButton
-                                        label="Prescription"
-                                        className="p-1 px-4 fw-semibold"
-                                        style={{ borderRadius: "7px", fontSize: "14px", height: "40px", }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="py-2 border p-3 py-3" style={{ borderRadius: "5px", color: "#46494C" }}>
-                                <div className="border-bottom pb-2 mb-2" >
-                                    <div className="d-flex gap-2 justify-content-between">
-                                        <div className="d-flex align-items-center">
-                                            <img
-                                                src={displayedPatient.image}
-                                                alt={displayedPatient.name}
-                                                style={{
-                                                    width: "40px",
-                                                    height: "40px",
-                                                    borderRadius: "50%",
-                                                    objectFit: "cover",
-                                                }}
-                                            />
-                                            <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                <p>{displayedPatient.patientName}</p>
-                                                <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "12px" }}>{displayedPatient.age + " " + displayedPatient.sex}</p>
-                                            </div>
-                                        </div>
-                                        <div className="d-flex border-start ps-4 flex-column ms-2" style={{ height: "40px" }}>
-                                            <p>UH Id</p>
-                                            <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "13px" }}>{displayedPatient.uhId}</p>
-                                        </div>
-                                        <div className="d-flex border-start ps-4  flex-column ms-2" style={{ height: "40px" }}>
-                                            <p>Contact No.</p>
-                                            <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "13px" }}>+91 {displayedPatient.phone}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="d-flex" style={{ lineHeight: "17px" }}>
-                                    <div style={{ width: "25%" }}>
-                                        <div>
-                                            <p>BP: 120/80</p>
-                                            <p>Pulse: 801m</p>
-                                            <p>Weight: 62 Kg</p>
-                                        </div>
-                                        <div className="mt-4">
-                                            <p className="fw-semibold text-dark">Test:</p>
-                                            <p>X-Ray</p>
-                                            <p>Blood Test</p>
-                                            <p>Urine Test</p>
-                                            <p>Endoscopy</p>
-                                        </div>
-                                    </div>
-                                    <div className="border-start ps-3">
-                                        <div>
-                                            <p className="fw-semibold text-dark">
-                                                Last Checked:
-                                            </p>
-                                            <p>Dr-Everly on 20 November 2022</p>
-                                            <p>Presciption - #20112022P0PS</p>
-
-                                        </div>
-                                        <div className="mt-4">
-                                            <p className="fw-semibold text-dark">
-                                                Observation:
-                                            </p>
-                                            <p>High Fever and cough at normal</p>
-                                        </div>
-                                        <div className="mt-4">
-                                            <p className="fw-semibold text-dark">
-                                                Prescription:
-                                            </p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <Slider slides={displayedPatient.reports} />
-                        </Col> */}
+              
 
                 </div>
             </div>

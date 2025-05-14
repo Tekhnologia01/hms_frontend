@@ -1,4 +1,3 @@
-import React from "react";
 import { Modal, Button } from "react-bootstrap"; 
 import { IoInformationCircle } from "react-icons/io5";
 

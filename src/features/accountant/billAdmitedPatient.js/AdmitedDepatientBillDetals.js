@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { useNavigate } from "react-router-dom";
-import { FaAmazonPay, FaArrowLeft } from "react-icons/fa";
+import { FaAmazonPay} from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
 import CommonTable from "../../../components/table/CommonTable";
-import { IoInformationCircle, IoReceiptSharp } from "react-icons/io5";
+import {  IoReceiptSharp } from "react-icons/io5";
 import PatientInfoModal from "./PatientInfoModal"; // Existing modal
 import PaymentModal from "./PaymentModal"; // New payment modal
 import { MdPayments } from "react-icons/md";
-import { GiCheckMark } from "react-icons/gi";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { Modal } from "react-bootstrap";
 import './discharge.css'
@@ -268,10 +267,6 @@ function AdmitedDepatientBillDetals() {
         handleClose={handleClose}
         patient={selectedPatient}
       />
-
-
-
-
    <Modal
           show={show}
           onHide={handleConfirmModal}

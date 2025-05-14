@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import InputBox from "../../../components/common/form/inputbox/index";
 import { useNavigate } from "react-router-dom";
-// import { validateLoginData } from "../../views/validation/Validationall";
 import Airavat from "../../../assets/images/Airavat.png";
-// import { apiurl } from "../../app/apiurl";
 import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
 import Google from "../../../assets/images/google.png";
@@ -27,64 +25,6 @@ function Register() {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState({});
-  const [passwordVisible, setPasswordVisible] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const handlogin = async () => {
-    // validateLoginData(formData);
-    // const validationErrors = validateLoginData(formData);
-    // if (Object.keys(validationErrors).length > 0) {
-    //   setErrors(validationErrors);
-    //   setAlert({
-    //     show: true,
-    //     message: Object.values(validationErrors)[0],
-    //     varient: "danger",
-    //   });
-    //   return;
-    // }
-    // setErrors({});
-
-    try {
-      const response = await axios.post(`${API_BASE_URL}/login`, {
-        username: formData.email,
-        password: formData.password,
-      });
-      const token = response.data.token;
-      const decodedToken = jwtDecode(token);
-      console.log("user data ", response);
-      console.log("decoded data ", decodedToken);
-
-      localStorage.setItem("token", token);
-      setAlert({
-        show: true,
-        message: "Login Successfull!",
-        varient: "success",
-      });
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-      setAlert({
-        show: true,
-        message: error.response?.data.message
-          ? error.response?.data.message
-          : "Error in login!",
-        varient: "danger",
-      });
-    }
-  };
-
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
   return (
     <div className="   vh-100 vw-100">

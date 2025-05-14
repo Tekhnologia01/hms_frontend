@@ -10,16 +10,16 @@ import { useSelector } from "react-redux";
 function ReceptionDashboard() {
     const [currentPage, setCurrentPage] = useState(1);
     const [limitPerPage, setLimitPerPage] = useState(1);
-    const[patients,setPatients] =useState([])
+    const [patients, setPatients] = useState([])
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [doctorsData,setDoctorsData]=useState([])
-    const [totalPages,setTotalPages]=useState()
+    const [doctorsData, setDoctorsData] = useState([])
+    const [totalPages, setTotalPages] = useState()
 
     const token = useSelector((state) => state.auth.currentUserToken);
-  const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     }
     useEffect(() => {
         const handleResize = () => {
@@ -56,37 +56,38 @@ function ReceptionDashboard() {
 
     };
 
-    const fetchPatient=async()=>{
+    const fetchPatient = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd`, config);
             setPatients(response?.data?.data);
             setTotalPages(response?.data?.data?.pagination?.TotalPages);
-          } catch (err) {
+        } catch (err) {
             console.log("Error fetching departments:", err);
-          }
+        }
     }
+
 
 
     const fetchDoctor = async () => {
         const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-      
-        try {
-          const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=${today}`,
-            config
-          );
-          setDoctorsData(response?.data?.data);
-          setTotalPages(response?.data?.data?.pagination?.TotalPages);
-        } catch (err) {
-          console.log("Error fetching doctors:", err);
-        }
-      };
-      
 
-    useEffect(()=>{
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/doctor/getDoctorsWithTodayAppointment?appo_date=${today}`,
+                config
+            );
+            setDoctorsData(response?.data?.data);
+            setTotalPages(response?.data?.data?.pagination?.TotalPages);
+        } catch (err) {
+            console.log("Error fetching doctors:", err);
+        }
+    };
+
+
+    useEffect(() => {
         fetchPatient();
         fetchDoctor();
-    },[])
+    }, [])
 
 
 
@@ -122,12 +123,7 @@ function ReceptionDashboard() {
         <tr key={item.id} className="border-bottom text-center">
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
-                    {/* <div className="ps-2">
-                        <input
-                            type="checkbox"
-                            style={{ transform: "scale(1.5)", cursor: "pointer" }}
-                        />
-                    </div> */}
+
                     <img
                         src={`${process.env.REACT_APP_API_URL}/${item?.patient_image}`}
                         alt={item?.patient_name}
@@ -159,12 +155,7 @@ function ReceptionDashboard() {
             >
                 &#x2022; {item.appo_status}
             </span></td>
-            {/* <td className="py-3 px-2">{item.price}</td> */}
-            {/* <td>
-                <FiEdit2 style={{ height: "23px", width: "23px" }} />
-                <span className="ps-3"></span>
-                <RiDeleteBinLine style={{ height: "25px", width: "25px" }} />
-            </td> */}
+
         </tr>
     );
 
@@ -200,8 +191,14 @@ function ReceptionDashboard() {
                 </div>
             </div >
             <div className="mx-lg-4 m-3 pb-4">
-                <div>
-                    <CommonTable minimumWidth={"900px"} headers={columns} bodyData={patients.data} renderRow={renderRow} title={"Patients List"} />
+                <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                    <CommonTable
+                        minimumWidth={"900px"}
+                        headers={columns}
+                        bodyData={patients.data}
+                        renderRow={renderRow}
+                        title={"Patients List"}
+                    />
                 </div>
                 {
                     totalPages > 1 &&

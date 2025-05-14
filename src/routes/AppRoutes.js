@@ -1,7 +1,5 @@
-import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {  Navigate, Route, Routes } from "react-router-dom";
 import DefaultLayout from "../components/layout/defaultLayout/DefaultLayout";
-
 // Common pages
 import Login from "../features/authentication/login/Login";
 import Register from "../features/authentication/register/Register";
@@ -18,7 +16,6 @@ import Setting from "../features/setting";
 import DoctorAppointment from "../features/doctor/appointement";
 import PatientDetails from "../features/doctor/PatientList/PatientDetails";
 import ViewPatient from "../features/doctor/appointement/ViewPaitent";
-import PatientList from "../features/doctor/PatientList";
 import AddPatient from "../features/commonfeature/AddPatient";
 import PaymentHistory from "../features/doctor/paymentHistory";
 import Account from "../features/commonfeature/Account";
@@ -27,7 +24,6 @@ import PatientAppointmentList from "../features/reception/patientList";
 import Nurse from '../features/nurse/index'
 import LabAppointments from "../features/nurse/LabAppointments";
 import LabAppointmentDetail from '../features/nurse/LabAppointments/labAppointment'
-import SelectedPatientDetails from '../features/nurse/PatientList/patientDetails'
 import NursePatientList from '../features/nurse/PatientList/index'
 import LabPatientDetails from '../features/nurse/LabAppointments/patientDetails'
 import ReceptionDashboard from "../features/reception";
@@ -38,14 +34,11 @@ import DoctorDashboard from "../features/doctor/dashboard";
 import Emergency from "../features/hospital/Emergency";
 import AddEmergencyPatient from "../features/hospital/Emergency/AddEmergencyPatient";
 import DoctorDetails from "../features/doctor/DoctorDetails";
-import GeneralExaminationTable from "../features/commonfeature/Examination";
 import RoomInfo from "../features/commonfeature/RoomInfo";
 import AddCharges from "../features/hospital/BillingAndCharges/AddCharges";
 import ReceptionistBillList from "../features/reception/billling/ReceptionistBillList";
 import BillDetails from "../features/reception/billling/BillDetails";
-import IPDBillList from "../features/reception/billling/IPD Billing";
 import AccountantDashboard from "../features/accountant/AccountantDashbord";
-import BillingHistory from "../features/accountant/billinghistory/BillingHistory";
 import ViewLabAppointment from "../features/nurse/LabAppointments/ViewLabAppointment";
 import ViewIpdLabAppointment from "../features/nurse/LabAppointments/ViewIpdLabAppointment";
 import DischargePatient from "../features/dischargePatient";
@@ -57,7 +50,6 @@ import DepositeReceipt from "../features/accountant/billAdmitedPatient.js/Deposi
 import DischargeSummery from "../features/accountant/dischargeSummery/DischargeSummery";
 import OpdReport from "../features/accountant/report/OpdReport";
 import Payment from "../features/accountant/paymentHistory/index"
-
 
 function AppRoutes({ getDefaultRoute }) {
   return (
@@ -91,8 +83,6 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/hospital/room" element={<RoomInfo/>} />
         <Route path="/hospital/payment/ipd" element={<Report/>} />
         <Route path="/hospital/payment/opd" element={<OpdReport/>} />
-
-
         {/* Lab routes */}
         <Route path="/lab" element={<Nurse />} />
         <Route path="/lab/lab_appointments" element={<LabAppointments />} />

@@ -1,7 +1,5 @@
-import React, { useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import CommanButton from "../../../components/common/form/commonButtton";
 import Airavat from "../../../assets/images/Airavat.png";
 import ForgotLogo from "../../../assets/images/forgotlogo.png";
 import Login from '../../../assets/images/loginflip.png'

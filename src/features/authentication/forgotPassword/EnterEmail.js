@@ -16,7 +16,7 @@ function EnterEmail() {
   const navigate = useNavigate();
 
   const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // simple regex for email validation
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   };
 
@@ -32,7 +32,6 @@ function EnterEmail() {
     }
 
     try {
-      console.log("first", email);
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/forgot/sendotp`, {userEmail: email });
       navigate(`/checkemail/${email}`);
     } catch (err) {

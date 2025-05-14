@@ -1,4 +1,3 @@
-import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +8,9 @@ import InputBox from "../../../components/common/form/inputbox";
 import CommanButton from "../../../components/common/form/commonButtton/index";
 import PasswordInput from "../../../components/common/form/password";
 import Airavat from "../../../assets/images/Airavat.png";
-import Google from "../../../assets/images/google.png";
-import Facebook from "../../../assets/images/facebook.png";
-import Apple from "../../../assets/images/apple.png";
+// import Google from "../../../assets/images/google.png";
+// import Facebook from "../../../assets/images/facebook.png";
+// import Apple from "../../../assets/images/apple.png";
 import Login1 from "../../../assets/images/login.png";
 import CommonToast, { showToast } from "../../../components/common/Toaster";
 

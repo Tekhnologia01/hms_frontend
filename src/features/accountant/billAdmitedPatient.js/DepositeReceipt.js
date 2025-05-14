@@ -4,7 +4,6 @@ import axios from "axios";
 import { Button, Card, Col, Container, Row, Table } from "react-bootstrap";
 import Airavat from "../../../assets/images/Airavat.png";
 import { useSelector } from "react-redux";
-import { showToast } from "../../../components/common/Toaster";
 import { useState, useEffect } from "react";
 import { epochTimeToDate } from "../../../utils/epochToDate";
 
@@ -49,131 +48,6 @@ useEffect(() => {
     return details?.deposits?.reduce((sum, deposit) => sum + deposit.amount, 0) || 0;
   };
 
-  // Function to handle deposit slip print with formatted layout
-  // const handlePrintDepositSlip = () => {
-  //   const printContent = `
-  //     <html>
-  //       <head>
-  //         <title>Deposit Receipt</title>
-  //         <style>
-  //           body {
-  //             font-family: Arial, sans-serif;
-  //             margin: 20px;
-  //             padding: 0;
-  //             font-size: 12pt;
-  //           }
-  //           .receipt-container {
-  //             width: 100%;
-  //             max-width: 800px;
-  //             margin: 0 auto;
-  //             border: 1px solid #ccc;
-  //             padding: 20px;
-  //           }
-  //           .header {
-  //             text-align: center;
-  //             margin-bottom: 20px;
-  //           }
-  //           .header img {
-  //             max-width: 150px;
-  //             height: auto;
-  //           }
-  //           .details-table {
-  //             width: 100%;
-  //             margin-bottom: 20px;
-  //           }
-  //           .details-table td {
-  //             padding: 5px;
-  //           }
-  //           .deposit-table {
-  //             width: 100%;
-  //             border-collapse: collapse;
-  //             margin-bottom: 20px;
-  //           }
-  //           .deposit-table th, .deposit-table td {
-  //             border: 1px solid #000;
-  //             padding: 8px;
-  //             text-align: center;
-  //           }
-  //           .deposit-table th {
-  //             background-color: #f2f2f2;
-  //           }
-  //           .total-row td {
-  //             font-weight: bold;
-  //           }
-  //           .footer {
-  //             text-align: right;
-  //             margin-top: 20px;
-  //           }
-  //           @media print {
-  //             body {
-  //               margin: 0;
-  //             }
-  //             .receipt-container {
-  //               border: none;
-  //             }
-  //           }
-  //         </style>
-  //       </head>
-  //       <body>
-  //         <div class="receipt-container">
-  //           <div class="header">
-  //             <img src="${Airavat}" alt="Airavat Logo" />
-  //             <h2>Deposit Receipt</h2>
-  //           </div>
-  //           <table class="details-table">
-  //             <tr>
-  //               <td><strong>Patient Name:</strong> ${details.Name}</td>
-  //               <td><strong>IPD ID:</strong> ${details.ipd_id}</td>
-  //             </tr>
-  //             <tr>
-  //               <td><strong>Department:</strong> ${details.department}</td>
-  //               <td><strong>Receipt No.:</strong> IPD-${details.ipd_id}</td>
-  //             </tr>
-  //             <tr>
-  //               <td><strong>Consulting Dr.:</strong> ${details.doctor_name}</td>
-  //               <td><strong>Admitted Date:</strong> ${new Date(details.admitted_date * 1000).toLocaleDateString()}</td>
-  //             </tr>
-  //           </table>
-  //           <table class="deposit-table">
-  //             <thead>
-  //               <tr>
-  //                 <th>No</th>
-  //                 <th>Date</th>
-  //                 <th>Amount</th>
-  //                 <th>Deposit ID</th>
-  //               </tr>
-  //             </thead>
-  //             <tbody>
-  //               ${details.deposits
-  //                 .map(
-  //                   (deposit, index) => `
-  //                     <tr>
-  //                       <td>${index + 1}</td>
-  //                       <td>${new Date(deposit.date * 1000).toLocaleDateString()}</td>
-  //                       <td>${deposit.amount}</td>
-  //                       <td>${deposit.deposite_id}</td>
-  //                     </tr>
-  //                   `
-  //                 )
-  //                 .join("")}
-  //               <tr class="total-row">
-  //                 <td colspan="3">Total Deposited</td>
-  //                 <td>${calculateDepositTotal()}</td>
-  //               </tr>
-  //             </tbody>
-  //           </table>
-  //           <div class="footer">
-  //             <p>Generated on: ${new Date().toLocaleString()}</p>
-  //           </div>
-  //         </div>
-  //       </body>
-  //     </html>
-  //   `;
-  //   const printWindow = window.open("", "_blank");
-  //   printWindow.document.write(printContent);
-  //   printWindow.document.close();
-  //   printWindow.print();
-  // };
 
   const handlePrintDepositSlip = () => {
     const printContent = `

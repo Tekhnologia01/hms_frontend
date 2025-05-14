@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Table, Pagination, Row, Col } from "react-bootstrap";
-import { FaArrowDown } from "react-icons/fa";
+import  { useEffect, useState } from "react";
+import { Table,  Row, Col } from "react-bootstrap";
 import vijay from "../../assets/images/avatars/vijay.jpg";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
 import CommonTable from "../../components/table/CommonTable";
-import NewCommonPagination from "../../components/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import SetDischarge from "../commonfeature/Setdischarge";
 import { epochTimeToDate } from "../../utils/epochToDate";
 
 function AccountantDashboard() {
