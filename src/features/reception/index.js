@@ -14,6 +14,7 @@ function ReceptionDashboard() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [doctorsData, setDoctorsData] = useState([])
     const [totalPages, setTotalPages] = useState()
+    const [recepCount, setRecepCount] = useState(0)
 
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
@@ -21,6 +22,21 @@ function ReceptionDashboard() {
             Authorization: `Bearer ${token}`,
         },
     }
+
+    const fetchRecepcount = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_appointment_count_admin`, config)
+            setRecepCount(response?.data?.data);
+        } catch (err) {
+            console.log("Error fetching appointments => ", err)
+        }
+    }
+
+    useEffect(() => {
+        fetchRecepcount()
+    }, [])
+
+
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
@@ -35,11 +51,11 @@ function ReceptionDashboard() {
 
     const dataForBargraph = {
 
-        labels: ["January", "February", "March", "April", "May"], // Months
+        labels: recepCount?.month,
         datasets: [
             {
-                label: "Active Doctors",
-                data: [100, 400, 600, 800, 1000], // Active doctor counts
+                label: "Total Patients",
+                data: recepCount?.count,
                 backgroundColor: "#1D949A", // Bar color
                 borderColor: "#1D949A", // Border color
                 barPercentage: 1.0, // Maximize bar width relative to category

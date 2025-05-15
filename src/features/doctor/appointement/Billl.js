@@ -136,7 +136,7 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
         <Row className="m-0 pt-2">
           <Col lg={6}>
             <label className="fw-semibold pt-2 pb-2">
-              Select Billing Item <span style={{ color: "red" }}>*</span>
+              Select Billing Item
             </label>
             <SelectBox
               name="selectedCharge"

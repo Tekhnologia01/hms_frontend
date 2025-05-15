@@ -346,6 +346,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                     value={row.medicine_type}
                                                     onChange={(e) => handleChange(index, "medicine_type", e.target.value)}
                                                     disabled={index !== editableRowIndex}
+                                                    style={{width:"90%", marginLeft:"10px" }}
                                                 >
                                                     <option value="">Select</option>
                                                     <option value="Tablet">Tablet</option>
