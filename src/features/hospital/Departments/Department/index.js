@@ -5,6 +5,7 @@ import CommonTable from "../../../../components/table/CommonTable";
 import NewCommonPagination from "../../../../components/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import vijay from "../../../../assets/images/avatars/vijay1.jpg"
 import { toast } from "react-toastify";
 
 function Department() {
@@ -118,7 +119,7 @@ function Department() {
       <td className="px-2 text-start lh-1">
         <div className="d-flex align-items-center">
           <img
-            src={`${process.env.REACT_APP_API_URL}/${item.Photo}`}
+            src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
             alt={item.Name}
             style={{
               width: "40px",
@@ -149,7 +150,7 @@ function Department() {
       <td className="px-2 text-start lh-1">
         <div className="d-flex align-items-center">
           <img
-            src={`${process.env.REACT_APP_API_URL}/${item.Photo}`}
+            src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
             alt={item.Name}
             style={{
               width: "40px",
