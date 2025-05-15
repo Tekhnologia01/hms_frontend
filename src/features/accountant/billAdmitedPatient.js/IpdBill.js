@@ -194,7 +194,7 @@ function IpdBill() {
                                         return (
                                             <tr key={`room-${index}`}>
                                                 <td className="text-center">{index + 1}</td>
-                                                <td className="text-center">Room Charge (Type {room.room_type})</td>
+                                                <td className="text-center">Room Charge {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`} </td>
                                                 <td className="text-center">{new Date(room.start_date * 1000).toLocaleDateString()}</td>
                                                 <td className="text-center">{days} {days === 1 ? 'day' : 'days'}</td>
                                                 <td className="text-center">{room.total * days}</td>
