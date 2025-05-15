@@ -1,10 +1,7 @@
 import { PDFViewer } from "@react-pdf/renderer";
-import { Button, Col, Container, Modal, Row, Table } from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import BillPDF from "../../doctor/appointement/OPDBill";
-import Airavat from "../../../assets/images/Airavat.png";
-import { RxContainer } from "react-icons/rx";
-import { Form } from "react-router-dom";
-import { useState } from "react";
+
 
 const ViewOPDBill = ({ show, setShow, data }) => {
     // Define the custom file name dynamically

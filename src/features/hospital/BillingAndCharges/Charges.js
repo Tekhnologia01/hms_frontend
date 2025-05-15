@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";

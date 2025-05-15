@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { FiEdit2 } from "react-icons/fi";
@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import AdmitPatient from "../../admitPatient/admissionForm";
 import './patients.css';
 import UpdatePatient from "./UpdatePatient";
-import { epochTimeToDate, epochToTime } from "../../../utils/epochToDate";
+import { epochTimeToDate } from "../../../utils/epochToDate";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MdOutlineBedroomChild } from "react-icons/md";
 import ChangeRoom from "../../commonfeature/ChangeRoom";

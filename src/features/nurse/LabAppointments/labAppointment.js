@@ -3,7 +3,6 @@ import Covid from "../../../assets/images/labs/Covid.png";
 import { Col, Row } from "react-bootstrap";
 import { TbFileDescription } from "react-icons/tb";
 import { FaArrowLeft, FaCalendarCheck } from "react-icons/fa";
-import document from "../../../assets/images/avatars/document.png";
 import { FiEdit2, FiEye } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import CommonTable from "../../../components/table/CommonTable";

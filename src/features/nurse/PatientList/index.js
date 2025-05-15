@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Table, Pagination, Row, Col } from "react-bootstrap";
-import { FaArrowDown, FaArrowLeft, FaEdit } from "react-icons/fa";
+import{ useState } from "react";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { useNavigate } from "react-router-dom";
 import CommonTable from "../../../components/table/CommonTable";

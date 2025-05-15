@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Table, Pagination, Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Table, Row, Col } from "react-bootstrap";
 // import { FaArrowDown } from "react-icons/fa";
 import vijay from "../../assets/images/avatars/vijay1.jpg";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
 import CommonTable from "../../components/table/CommonTable";
-import NewCommonPagination from "../../components/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
 
 function DoctorDashboard() {
     const [admitedPatient, setAdmitedPatient] = useState([])
     const { user } = useSelector(state => state?.auth);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [limitPerPage, setLimitPerPage] = useState(10);
     const [patient, setPatient] = useState([])
     const [appointementcount, setAppointmentcount] = useState()
     const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
