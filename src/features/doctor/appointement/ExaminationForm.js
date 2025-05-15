@@ -16,7 +16,6 @@ const ExaminationForm = ({ formData, setFormData }) => {
 
     const handleCheckboxChange = (event) => {
         const { checked, value } = event.target;
-        console.log("checkbox value", value)
         setFormData((prevState) => {
             const selectedSigns = prevState.signs ? prevState.signs.split(", ") : [];
 

@@ -13,7 +13,6 @@ import { toast } from 'react-toastify';
 
 function AddLabTest() {
     const { admitedId } = useParams();
-    console.log("admitedId", admitedId);
     const token = useSelector((state) => state.auth.currentUserToken);
     
     const getCurrentDate = () => {

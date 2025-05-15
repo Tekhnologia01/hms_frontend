@@ -144,7 +144,6 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                 setBeds(response?.data?.data);
             }
         } catch (err) {
-            console.log("Error fetching departments:", err);
             toast.error(err?.response?.data?.message ? err.response?.data?.message : "Bed not available")
             setBeds([]);
         }
@@ -197,7 +196,6 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                 setBeds([]);
                 setFormData((prev) => ({ ...prev, bed_id: "" }));
             } else {
-                console.log("room_type", value);
                 setFormData((prev) => ({ ...prev, bed_id: "" }));
             }
         }

@@ -79,12 +79,7 @@ function OpdReport() {
       </td>
       <td className="py-3 px-2">{item.bill_date ?? "-"}</td>
       <td className="py-3 px-2">{item.amount ?? "-"}</td>
-      {/* <td>
-        <IoReceiptSharp
-          style={{ height: "25px", width: "25px", cursor: "pointer" }}
-          onClick={() => console.log(`View receipt for ${item.id}`)} // Add your receipt handler
-        />
-      </td> */}
+
     </tr>
   );
 

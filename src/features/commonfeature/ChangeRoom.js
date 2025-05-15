@@ -97,7 +97,6 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
       setRoomType(response?.data?.data || []);
     } catch (err) {
-      console.log("Error fetching room types:", err);
       setErrors({ roomType: "Failed to load room types" });
     }
   };
@@ -107,7 +106,6 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtypewise?id=${roomTypeId}`,config);
       setRooms(response?.data?.data || []);
     } catch (err) {
-      console.log("Error fetching rooms:", err);
       setErrors(prev => ({ ...prev, room: "Failed to load rooms" }));
     }
   };
@@ -122,7 +120,6 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
         setErrors(prev => ({ ...prev, bedName: "No available beds" }));
       }
     } catch (err) {
-      console.log("Error fetching beds:", err);
       setErrors(prev => ({ 
         ...prev, 
         bedName: err.response?.data?.message || "Beds not available" 
@@ -144,29 +141,6 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
-//   const handleSubmit = async () => {
-//     if (!validateForm()) return;
-    
-//     try {
-
-//       const submitData = {
-//         admited_id: +admited?.admitted_patient_id,
-//         ipd_id:admited.ipd_id,
-//         bed_id:+formData?.bedName,
-//         start_date: convertToEpoch(formData.discharge_date, formData.discharge_time)
-//       };
-      
-
-//     const response= await axios.post(`${process.env.REACT_APP_API_URL}/roombed/changebed`,submitData,config)
-// console.log(response)
-
-//       handleClose();
-//     } catch (error) {
-//       console.error("Error updating patient:", error);
-//       setErrors({ submit: "Failed to update patient" });
-//     }
-//   };
 
 
 const handleSubmit = async () => {
@@ -191,7 +165,6 @@ const handleSubmit = async () => {
       submitData,
       config
     );
-    console.log(response);
     handleClose();
   } catch (error) {
     console.error("Error updating patient:", error);

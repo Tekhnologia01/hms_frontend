@@ -34,7 +34,6 @@ function Account() {
                 setPreviewImage(defaultProfile);
             }
         } catch (err) {
-            console.log("Error fetching profile:", err);
             toast.error("Failed to load profile data");
         }
     }
@@ -47,7 +46,6 @@ function Account() {
             );
             setBloodGroups(response?.data?.data);
         } catch (err) {
-            console.log("Error fetching blood group:", err);
             toast.error("Failed to load blood groups");
         }
     };
@@ -90,7 +88,6 @@ function Account() {
                 toast.error("Error updating profile");
             }
         } catch (e) {
-            console.log(e);
             toast.error(e.response?.data?.error || "Error updating profile");
         } finally {
             setIsLoading(false);

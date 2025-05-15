@@ -42,15 +42,6 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
     },
   }
 
-
-  //   console.log("patient data in the payment page",patient);
-  // useEffect(() => {
-  //   setFormData({
-  //     name: patient?.Name || "",
-  //     amount: "",
-  //     date: "",
-  //   });
-  // }, [patient]);
   useEffect(() => {
     // Get current date in YYYY-MM-DD format (HTML date input format)
     const today = new Date().toISOString().split('T')[0];

@@ -41,11 +41,9 @@ function AddLabModal({ show, handleClose, fetchLabs }) {
                 formData.append("testFees", newLab.price);
                 formData.append("testPhoto", newLab.image);
 
-                // console.log("FormData Object =>", Object.fromEntries(formData.entries()));
 
                 const response = await axios.post(`${process.env.REACT_APP_API_URL}/lab/addtest/${userId}`, formData,config);
                 fetchLabs();
-                console.log(response);
 
                 handleClose();
             } else {

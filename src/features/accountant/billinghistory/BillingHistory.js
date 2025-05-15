@@ -26,7 +26,6 @@ function BillingHistory() {
     const fetchDoctors = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/get?page=${currentPage}&limit=${limitPerPage}`,config);
-        console.log("Doctor list response => ", response.data)
         setDoctors(response?.data?.data);
       } catch (err) {
         console.log("Error fetching doctors => ", err)

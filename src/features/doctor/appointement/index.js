@@ -28,7 +28,6 @@ function DoctorAppointment() {
   const getDays = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getday`,config);
-      // console.log(response);
       setDays(response?.data?.data)
     } catch (err) {
       console.log("Error fetching days => ", err)
@@ -38,7 +37,6 @@ function DoctorAppointment() {
   const fetchAppointments = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${selectedDate}`,config)
-      console.log("Appointments data => ", response?.data?.data);
       setAppointmentData(response?.data?.data);
     } catch (err) {
       console.log("Error fetching appointments => ", err)

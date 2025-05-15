@@ -53,7 +53,6 @@ function AdmitedDepatientBillDetals() {
       );
       setDoctors(response?.data?.data);
     } catch (err) {
-      console.log("Error fetching doctors => ", err);
     }
   };
 

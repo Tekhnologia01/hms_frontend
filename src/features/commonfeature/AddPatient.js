@@ -46,7 +46,6 @@ function AddPatient() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("firstSubmit",formData)
     const validationErrors = validatePatientForm(formData);
     setErrors(validationErrors); // Store errors in state
 

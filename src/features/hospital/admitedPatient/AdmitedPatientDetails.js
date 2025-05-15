@@ -53,7 +53,6 @@ function AdmitedPatientDetails() {
     const fetchCharges = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getipdpatientcharges?admited_id=${admitedId}`, config)
-            console.log(response?.data?.data[0])
             setCharges(response?.data?.data[0])
             // setPatient(response?.data[0][0])
         } catch (error) {
@@ -63,7 +62,6 @@ function AdmitedPatientDetails() {
     const fetchvisits = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/getipddoctorvisits?admited_id=${admitedId}`, config)
-            console.log("dfghjkl", response.data.data[0])
             setDoctorVisits(response?.data?.data[0])
         } catch (error) {
 

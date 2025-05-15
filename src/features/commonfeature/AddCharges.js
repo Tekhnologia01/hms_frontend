@@ -61,7 +61,6 @@ const AddCharges = ({ show = false, handleClose, admited, patientUpdate }) => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`,config);
             setTreatmentOptions(response?.data?.data || []);
         } catch (err) {
-            console.log("Error fetching treatments:", err);
             setErrors({ treatmentId: "Failed to load treatments" });
         }
     };
@@ -96,7 +95,6 @@ const AddCharges = ({ show = false, handleClose, admited, patientUpdate }) => {
                 `${process.env.REACT_APP_API_URL}/fees/addipdcharges`, 
                 submitData,config
             );
-            console.log("Charge added:", submitData);
 
             if (patientUpdate) patientUpdate();
             handleClose();

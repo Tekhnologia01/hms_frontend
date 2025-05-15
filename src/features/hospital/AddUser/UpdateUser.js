@@ -63,7 +63,6 @@ const UpdateUser = ({ show = false, handleClose, user, patientUpdate,status }) =
   const handleSubmit = async () => {
     if (!validateForm()) return;
     try {
-      console.log("Updating patient with data:", formData);
       patientUpdate(formData);
      setFormData( {
         name: "",

@@ -79,7 +79,6 @@ function IpdBill() {
             // Generate PDF blob
             const pdfBlob = await pdf(<BillPDF billData={billDataForPDF} discount={discountAmount} />).toBlob();
 
-            console.log("pdfBlob", pdfBlob)
             // Create object URL for preview
             const pdfPreviewUrl = URL.createObjectURL(pdfBlob);
             setPdfUrl(pdfPreviewUrl);
@@ -119,7 +118,6 @@ function IpdBill() {
                 toast.success("Bill generated and uploaded successfully!")
             }
         } catch (e) {
-            console.log(e);
 
             toast.error("Error generating bill")
 

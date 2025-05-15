@@ -365,7 +365,6 @@ function AddUsers() {
     const handleEdit = async (data) => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/receptionist/updateuser`, data, config);
-            console.log(response)
             fetchData()
             toast.success("Updated successfully");
 
@@ -392,7 +391,6 @@ function AddUsers() {
 
     const handleEditDoctor = async (data) => {
         try {
-            console.log(data)
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/doctor/updatedoctor`, data, config);
             fetchData()
             toast.success("Doctor updated successfully");

@@ -1,5 +1,4 @@
 export const validateDoctorForm = (data) => {
-    console.log('validateDoctorForm', data);
     let errors = {};
 
     if (!data.name.trim()) {

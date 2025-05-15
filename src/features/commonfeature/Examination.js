@@ -22,7 +22,6 @@ const GeneralExaminationTable = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted Data:", formData);
   };
 
   return (

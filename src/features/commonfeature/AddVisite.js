@@ -61,7 +61,6 @@ const AddVisit = ({ show = false, handleClose, admited, patientUpdate }) => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/get`,config);
             setDoctors(response?.data?.data?.data || []);
         } catch (err) {
-            console.log("Error fetching doctors:", err);
             setErrors({ doctor_id: "Failed to load doctors" });
         }
     };

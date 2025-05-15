@@ -12,7 +12,7 @@ import Airavat from "../../../assets/images/Airavat.png";
 // import Facebook from "../../../assets/images/facebook.png";
 // import Apple from "../../../assets/images/apple.png";
 import Login1 from "../../../assets/images/login.png";
-import CommonToast, { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 function Login() {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -34,22 +34,20 @@ function Login() {
 
   // **Login function**
   const handelForm = async (values, { setSubmitting, setErrors }) => {
-    console.log("form submit ", values)
     try {
       const response = await dispatch(loginUser({
         userName: values.username,
         password: values.password
       }));
       if (response?.payload?.token) {
-        // showToast("Login Successfull!", "success");
-        // setTimeout(() => {
+
           navigate("/");
-        // }, 1000);
       } else {
-        showToast(response?.payload, "error")
+        toast.error(response?.payload)
       }
     } catch (error) {
-      showToast("This is an error message!", "error")
+
+      toast.error("This is an error message!")
       setErrors({ server: error.response?.data.message || "Login failed!" });
     }
     setSubmitting(false);
@@ -57,7 +55,7 @@ function Login() {
 
   return (
     <div className="vh-100 vw-100">
-      <CommonToast />
+      {/* <CommonToast /> */}
       <Row className="m-0">
         <Col md={6} className="vh-100 ">
           <Container className="vh-100 d-flex align-items-center">
@@ -194,3 +192,5 @@ function Login() {
 }
 
 export default Login;
+
+

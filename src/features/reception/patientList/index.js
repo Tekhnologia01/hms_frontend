@@ -78,7 +78,6 @@ function PatientAppointmentList() {
   async function getIPDPatients() {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patients?page=${currentPage}&limit=${limitPerPage}`, config);
-      console.log("appooijofdng => ", response?.data?.data);
       setPatients(response?.data?.data);
       setTotalPages(response?.data?.data?.pagination?.TotalPages);
     } catch (err) {

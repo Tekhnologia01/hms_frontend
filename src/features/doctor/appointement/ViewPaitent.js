@@ -171,7 +171,6 @@ function ViewPatient() {
       }
     } catch (error) {
       toast.error(error?.response?.message ? error.response?.message : "Error while saving data");
-      console.log(error);
     }
   }
 
@@ -193,7 +192,6 @@ function ViewPatient() {
       setTestData(response?.data?.data?.Test);
     } catch (error) {
       toast.error(error?.response?.message ? error.response?.message : "Error while getting data");
-      console.log(error);
     }
   }
 
@@ -205,7 +203,6 @@ function ViewPatient() {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/get_examination_details?appointment_id=${params?.appointmentId}`, config);
       if (response?.data?.status && response?.data?.data?.length > 0) {
-        console.log(response?.data?.data[0])
         const newData = {
           opd_examination_id: response?.data?.data[0]?.opd_examination_id,
           chief_complaints: response?.data?.data[0]?.chief_complaints,
@@ -223,7 +220,6 @@ function ViewPatient() {
           central_nervous_system: response?.data?.data[0]?.central_nervous_system,
           per_abdomen: response?.data?.data[0]?.per_abdomen
         }
-        console.log(newData);
         setExaminationData(newData);
       }
     } catch (error) {

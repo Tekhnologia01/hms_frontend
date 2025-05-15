@@ -17,7 +17,6 @@ export const timeToEpoch = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
     const now = new Date();
     now.setHours(hours, minutes, 0, 0); // Set selected time
-    console.log(Math.floor(now.getTime() / 1000));
     return Math.floor(now.getTime() / 1000);
 };
 

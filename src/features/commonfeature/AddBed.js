@@ -51,7 +51,6 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`, config);
             const roomTypes = response?.data?.data || [];
             setRoomType(roomTypes);
-            console.log("Room Types:", roomTypes); // Debug
         } catch (err) {
             console.error("Error fetching room types:", err);
         }
@@ -69,7 +68,6 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
             );
             const roomData = response?.data?.data || [];
             setRooms(roomData);
-            console.log("Rooms for roomTypeId", roomTypeId, ":", roomData); // Debug
         } catch (err) {
             console.error("Error fetching rooms:", err);
             setRooms([]);

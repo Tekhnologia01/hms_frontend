@@ -58,7 +58,6 @@ function AccountantDashboard() {
                 `${process.env.REACT_APP_API_URL}/accountant/getcollection?date=${today}&page=${1}&limit=${5}`,
                 config
             );
-            console.log(response?.data?.data)
             setReportData(response?.data?.data[0] || []);
         } catch (err) {
             console.error("Error fetching report:", err);

@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
 
 // PDF Component
 const BillPDF = ({ billData }) => {
-    console.log("bill data", billData);
     return (
         <Document>
             <Page size="A4" style={styles.page}>
