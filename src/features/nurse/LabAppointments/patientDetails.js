@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { FaArrowLeft, FaArrowRight, FaFileUpload } from "react-icons/fa";
-import vijay from "../../../assets/images/avatars/vijay.jpg";
+import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import InputBox from "../../../components/common/form/inputbox";
 import Note from "../../../components/common/form/textarea";
 import CommanButton from "../../../components/common/form/commonButtton";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Pagination, Row, Col } from "react-bootstrap";
 // import { FaArrowDown } from "react-icons/fa";
-import vijay from "../../assets/images/avatars/vijay.jpg";
+import vijay from "../../assets/images/avatars/vijay1.jpg";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
 import CommonTable from "../../components/table/CommonTable";

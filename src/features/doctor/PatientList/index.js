@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import vijay from "../../../assets/images/avatars/vijay.jpg";
+import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import CommonTable from "../../../components/table/CommonTable";

@@ -1,9 +1,7 @@
 import BarGraph from "../../features/commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../../features/commonfeature/Graphs/circleGraph";
 import React, { useEffect, useState } from "react";
-import { Table, Pagination } from "react-bootstrap";
-import { FaArrowDown } from "react-icons/fa";
-import vijay from "../../assets/images/avatars/vijay.jpg";
+
 import CommonTable from "../../components/table/CommonTable";
 import axios from "axios";
 import { useSelector } from "react-redux";

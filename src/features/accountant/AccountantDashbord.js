@@ -1,6 +1,6 @@
 import  { useEffect, useState } from "react";
 import { Table,  Row, Col } from "react-bootstrap";
-import vijay from "../../assets/images/avatars/vijay.jpg";
+import vijay from "../../assets/images/avatars/vijay1.jpg";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
 import CommonTable from "../../components/table/CommonTable";

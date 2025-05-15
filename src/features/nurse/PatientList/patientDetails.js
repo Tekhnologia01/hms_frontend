@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import { FaArrowLeft, FaArrowRight, FaFileUpload } from "react-icons/fa";
 import document from "../../../assets/images/avatars/document.png";
-import vijay from "../../../assets/images/avatars/vijay.jpg";
+import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import InputBox from "../../../components/common/form/inputbox";
 import Note from "../../../components/common/form/textarea";
 import { useNavigate } from "react-router-dom";

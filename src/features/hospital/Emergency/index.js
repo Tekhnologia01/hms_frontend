@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import vijay from "../../../assets/images/avatars/vijay.jpg";
+import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import CommanButton from "../../../components/common/form/commonButtton";
 import CommonTable from "../../../components/table/CommonTable";
 import NewCommonPagination from "../../../components/pagination/NewCommonPagination";

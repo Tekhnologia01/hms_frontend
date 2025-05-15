@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
-import vijay from "../../assets/images/avatars/vijay.jpg";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";

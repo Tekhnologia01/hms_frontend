@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import vijay from "../../../assets/images/avatars/vijay.jpg";
 import AppointmentCard from "./AppointmentCard";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputBox from "../../../components/common/form/inputbox";
 import { useSelector } from "react-redux";
