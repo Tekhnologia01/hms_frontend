@@ -353,7 +353,7 @@ function Account() {
                         type={isEditable ? "submit" : "button"}
                         // onClick={!isEditable ? () => setIsEditable(true) : undefined}
                         loading={isLoading}
-                        disabled={isLoading}
+                        disabled={isLoading || !isEditable}
                     />
                 </div>
             </form>
