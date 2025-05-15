@@ -12,6 +12,8 @@ function HospitalDashboard() {
     const [limitPerPage, setLimitPerPage] = useState(5);
     const [patient, setPatient] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
+    const [adminCount, setAdmincount] = useState(0)
+    console.log(adminCount)
     const [loading, setLoading] = useState(false);
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
@@ -20,6 +22,19 @@ function HospitalDashboard() {
         },
     };
 
+    const fetchadmincount = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_appointment_count_admin`, config)
+            setAdmincount(response?.data?.data);
+        } catch (err) {
+            console.log("Error fetching appointments => ", err)
+        }
+    }
+
+     useEffect(() => {
+         fetchadmincount()
+        }, []);
+    
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);
@@ -33,11 +48,11 @@ function HospitalDashboard() {
     }, []);
 
     const dataForBargraph = {
-        labels: ["January", "February", "March", "April", "May"],
+        labels: adminCount?.month,
         datasets: [
             {
-                label: "Active Doctors",
-                data: [100, 400, 600, 800, 1000],
+                label: "Total Patients",
+                data: adminCount?.count,
                 backgroundColor: "#1D949A",
                 borderColor: "#1D949A",
                 barPercentage: 1.0,
@@ -152,7 +167,7 @@ function HospitalDashboard() {
                         headers={columns}
                         bodyData={patient}
                         renderRow={renderRow}
-                        title={"Patients List"}
+                        title={"Staff List"}
                         loading={loading}
                     />
                 </div>

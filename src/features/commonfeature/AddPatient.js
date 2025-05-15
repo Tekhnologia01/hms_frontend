@@ -13,7 +13,8 @@ import { toast } from "react-toastify";
 
 function AddPatient() {
   const [errors, setErrors] = useState({});
-  const [bloodGroup,setBloodGroup]=useState([]);
+  const [bloodGroup, setBloodGroup] = useState([]);
+  const [photoError, setPhotoError] = useState(false);
   const navigate = useNavigate();
   const { user } = useSelector(state => state?.auth)
   const token = useSelector((state) => state.auth.currentUserToken);
@@ -32,7 +33,7 @@ function AddPatient() {
     patient_id_proof: "",
     patient_proof_image: null,
     patient_photo: null,
-    patient_blood_group:""
+    patient_blood_group: ""
   });
 
   const handleInputChange = (e) => {
@@ -47,6 +48,12 @@ function AddPatient() {
 
   const handleSubmit = async (e) => {
     const validationErrors = validatePatientForm(formData);
+    if (!formData.patient_photo) {
+      setPhotoError(true);
+      validationErrors.patient_photo = "Profile photo is required";
+    } else {
+      setPhotoError(false);
+    }
     setErrors(validationErrors); // Store errors in state
 
     // If there are errors, stop form submission
@@ -97,27 +104,26 @@ function AddPatient() {
         patient_blood_group: ""
       })
     } catch (err) {
-      toast.error(err?.response?.data?.message|| 'Error in patient add');
+      toast.error(err?.response?.data?.message || 'Error in patient add');
     }
   };
 
-const fetchblood=async()=>{
-  try{
-    const response=await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`,config)
-    setBloodGroup(response?.data?.data)
+  const fetchblood = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`, config)
+      setBloodGroup(response?.data?.data)
 
 
-  }
-  catch(err){
-    console.log("Error fetching blood group => ", err)
-  }
-}
-
-  useEffect(()=>
-    {
-      fetchblood();
     }
-  ,[])
+    catch (err) {
+      console.log("Error fetching blood group => ", err)
+    }
+  }
+
+  useEffect(() => {
+    fetchblood();
+  }
+    , [])
 
   return (
     <div className="mx-lg-4 m-3 pb-3">
@@ -150,7 +156,10 @@ const fetchblood=async()=>{
               name="patient_photo"
               accept="image/*"
               style={{ display: "none" }}
-              onChange={handleFileChange}
+              onChange={(e) => {
+                handleFileChange(e);
+                setPhotoError(false);
+              }}
             />
             <img
               src={formData.patient_photo ? URL.createObjectURL(formData.patient_photo) : vijay}
@@ -161,6 +170,7 @@ const fetchblood=async()=>{
                 height: "80px",
                 objectFit: "cover",
                 cursor: "pointer",
+                border: photoError ? "2px solid red" : "2px solid #e9ecef"
               }}
               onClick={() => document.getElementById("profileInput").click()}
             />
@@ -168,6 +178,11 @@ const fetchblood=async()=>{
             <span className="fw" style={{ fontSize: "13px", color: "gray" }}>
               Click to select picture
             </span>
+            {photoError && (
+              <div className="text-danger mt-2" style={{ fontSize: "0.9rem" }}>
+                Profile photo is required
+              </div>
+            )}
           </div>
 
           <div className="text-center mt-3 fw-semibold" style={{ fontSize: "1rem" }}>
@@ -295,7 +310,7 @@ const fetchblood=async()=>{
                   option: blood.blood_id,
                 }))}
                 onChange={(e) => handleInputChange({ target: { name: "patient_blood_group", value: e.target.value } })}
-                />
+              />
             </Col>
 
 
@@ -328,7 +343,7 @@ const fetchblood=async()=>{
             <label className="fw-semibold mb-2" style={{ fontSize: "1.1rem" }}>
               ID Proof Image <span className="text-danger fw-bold">*</span>
             </label>
-            <div className="d-flex flex-column align-items-center p-3 border rounded" onClick={() => document.getElementById("proofInput").click()} style={{ backgroundColor: "#f9f9f9" ,cursor: 'pointer' }}>
+            <div className="d-flex flex-column align-items-center p-3 border rounded" onClick={() => document.getElementById("proofInput").click()} style={{ backgroundColor: "#f9f9f9", cursor: 'pointer' }}>
               <input
                 type="file"
                 id="proofInput"

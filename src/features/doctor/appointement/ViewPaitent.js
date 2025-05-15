@@ -350,7 +350,7 @@ function ViewPatient() {
                   width: "80px",
                   height: "80px",
                   objectFit: "cover",
-                  backgroundColor: "red",
+                  border: "2px solid #1E959B"
                 }}
               />
             </div>}

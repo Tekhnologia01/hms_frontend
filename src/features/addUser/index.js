@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import { FaArrowLeft, FaFileUpload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -9,8 +9,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { validateAccountantForm, validateDoctorForm, validateLabAssistantForm, validateReceptionistForm } from "../../validation/UserFormValidation";
 import PasswordInput from "../../components/common/form/password";
-
-import { toast } from "react-toastify";
+import CommonToast, { showToast } from "../../components/common/Toaster";
 
 function AddUserForm({ user }) {
     const navigate = useNavigate();
@@ -21,10 +20,11 @@ function AddUserForm({ user }) {
     const [bloodGroups, setBloodGroups] = useState([]);
     const userId = useSelector(state => state?.auth?.user?.userId);
     const token = useSelector((state) => state.auth.currentUserToken);
+    const userPhotoInputRef = useRef(null);
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     }
 
     let role_id;
@@ -39,28 +39,27 @@ function AddUserForm({ user }) {
 
     async function getDepartments() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`, config);
             setDepartments(response?.data?.data);
         } catch (err) {
-            toast.error("Error fetching department")
-
+            showToast("Error fetching departments", "error");
         }
     }
 
     async function getShifts() {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getshift`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getshift`, config);
 
             setShifts(response?.data?.data);
         } catch (err) {
-            toast.error("Error fetching shifts")
+            showToast("Error fetching shifts", "error");
         }
     }
 
     async function getDays() {
         try {
 
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getday`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/getday`, config);
             setDays(response?.data?.data)
         } catch (err) {
 
@@ -211,15 +210,20 @@ function AddUserForm({ user }) {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/${user?.toLowerCase()}/add`, formDataObj, {
                 headers:
-                 {          
-                      Authorization: `Bearer ${token}`,
-                     "Content-Type": "multipart/form-data"
-                 },
+                {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                },
             });
-            toast.success(response?.data?.message ? response?.data?.message : 'User added successfully');
+            showToast(response?.data?.message ? response?.data?.message : 'User added successfully', 'success');
             setFormData(initialState);
+
+            if (userPhotoInputRef.current) {
+                userPhotoInputRef.current.value = "";
+            }
         } catch (error) {
-            toast.error(error?.response?.data ? error?.response?.data?.error : `Failed to add ${user}.`);
+            console.log(error?.response?.data?.error);
+            showToast(error?.response?.data ? error?.response?.data?.error : `Failed to add ${user}.`, 'error');
         }
     };
 
@@ -244,7 +248,7 @@ function AddUserForm({ user }) {
 
     const fetchblood = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/getbloodgroup`, config);
             setBloodGroups(response?.data?.data);
         } catch (err) {
             console.log("Error fetching blood group:", err);
@@ -253,7 +257,7 @@ function AddUserForm({ user }) {
 
     return (
         <div className="pt-4">
-            {/* <CommonToast/> */}
+            <CommonToast />
             <Row className="m-0">
                 <Row md={12} className="m-0">
                     <div
@@ -420,6 +424,7 @@ function AddUserForm({ user }) {
                                     isRequired={true}
                                     onChange={handleInputChange}
                                     name="user_photo"
+                                    inputRef={userPhotoInputRef}
                                 />
                                 {errors.user_photo && <p className="text-danger">{errors.user_photo}</p>}
 
@@ -726,7 +731,7 @@ function AddUserForm({ user }) {
                         <Row className="m-0 pb-3">
 
 
-                            {user !== "Accountant" &&<Col md={6} className="gy-3">
+                            {user !== "Accountant" && <Col md={6} className="gy-3">
                                 <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>Select Days <span className="text-danger fw-bold">*</span></Form.Label>
 
                                 <MultiSelectWithCheckbox
@@ -744,7 +749,7 @@ function AddUserForm({ user }) {
                                 <Form.Group controlId="idSelect">
                                     <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>Select Shift <span className="text-danger fw-bold">*</span></Form.Label>
                                     <Form.Select
-                                        // value={formData.shift_id}
+                                        value={formData.shift_id}
                                         name="shift_id"
                                         onChange={handleInputChange}
                                         isRequired={true}

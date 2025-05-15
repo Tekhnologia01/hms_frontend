@@ -70,7 +70,7 @@ function BarGraph({ data }) {
             y: {
                 title: {
                     display: true,
-                    text: "Active Doctors",
+                    // text: "Active Doctors",
                     font: {
                         weight: "bold",
                     },
