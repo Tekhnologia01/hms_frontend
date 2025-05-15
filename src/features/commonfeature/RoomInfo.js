@@ -33,6 +33,8 @@ function RoomInfo() {
     const [bed, setBed] = useState(null)
     const [room, setRoom] = useState(null)
 
+        const [pagination,setpagination]=useState()
+
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
@@ -44,15 +46,23 @@ function RoomInfo() {
         try {
             let endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?page=${currentPage}&limit=${limitPerPage}`;
             if (cardState === "Occupied") {
-                endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?status=occupied&page=${currentPage}&limit=${limitPerPage}`;
+                endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?status=occupied`;
             } else if (cardState === "Available") {
-                endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?status=available&page=${currentPage}&limit=${limitPerPage}`;
+                endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?status=available`;
             } else if (cardState === "Room") {
                 endpoint = `${process.env.REACT_APP_API_URL}/roombed/getroom`;
             } else if (cardState === "Bed") {
                 endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?page=${currentPage}&limit=${limitPerPage}`;
             }
             const response = await axios.get(endpoint, config);
+
+
+            console.log("+++++++++",response)
+            setpagination(response?.data)
+
+
+
+            console.log("-------------------========++++++",pagination)
             setDoctors(response?.data?.data || []);
         } catch (err) {
             toast.error("Error fetching data");
@@ -80,6 +90,22 @@ function RoomInfo() {
     }, [])
 
     ////////////////////////////////TableCss///////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+    console.log("___________=========",doctors)
+
+
+
+
 
     const cardStyle = {
         width: "225px",
@@ -427,7 +453,7 @@ function RoomInfo() {
                     {cardState === "Bed" &&
                         doctors?.data?.length > 0 && <div>
                             <CommonTable minimumWidth={"700px"} headers={columns} bodyData={doctors?.data} renderRow={renderRow} title={"Bed Information"} />
-                            <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
+                            <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination[0]?.total_records} setCurrentPage={setCurrentPage} />
                         </div>
                     }
                     {
@@ -441,7 +467,7 @@ function RoomInfo() {
                                     renderRow={renderRowRoom}
                                     title={"Room Information"}
                                 />
-                                <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
+                                {/* <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors[0]?.pagination?.total_records} setCurrentPage={setCurrentPage} /> */}
                             </div>
                         )
                     }
@@ -455,7 +481,7 @@ function RoomInfo() {
                                     renderRow={renderRowAvailable}
                                     title={"Available Information"}
                                 />
-                                <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
+                                {/* <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination[0]?.total_records} setCurrentPage={setCurrentPage} /> */}
                             </div>
                         )
                     }
@@ -468,7 +494,7 @@ function RoomInfo() {
                                 renderRow={renderRowAvailable}
                                 title={"Occupied Information"}
                             />
-                            <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
+                            {/* <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination[0]?.total_records} setCurrentPage={setCurrentPage} /> */}
                         </div>
 
                     )

@@ -26,6 +26,10 @@ const NewCommonPagination = ({
         pages.push(i);
     }
 
+
+
+    console.log("pagination recotrd count",totalRecords)
+
     return (
         <div className="p-4 d-flex align-items-center justify-content-between ">
             {/* Previous Button */}
