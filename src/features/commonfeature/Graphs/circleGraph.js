@@ -69,7 +69,7 @@ const ThreeLayeredChart = () => {
 
   return (
     <div className="p-2" style={{ position: "relative", width: "300px", margin: "auto", textAlign: "center" }}>
-      <p className="text-start fs-6 fw-semibold">Lab Appointment</p>
+      <p className="text-start fs-6 fw-semibold">Appointment</p>
       {/* Centered Text */}
       <div
         style={{

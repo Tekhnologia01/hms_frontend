@@ -254,7 +254,10 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
             toast.success(response?.data?.message || 'Admit patient successfully!');
         } catch (error) {
 
-            toast.error(error?.response?.data?.message || 'Error in Admit patient !');
+
+
+
+            toast.error(error?.response?.data?.error || 'Error in Admit patient !');
 
 
         }
