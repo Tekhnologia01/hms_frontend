@@ -7,7 +7,6 @@ import CommanButton from "../../../components/common/form/commonButtton";
 import SelectBox from "../../../components/common/form/selectBox/SelectBox";
 import { convertDateTimeToEpoch, epochToTime, timeToEpoch } from "../../../utils/epochToDate";
 import { validateAdmitForm } from "../../../validation/PatientValidation";
-import { showToast } from "../../../components/common/Toaster";
 import { toast } from "react-toastify";
 
 const AdmitPatient = ({ show, handleClose, appointmentData }) => {
@@ -146,7 +145,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
             }
         } catch (err) {
             console.log("Error fetching departments:", err);
-            showToast(err?.response?.data?.message ? err.response?.data?.message : "Bed not available", "info")
+            toast.error(err?.response?.data?.message ? err.response?.data?.message : "Bed not available")
             setBeds([]);
         }
     }

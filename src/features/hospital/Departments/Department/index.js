@@ -4,8 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import CommonTable from "../../../../components/table/CommonTable";
 import NewCommonPagination from "../../../../components/pagination/NewCommonPagination";
 import axios from "axios";
-import { showToast } from "../../../../components/common/Toaster";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function Department() {
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ function Department() {
     } catch (error) {
       console.error(`Error fetching ${selectedCard} data:`, error);
       setSelectedData(null);
-      showToast(error?.response?.data?.message ? error?.response?.data?.message : "Error while deleting room!", "error");
+      toast.error(error?.response?.data?.message ? error?.response?.data?.message : "Error while deleting room!");
     } finally {
       setIsLoading(false);
     }

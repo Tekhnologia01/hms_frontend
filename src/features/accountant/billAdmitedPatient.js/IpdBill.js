@@ -5,10 +5,10 @@ import { Button, Card, Col, Container, Form, Modal, Row, Table } from "react-boo
 import CommanButton from "../../../components/common/form/commonButtton";
 import Airavat from "../../../assets/images/Airavat.png";
 import { useSelector } from "react-redux";
-import { showToast } from "../../../components/common/Toaster";
 import { pdf } from "@react-pdf/renderer";
 import { useState, useEffect } from "react";
 import BillPDF from "./BillPdf";
+import { toast } from "react-toastify";
 
 function IpdBill() {
     const navigate = useNavigate();
@@ -77,7 +77,7 @@ function IpdBill() {
             };
 
             // Generate PDF blob
-            const pdfBlob = await pdf(<BillPDF billData={billDataForPDF}  discount={discountAmount}/>).toBlob();
+            const pdfBlob = await pdf(<BillPDF billData={billDataForPDF} discount={discountAmount} />).toBlob();
 
             console.log("pdfBlob", pdfBlob)
             // Create object URL for preview
@@ -116,11 +116,13 @@ function IpdBill() {
                 }));
                 fetchReceipt()
                 setShowPaymentModal(true);
-                showToast("Bill generated and uploaded successfully!", "success");
+                toast.success("Bill generated and uploaded successfully!")
             }
         } catch (e) {
             console.log(e);
-            showToast("Error generating bill", "error");
+
+            toast.error("Error generating bill")
+
         }
     };
 
@@ -131,13 +133,13 @@ function IpdBill() {
             const pdfUrl = `${process.env.REACT_APP_API_URL}/uploads/${details.bill_report}`;
             window.open(pdfUrl, "_blank");
         } else {
-            showToast("Please save the bill first", "warning");
+            toast.error("Please save the bill first")
         }
     };
 
     const totalAmount = calculateTotal();
     const totalDeposit = details?.deposits?.reduce((sum, index) => sum + index.amount, 0) || 0;
-    const isAmountEqual =totalAmount== totalDeposit;
+    const isAmountEqual = totalAmount == totalDeposit;
 
 
 
@@ -145,7 +147,7 @@ function IpdBill() {
     const isDischared = details?.discharge_status == 1;
 
     // Enable button only if both conditions are true
-    const shouldEnableButton = isAmountEqual && isBillNotPaid && isDischared ;
+    const shouldEnableButton = isAmountEqual && isBillNotPaid && isDischared;
 
     return (
         <div className="mx-lg-4 m-3 pb-3">
@@ -231,15 +233,15 @@ function IpdBill() {
                                             <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Paid Amount</td>
                                             <td className="text-center">{totalDeposit}</td>
                                         </tr>
-                                    )} 
-                                    
+                                    )}
+
                                     <tr>
                                         <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Balance Amount</td>
-                                        <td className="text-center">{totalAmount-totalDeposit}</td>
+                                        <td className="text-center">{totalAmount - totalDeposit}</td>
                                     </tr>
                                     <tr>
                                         <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Grand Total</td>
-                                        <td className="text-center">{totalAmount  + discountAmount}</td>
+                                        <td className="text-center">{totalAmount + discountAmount}</td>
                                     </tr>
                                 </tbody>
                             </Table>

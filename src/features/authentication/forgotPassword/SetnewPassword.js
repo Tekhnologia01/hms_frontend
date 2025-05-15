@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import CommanButton from "../../../components/common/form/commonButtton";
@@ -8,11 +8,11 @@ import ForgotLogo from "../../../assets/images/forgotlogo.png";
 import Login from '../../../assets/images/loginflip.png';
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { showToast } from "../../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 function SetnewPassword() {
   const navigate = useNavigate();
-const {email}=useParams()
+  const { email } = useParams()
   const [formData, setFormData] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -60,10 +60,10 @@ const {email}=useParams()
             newPassword: formData.newPassword,
           }
         );
-  
+
         if (response.data.status) {
-          showToast("Password changed successfully!")    
-              navigate("/passwordreset");
+          toast.success("Password changed successfully!")
+          navigate("/passwordreset");
 
         } else {
           console.error("Failed to change password:", response.data.message);
@@ -74,8 +74,8 @@ const {email}=useParams()
       }
     }
   };
-  
-    // navigate("/passwordreset");
+
+  // navigate("/passwordreset");
   return (
     <div className="vh-100 vw-100">
       <Row className="m-0">

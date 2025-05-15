@@ -9,7 +9,6 @@ import AddRoom from "./AddRoom";
 import AddBed from "./AddBed";
 import { useSelector } from "react-redux";
 import DeleteConfirmationModal from "../../components/common/DeleteModal";
-import { showToast } from "../../components/common/Toaster";
 import { ListGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
 

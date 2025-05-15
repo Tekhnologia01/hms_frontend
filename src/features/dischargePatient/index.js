@@ -10,8 +10,9 @@ import Note from "../../components/common/form/textarea";
 import { useLocation, useNavigate } from "react-router-dom";
 import AddPrescriptionTable from "../doctor/appointement/PrescriptionAddTable";
 import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../../utils/epochToDate";
-import CommonToast, { showToast } from "../../components/common/Toaster";
+import CommonToast from "../../components/common/Toaster";
 import ViewDischargeSheet from "./ViewDischargeSheet";
+import { toast } from "react-toastify";
 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
@@ -131,7 +132,7 @@ const DischargePatient = () => {
                 }
             ]);
         } catch (error) {
-            // showToast("Error while retrieving prescription data", "error");
+
         }
     }
 
@@ -169,7 +170,7 @@ const DischargePatient = () => {
                 });
             }
         } catch (error) {
-            // showToast("Error while retrieving discharge details", "error");
+       
         }
     }
 
@@ -221,23 +222,24 @@ const DischargePatient = () => {
             }
 
             if (response?.data?.status) {
-                showToast(
+                toast.success(
                     values?.discharge_details_id
                         ? "Discharge details updated successfully"
-                        : "Discharge details saved successfully",
-                    "success"
+                        : "Discharge details saved successfully"
                 );
                 getDischargeDetails();
                 setShowDischargeSheet(true);
             } else {
-                showToast("Failed to save discharge details", "error");
+
+                toast.error("Failed to save discharge details")
             }
         } catch (error) {
-            showToast(
+
+            toast.error(
                 error?.response?.data?.error
                     ? error?.response?.data?.error
-                    : "Failed to save discharge details",
-                "error"
+                    : "Failed to save discharge details"
+           
             );
         }
     };

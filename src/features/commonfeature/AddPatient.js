@@ -9,7 +9,6 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { validatePatientForm } from '../../validation/PatientValidation'
 import SelectBox from "../../components/common/form/selectBox/SelectBox";
-import { showToast } from "../../components/common/Toaster";
 import { toast } from "react-toastify";
 
 function AddPatient() {

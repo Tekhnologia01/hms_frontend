@@ -10,7 +10,6 @@ import axios from "axios";
 import { FaFilePrescription } from "react-icons/fa";
 import PrescriptionPDF from "./PrescriptionPDF";
 import { PDFViewer } from "@react-pdf/renderer";
-import { showToast } from "../../../components/common/Toaster";
 import { toast } from "react-toastify";
 
 const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appointmentData, isIPD }) => {

@@ -7,7 +7,6 @@ import CommonTable from "../../../components/table/CommonTable";
 import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
 import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
-import { showToast } from "../../../components/common/Toaster";
 import UpdateUser from "./UpdateUser";
 import { useSelector } from "react-redux";
 import UpdateDoctor from "./UpdateDoctor";

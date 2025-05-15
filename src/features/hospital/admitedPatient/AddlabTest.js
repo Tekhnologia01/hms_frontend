@@ -9,7 +9,6 @@ import MultiSelectWithDropdown from '../../../components/common/form/multiselect
 import { epochTimeToDate } from '../../../utils/epochToDate';
 import CommonTable from '../../../components/table/CommonTable';
 import { FaEye } from 'react-icons/fa';
-import { showToast } from '../../../components/common/Toaster';
 import { toast } from 'react-toastify';
 
 function AddLabTest() {

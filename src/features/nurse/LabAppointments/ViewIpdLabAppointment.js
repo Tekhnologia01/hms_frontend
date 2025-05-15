@@ -6,7 +6,6 @@ import CommanButton from "../../../components/common/form/commonButtton";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { showToast } from "../../../components/common/Toaster";
 import { toast } from "react-toastify";
 
 function ViewIpdLabAppointment({ type }) {
@@ -76,7 +75,8 @@ function ViewIpdLabAppointment({ type }) {
     const handleUpdate = async () => {
         try {
             if (!formData?.report_photo) {
-                showToast("Please upload a report photo", "error");
+                toast.error("Please upload a report photo", );
+
                 return;
             }
 
@@ -91,13 +91,13 @@ function ViewIpdLabAppointment({ type }) {
                 }
             });
 
-            showToast(response?.data?.message);
+            toast.success(response?.data?.message);
 
             setFormData(initialState); // Ensure you use setFormData instead of formData()
             navigate(-1);
 
         } catch (error) {
-            showToast(error?.response?.data?.message || "An error occurred", "error");
+            toast.error(error?.response?.data?.message || "An error occurred", "error");
         }
     };
 

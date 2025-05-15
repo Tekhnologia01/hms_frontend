@@ -8,7 +8,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { epochTimeToDate } from "../../../utils/epochToDate";
-import { showToast } from "../../../components/common/Toaster";
 import { toast } from "react-toastify";
 
 function ViewLabAppointment({ type }) {
@@ -97,7 +96,7 @@ const [formData, setFormData] = useState(initialState);
   const handleUpdate = async () => {
     try {
       if (!formData?.report_photo) {
-        showToast("Please upload a report photo", "error");
+        toast.error("Please upload a report photo");
         return;
       }
 
@@ -112,14 +111,14 @@ const [formData, setFormData] = useState(initialState);
         }
       });
 
-      // showToast(response?.data?.message);
+   
 
       toast.success(response?.data?.message)
       setFormData(initialState);
       navigate(-1);
 
     } catch (error) {
-      showToast(error?.response?.data?.message || "An error occurred", "error");
+      toast.error(error?.response?.data?.message || "An error occurred", "error");
     }
   };
 

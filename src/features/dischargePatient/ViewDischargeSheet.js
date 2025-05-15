@@ -3,8 +3,9 @@ import { Modal } from "react-bootstrap";
 import DischargeSheetPDF from "./dischargeSheetPDF";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CommonToast, { showToast } from "../../components/common/Toaster";
+import CommonToast from "../../components/common/Toaster";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
     const [details, setDetails] = useState(null);
@@ -25,10 +26,10 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
                 `${process.env.REACT_APP_API_URL}/patient/get_ipd_details?ipd_id=${ipd_id}`,config);
 
             setDetails(response?.data?.data)
-            console.log("discharge shot",response?.data?.data)
         } catch (error) {
-            showToast("Error while retrieving data", "error");
-            console.error("API Error:", error);
+            toast.error("Error while retrieving data")
+    
+       
         } finally {
             setLoading(false);
         }

@@ -9,7 +9,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { validateAccountantForm, validateDoctorForm, validateLabAssistantForm, validateReceptionistForm } from "../../validation/UserFormValidation";
 import PasswordInput from "../../components/common/form/password";
-import CommonToast, { showToast } from "../../components/common/Toaster";
+import CommonToast from "../../components/common/Toaster";
+import { toast } from "react-toastify";
 
 function AddUserForm({ user }) {
     const navigate = useNavigate();
@@ -41,7 +42,8 @@ function AddUserForm({ user }) {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`,config);
             setDepartments(response?.data?.data);
         } catch (err) {
-            showToast("Error fetching departments", "error");
+            toast.error("Error fetching department")
+
         }
     }
 
@@ -51,7 +53,7 @@ function AddUserForm({ user }) {
 
             setShifts(response?.data?.data);
         } catch (err) {
-            showToast("Error fetching shifts", "error");
+            toast.error("Error fetching shifts")
         }
     }
 
@@ -214,11 +216,11 @@ function AddUserForm({ user }) {
                      "Content-Type": "multipart/form-data"
                  },
             });
-            showToast(response?.data?.message ? response?.data?.message : 'User added successfully', 'success');
+            toast.success(response?.data?.message ? response?.data?.message : 'User added successfully');
             setFormData(initialState);
         } catch (error) {
             console.log(error?.response?.data?.error);
-            showToast(error?.response?.data ? error?.response?.data?.error : `Failed to add ${user}.`, 'error');
+            toast.error(error?.response?.data ? error?.response?.data?.error : `Failed to add ${user}.`);
         }
     };
 

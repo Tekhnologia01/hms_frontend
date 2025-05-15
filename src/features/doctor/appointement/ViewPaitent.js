@@ -14,7 +14,6 @@ import ExaminationForm from "./ExaminationForm";
 import AdmitPatient from "../../admitPatient/admissionForm";
 import BillPDF from "./OPDBill";
 import { pdf } from "@react-pdf/renderer";
-import { showToast } from "../../../components/common/Toaster";
 import { toast } from "react-toastify";
 
 function ViewPatient() {
@@ -114,7 +113,7 @@ function ViewPatient() {
     try {
       if (prescriptionData.length > 0) {
         if (!examinationData?.chief_complaints) {
-          showToast("Please fill all fields", "error");
+          toast.error("Please fill all fields");
         } else {
 
           if (examinationData?.opd_examination_id) {
@@ -138,7 +137,7 @@ function ViewPatient() {
             };
             const response = await axios.put(`${process.env.REACT_APP_API_URL}/appointment/examination_update?userId=${user?.userId}`, payload, config);
             if (response?.data?.status) {
-              showToast("Changes Saved Successfully", "success");
+              toast.success("Changes Saved Successfully");
               handleShowModalbill()
             }
           } else {
@@ -162,7 +161,8 @@ function ViewPatient() {
             };
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/appointment/monitor?userId=${user?.userId}`, payload, config);
             if (response?.data?.status) {
-              showToast("Changes Saved Successfully", "success");
+
+              toast.success("Changes Saved Successfully");
               handleShowModalbill()
             }
           }
@@ -170,7 +170,7 @@ function ViewPatient() {
         }
       }
     } catch (error) {
-      showToast(error?.response?.message ? error.response?.message : "Error while saving data", "error");
+      toast.error(error?.response?.message ? error.response?.message : "Error while saving data");
       console.log(error);
     }
   }
@@ -181,7 +181,7 @@ function ViewPatient() {
       setAppointmentData(response?.data?.data);
 
     } catch (error) {
-      showToast(error?.response?.message ? error.response?.message : "Error while getting data", "error");
+      toast.error(error?.response?.message ? error.response?.message : "Error while getting data");
     }
   }
 
@@ -192,7 +192,7 @@ function ViewPatient() {
       if (response?.data?.data?.prescription?.length !== 0) { setPrescriptionData(response?.data?.data?.prescription); }
       setTestData(response?.data?.data?.Test);
     } catch (error) {
-      showToast(error?.response?.message ? error.response?.message : "Error while getting data", "error");
+      toast.error(error?.response?.message ? error.response?.message : "Error while getting data");
       console.log(error);
     }
   }
@@ -264,7 +264,7 @@ function ViewPatient() {
 
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/bill/createbill`, { appointment_id: params.appointmentId, total_amount: totalBill, chargesList: formData?.chargesList, user_id: user?.userId }, config);
       if (response.data?.status) {
-        showToast("End Appointment")
+        toast.success("End Appointment")
         handleCloseModalbill();
 
         setFormData(initialState);
