@@ -152,7 +152,7 @@ function HospitalDashboard() {
                         headers={columns}
                         bodyData={patient}
                         renderRow={renderRow}
-                        title={"Patients List"}
+                        title={"Staff List"}
                         loading={loading}
                     />
                 </div>
