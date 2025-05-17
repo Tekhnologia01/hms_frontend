@@ -487,7 +487,7 @@ const DischargePatient = () => {
 
                                     <Col md={4} lg={6} className="mb-2">
                                         <Form.Group controlId="icd_code">
-                                            <Form.Label className="fw-semibold">ICD Code</Form.Label>
+                                            <Form.Label className="fw-semibold">ICD Code <span className="text-danger fw-bold">*</span> </Form.Label>
                                             <Form.Control
                                                 type="text"
                                                 placeholder="Enter ICD Code"
