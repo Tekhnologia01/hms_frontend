@@ -89,6 +89,8 @@ const DischargePatient = () => {
         temperature: Yup.number()
             .required("Temperature is required"),
 
+         icd_code:Yup.number().required("Icd code required"),
+
         pulse: Yup.number()
             .required("Pulse is required")
             .min(30, "Pulse cannot be below 30 bpm")
@@ -494,7 +496,10 @@ const DischargePatient = () => {
                                                 className="rounded-3"
                                                 name='icd_code'
                                                 value={values.icd_code}
+                                                isRequired
                                                 onChange={handleChange} />
+                                        <ErrorMessage name="icd_code" component="div" className="text-danger" />
+     
                                         </Form.Group>
                                     </Col>
 
