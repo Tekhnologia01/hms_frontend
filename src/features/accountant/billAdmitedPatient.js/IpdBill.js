@@ -118,7 +118,7 @@ function IpdBill() {
                 toast.success("Bill generated and uploaded successfully!")
             }
         } catch (e) {
-
+ 
             toast.error("Error generating bill")
 
         }

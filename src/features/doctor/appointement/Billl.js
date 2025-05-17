@@ -30,7 +30,7 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
     const fetchCharges = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`,config);
-        setChargesData(response?.data?.data || []);
+        setChargesData(response?.data?.data.data || []);
       } catch (error) {
         console.error("Error fetching charges:", error);
       }
