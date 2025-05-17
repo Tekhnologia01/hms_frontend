@@ -36,10 +36,9 @@ function AddCharges() {
 
     const renderRow = (item, index) => (
         <tr key={index} className="border-bottom text-center">
-            <td className="px-2 text-center lh-1">{index + 1}</td>
+            <td className="px-2 text-center lh-1">{(currentPage - 1) * limitPerPage + index + 1}</td>
             <td className="py-3 px-2">{item?.fees_name}</td>
             <td className="py-3 px-2">{item.fees_amount ?? "0"}</td>
-
             {user.RoleId !== 5 &&
                 <td>
                     <FiEdit2 style={{ height: "23px", width: "23px", cursor: "pointer" }} onClick={() => {
@@ -53,25 +52,22 @@ function AddCharges() {
                         onClick={() => handleDeleteCharges(item.fees_id)}
                     />
                 </td>
-
             }
         </tr>
     );
 
-    const fetchChargesData = async () => {
+    const fetchChargesData = async (page = currentPage, limit = limitPerPage) => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges?page=${currentPage}&limit=${limitPerPage}`, config);
-
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges?page=${page}&limit=${limit}`, config);
             setChargesData(response?.data?.data);
         } catch (error) {
             console.error(error);
         }
     };
 
-
     useEffect(() => {
-        fetchChargesData();
-    }, []);
+        fetchChargesData(currentPage, limitPerPage);
+    }, [currentPage, limitPerPage]);
 
 
     const handleAddCharges = async (chargeData) => {
@@ -151,10 +147,11 @@ function AddCharges() {
                     </div>
                     {chargesData?.data?.length > 0 && (
                         <NewCommonPagination
-                            currentPage={currentPage} // You need to manage this state
-                            limitPerPage={10} // Set appropriate value
-                            totalRecords={chargesData?.data?.length}
-                            setCurrentPage={setCurrentPage} // Update accordingly
+                            currentPage={currentPage}
+                            limitPerPage={limitPerPage}
+                            totalRecords={chargesData?.pagination?.TotalRecords || chargesData?.data?.length}
+                            setCurrentPage={setCurrentPage}
+                            setLimitPerPage={setLimitPerPage}
                         />
                     )}
                 </div>
