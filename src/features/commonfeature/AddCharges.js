@@ -144,7 +144,7 @@ const AddCharges = ({ show = false, handleClose, admited, patientUpdate }) => {
                             onChange={handleInputChange}
                         >
                             <option value="">Select Treatment</option>
-                            {treatmentOptions.map((type) => (
+                            {treatmentOptions?.data?.map((type) => (
                                 <option key={type.fees_id} value={type.fees_id}>
                                     {type.fees_name}
                                 </option>
