@@ -18,12 +18,21 @@ const styles = StyleSheet.create({
         fontFamily: 'Times New Roman',
         padding: 20,
         fontSize: 12,
+        // backgroundColor:"transpernt"
     },
     custom_header: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: "space-between",
         marginBottom: 15,
+    },
+        custom_header1: {
+       
+        marginTop:120,
+    },
+            custom_header1: {
+       
+        marginBottom:120,
     },
     headerSection: {
         display: 'flex',
@@ -103,7 +112,7 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-                <View style={styles.headerSection}>
+                {/* <View style={styles.headerSection}>
                     <Image
                         src={Airavat}
                         style={{ width: 130, height: 80, margin: 'auto', marginBottom: 5 }}
@@ -114,9 +123,13 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
                             123 Health Street, Medical City, State 12345
                         </Text>
                     </View>
-                </View>
+                </View> */}
 
-                <View style={styles.custom_header}>
+                        <View style={styles.custom_header1}>
+                   
+                </View> 
+
+                <View style={styles.custom_header} >
                     <View>
                         <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Patient Name:</Text> {patientDetails?.Patient_Name}</Text>
                         <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Age:</Text> {patientDetails?.Patient_Age}</Text>
@@ -169,6 +182,12 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
                     <View style={styles.signatureLine}></View>
                     <Text style={styles.signatureText}>Signature</Text>
                 </View>
+
+
+
+                              <View style={styles.custom_header2}>
+                   
+                </View> 
             </Page>
         </Document>
     );
