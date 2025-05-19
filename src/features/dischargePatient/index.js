@@ -7,7 +7,7 @@ import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import CommanButton from "../../components/common/form/commonButtton";
 import Note from "../../components/common/form/textarea";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AddPrescriptionTable from "../doctor/appointement/PrescriptionAddTable";
 import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../../utils/epochToDate";
 import CommonToast from "../../components/common/Toaster";
@@ -22,6 +22,10 @@ const DischargePatient = () => {
             Authorization: `Bearer ${token}`,
         },
     };
+
+
+    const [patientdetails, setPatientDetails] = useState({})
+    const { id } = useParams()
 
     const [dischargeDetails, setDischargeDetails] = useState({
         diagnosisDetails: "",
@@ -42,7 +46,7 @@ const DischargePatient = () => {
         discharge_advice: "",
         discharge_date_time: "",
         follow_up_date_time: "",
-        icd_code:"",
+        icd_code: "",
     });
     const [showDischargeSheet, setShowDischargeSheet] = useState(false);
 
@@ -50,20 +54,16 @@ const DischargePatient = () => {
     const { user } = useSelector(state => state?.auth);
     const navigate = useNavigate();
 
-    // const validationSchema = Yup.object({
-    //     diagnosisDetails: Yup.string().required("Diagnosis is required"),
-    //     chiefComplaints: Yup.string().required("Chief Complaints are required"),
-    //     discharge_date: Yup.date().required("Discharge date is required"),
-    //     discharge_time: Yup.string().required("Admit time is required"),
-    //     follow_up_date: Yup.date().required("Follow Up date is required"),
-    //     follow_up_time: Yup.string().required("Follow Up time is required"),
-    //     temperature: Yup.string().required("Temperature is required"),
-    //     pulse: Yup.number().required("Pulse is required"),
-    //     blood_pressure: Yup.string().required("Blood Pressure is required"),
-    //     respiratory_rate: Yup.number().required("Respiratory Rate is required"),
-    //     local_examination: Yup.string().required("Local Examination is required"),
-    //     discharge_advice: Yup.string().required("Discharge Advice is required"),
-    // });
+
+
+
+
+
+
+
+
+
+
 
     const validationSchema = Yup.object({
         diagnosisDetails: Yup.string().required("Diagnosis is required"),
@@ -89,7 +89,7 @@ const DischargePatient = () => {
         temperature: Yup.number()
             .required("Temperature is required"),
 
-         icd_code:Yup.number().required("Icd code required"),
+        icd_code: Yup.number().required("Icd code required"),
 
         pulse: Yup.number()
             .required("Pulse is required")
@@ -109,6 +109,16 @@ const DischargePatient = () => {
         local_examination: Yup.string().required("Local Examination is required"),
         discharge_advice: Yup.string().required("Discharge Advice is required"),
     });
+
+
+    async function getPatientinfo() {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_patientinfo_admited_idwise?admited_id=${id}`, config);
+            setPatientDetails(response?.data.data[0])
+        } catch (error) {
+
+        }
+    }
 
     const formatDateForInput = (dateString) => {
         if (!dateString) return '';
@@ -172,13 +182,14 @@ const DischargePatient = () => {
                 });
             }
         } catch (error) {
-       
+
         }
     }
 
     useEffect(() => {
         getDischargeDetails();
         getPrescription();
+        getPatientinfo()
     }, [location.state]);
 
     const handleSubmit = async (values) => {
@@ -241,7 +252,7 @@ const DischargePatient = () => {
                 error?.response?.data?.error
                     ? error?.response?.data?.error
                     : "Failed to save discharge details"
-           
+
             );
         }
     };
@@ -498,8 +509,8 @@ const DischargePatient = () => {
                                                 value={values.icd_code}
                                                 isRequired
                                                 onChange={handleChange} />
-                                        <ErrorMessage name="icd_code" component="div" className="text-danger" />
-     
+                                            <ErrorMessage name="icd_code" component="div" className="text-danger" />
+
                                         </Form.Group>
                                     </Col>
 
@@ -564,7 +575,7 @@ const DischargePatient = () => {
                                 </Row>
                                 <Row className="">
                                     <Col >
-                                        {<AddPrescriptionTable isIPD={true} ipd_id={location.state} rows={prescriptionData} setRows={setPrescriptionData} role={user?.RoleId} />}
+                                        {<AddPrescriptionTable isIPD={true} ipd_id={location.state} rows={prescriptionData} setRows={setPrescriptionData} role={user?.RoleId} appointmentData={patientdetails} />}
                                     </Col>
                                 </Row>
                                 <div className="d-flex justify-content-end pt-lg-4">

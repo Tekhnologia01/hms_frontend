@@ -80,26 +80,6 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         }
     }, [medicineList.length, config]);
 
-    async function getPrescriptionTest() {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getprescriptiontest?appo_id=${appointmentId}`, config);
-            if (response?.data?.data?.prescription?.length !== 0) { setRows(response?.data?.data?.prescription); }
-        } catch (error) {
-            toast.error(error?.response?.data?.error || "Failed to fetch prescription data");
-        }
-    }
-
-    async function getPrescription() {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${ipd_id}`, config);
-            if (response?.data?.data !== 0) {
-                setRows(response?.data?.data);
-            }
-        } catch (error) {
-            toast.error(error?.response?.data?.error || "Failed to fetch prescription data");
-        }
-    }
-
     const handleEditPrescription = async (index, row) => {
         if (isIPD && ipd_id) {
             try {
@@ -230,6 +210,9 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         }
     };
 
+
+
+    console.log("___________",appointmentData)
     return (
         <>
             <div className="row p-2 pt-0 m-0">

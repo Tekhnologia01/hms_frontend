@@ -133,7 +133,7 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/doctor/patient_list/ipd/:admitedId" element={<AdmitedPatientDetails />} />
         <Route path="/doctor/patient_list/:patientId" element={<PatientDetails />} />
         <Route path="/doctor/add_patient" element={<AddPatient />} />
-        <Route path="/doctor/discharge_patient" element={<DischargePatient />} />
+        <Route path="/doctor/discharge_patient/:id" element={<DischargePatient />} />
         <Route path="/doctor/payment_history" element={<PaymentHistory />} />
         <Route path="/doctor/account" element={<Account />} />
         <Route path="/doctor/settings" element={<Setting />} />
