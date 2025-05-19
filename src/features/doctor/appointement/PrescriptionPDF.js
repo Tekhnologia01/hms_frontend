@@ -142,8 +142,8 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
                     </View>
                 </View>
 
-                <View style={{ width: '100%', borderTop: '1px solid #475467', marginTop: 8 }} />
 
+                <View style={{ width: '100%', borderTop: '1px solid #475467', marginTop: 8 }} />
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold" }}>Prescription</Text>
                 </View>
