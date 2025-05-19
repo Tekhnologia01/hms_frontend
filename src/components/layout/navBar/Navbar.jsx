@@ -33,9 +33,9 @@ function Navbar({ toggleSidebar }) {
                     </div> */}
                     
                        <div className="more">
-                        <div>
+                        {/* <div>
                             <RiMoreFill className="more-icon" />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

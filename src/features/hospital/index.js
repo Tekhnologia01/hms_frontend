@@ -123,8 +123,8 @@ function HospitalDashboard() {
                         }}
                         className="ms-3"
                     />
-                    <div className="d-flex flex-column ms-2" style={{ height: "40px", alignItems: "center" }}>
-                        <p className="fw-semibold pt-2">{item.user_name}</p>
+                    <div className="d-flex flex-column ms-2" style={{ height: "40px", alignItems: "center", justifyContent: "center" }}>
+                        <p className="fw-semibold pt-3">{item.user_name}</p>
                     </div>
                 </div>
             </td>

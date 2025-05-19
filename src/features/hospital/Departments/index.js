@@ -183,6 +183,7 @@ function Departments() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                textAlign: "center",
               }}
             >
               {dept.department_name}
