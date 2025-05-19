@@ -135,7 +135,7 @@ function HospitalDashboard() {
 
     return (
         <>
-            <div className="graph-container d-flex flex-md-row flex-column gap-3 p-4 m-0 mt-2 justify-content-center align-items-center">
+            <div className="graph-container d-flex flex-lg-row flex-column gap-3 p-4 m-0 mt-2 justify-content-center align-items-center">
                 <div style={{
                     width: screenWidth > 768 ? "60%" : "100%",
                     height: "100%",

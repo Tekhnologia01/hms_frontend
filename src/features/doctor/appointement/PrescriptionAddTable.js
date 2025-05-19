@@ -210,9 +210,6 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         }
     };
 
-
-
-    console.log("___________",appointmentData)
     return (
         <>
             <div className="row p-2 pt-0 m-0">

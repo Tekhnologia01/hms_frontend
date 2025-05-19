@@ -18,6 +18,10 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import CommanButton from "../../common/form/commonButtton";
 import { FaRegMoneyBill1 } from "react-icons/fa6";
+import { FaTimes, FaBars } from "react-icons/fa"; // Import the icons
+import { MdOutlineArrowRightAlt } from "react-icons/md";
+
+
 
 
 function Sidebar({ isVisible, isCompact, role }) {
@@ -25,11 +29,14 @@ function Sidebar({ isVisible, isCompact, role }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [isHovered, setHovered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(!isCompact);
   const [expandedLinks, setExpandedLinks] = useState({});
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [links, setLinks] = useState([]);
 
+  const toggleSidebar = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const sidebarLinks = {
     Admin: [
@@ -166,30 +173,47 @@ function Sidebar({ isVisible, isCompact, role }) {
 
   const sidebarClass = isVisible
     ? "sidebar-visible p-4"
-    : isCompact && isHovered
+    : isExpanded
       ? "sidebar-hover p-4"
-      : isCompact
-        ? "sidebar-compact"
-        : "sidebar-hidden";
+      : "sidebar-compact";
 
   return (
     <>
       <div
         className={`border py-4 sidebar ${sidebarClass}`}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onClick={() => {
+          if (isCompact) {
+            toggleSidebar();
+          }
+        }}
       >
-        {!isCompact && (
-          <div className="image-container">
-            <img src={logo} alt="hospital-image" style={{ height: '100px', width: '140px' }} />
-          </div>
-        )}
+        <div className="sidebar-header">
+          {!isCompact && (
+            <div className="image-container">
+              <img src={logo} alt="hospital-image" style={{ height: '100px', width: '140px' }} />
+            </div>
+          )}
+          {isCompact && (
+            <div
+              className="sidebar-toggle"
+              onClick={toggleSidebar}
+            >
+              {isExpanded ? (
+                <FaTimes className="toggle-icon" />
+              ) : (
+                  <MdOutlineArrowRightAlt className="toggle-icon" />
+              )}
+            </div>
+          )}
+        </div>
+
         <div className="sidebar-links">
           <ul>
             {links.map((link, index) => (
               <React.Fragment key={index}>
                 <li
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent the sidebar toggle when clicking on links
                     if (link.subLinks) {
                       toggleSubLinks(link.label);
                     } else if (link.label === "Logout") {
@@ -203,7 +227,7 @@ function Sidebar({ isVisible, isCompact, role }) {
                   {link.icon}
                   <span
                     style={{
-                      opacity: !isCompact || isHovered ? 1 : 0,
+                      opacity: isExpanded ? 1 : 0,
                       transition: "opacity 0.1s ease-in-out",
                       whiteSpace: "nowrap",
                     }}
@@ -221,13 +245,16 @@ function Sidebar({ isVisible, isCompact, role }) {
                     {link.subLinks.map((subLink, subIndex) => (
                       <li
                         key={subIndex}
-                        onClick={() => navigate(subLink.path)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(subLink.path);
+                        }}
                         className={location.pathname === subLink.path ? "active-link text-dark" : ""}
                       >
                         {subLink.icon}
                         <span
                           style={{
-                            opacity: !isCompact || isHovered ? 1 : 0,
+                            opacity: isExpanded ? 1 : 0,
                             transition: "opacity 0.1s ease-in-out",
                             whiteSpace: "nowrap",
                             marginLeft: "20px",

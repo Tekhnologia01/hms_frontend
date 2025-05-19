@@ -15,6 +15,21 @@
     transition: transform 0.3s ease-in-out;
     z-index: 99;
   }
+  .sidebar-toggle {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    opacity: 0.5;
+  }
   
   .sidebar .image-container {
     height: 130px;
@@ -28,6 +43,7 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+    margin-top: 10px;
     /* align-items: start; */
   }
   
