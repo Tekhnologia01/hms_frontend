@@ -39,10 +39,6 @@ useEffect(() => {
 
 }, []);
 
-
-
-
-
   // Calculate total deposits
   const calculateDepositTotal = () => {
     return details?.deposits?.reduce((sum, deposit) => sum + deposit.amount, 0) || 0;

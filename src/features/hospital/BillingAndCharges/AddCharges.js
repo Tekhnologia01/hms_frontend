@@ -3,10 +3,10 @@ import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 import CommanButton from "../../../components/common/form/commonButtton";
 import AddChargesModal from "./AddChargesModal";
-import CommonTable from "../../../components/table/CommonTable";
+import CommonTable from "../../../components/common/table/CommonTable";
 import { toast } from "react-toastify";
 
 function AddCharges() {

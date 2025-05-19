@@ -8,10 +8,8 @@ const CommanButton = ({ label, onClick, variant = "", className, style, type, di
 
   const buttonStyle = {
     color: "white",
-    // color: isHovered ? "white" : " #1D949A",
     color: isHovered ? "white" : " white",
 
-    // backgroundColor: isHovered ? " #1D949A" : " white",
     backgroundColor: isHovered ? " #1D949A" : " #1D949A",
 
     borderColor: isHovered ? " #1D949A" : " #1D949A", // Example hover border color

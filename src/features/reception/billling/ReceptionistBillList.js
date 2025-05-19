@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { IoReceiptOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import CommonTable from "../../../components/table/CommonTable";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import CommonTable from "../../../components/common/table/CommonTable";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
 import ViewOPDBill from "./ViewOPDBill";
 import { useSelector } from "react-redux";
@@ -51,7 +51,6 @@ function ReceptionistBillList() {
   const columns = [
     { name: "Patient Name", accessor: "Name", class: "py-3  px-4 text-left" },
     { name: "UH ID", accessor: "joining_date", class: "text-center px-3" },
-    // { name: "Date", accessor: "degree", class: "py-3 text-center px-3" },
     { name: "Sex", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
     { name: "Age", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
     { name: "Diseases", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
@@ -81,7 +80,6 @@ function ReceptionistBillList() {
         </div>
       </td>
       <td className="py-3 px-4" style={{ width: "120px" }}>{item.uh_id}</td>
-      {/* <td className="py-4 px-4" style={{ width: "140px" }}>{item.appo_date ?? "-"}</td> */}
       <td className="py-4 px-4" style={{ width: "100px" }}>{item.patient_sex ?? "-"}</td>
       <td className="py-3 px-2" style={{ width: "80px" }}>{item.patient_age ?? "-"}</td>
       <td className="py-3 px-2" style={{ width: "150px" }}>{item.disease ?? "-"}</td>
@@ -99,12 +97,7 @@ function ReceptionistBillList() {
           >
             <LuReceiptIndianRupee style={{ height: "23px", width: "23px", cursor: "pointer" }} />
           </a>
-
-
         }
-
-
-
       </td>
     </tr>
 

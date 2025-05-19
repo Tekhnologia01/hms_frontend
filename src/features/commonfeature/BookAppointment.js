@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Modal, Row } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';

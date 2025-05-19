@@ -8,9 +8,6 @@ import InputBox from "../../../components/common/form/inputbox";
 import CommanButton from "../../../components/common/form/commonButtton/index";
 import PasswordInput from "../../../components/common/form/password";
 import Airavat from "../../../assets/images/Airavat.png";
-// import Google from "../../../assets/images/google.png";
-// import Facebook from "../../../assets/images/facebook.png";
-// import Apple from "../../../assets/images/apple.png";
 import Login1 from "../../../assets/images/login.png";
 import { toast } from "react-toastify";
 
@@ -131,35 +128,6 @@ function Login() {
                     )
                   }}
                 </Formik>
-
-                {/* <div className="d-flex justify-content-center">
-                  <hr style={{ width: "45%", border: "1px solid black" }} />{" "}
-                  <span className="pt-1 ps-1 pe-1"> OR</span>{" "}
-                  <hr style={{ width: "45%", border: "1px solid black" }} />
-                </div>
-
-                <div className="pt-3 pb-3">
-                  <Row className="m-0 justify-content-between ">
-                    <Col className="d-flex justify-content-center m-2"
-                      style={{ border: "1px solid #CFD4DC", borderRadius: "10px" }}>
-                      <div className="p-2">
-                        <img src={Facebook} alt="Facebook" style={{ maxHeight: "30px" }} />
-                      </div>
-                    </Col>
-                    <Col className="d-flex justify-content-center m-2"
-                      style={{ border: "1px solid #CFD4DC", borderRadius: "10px" }}>
-                      <div className="p-2">
-                        <img src={Google} alt="Google" style={{ maxHeight: "30px" }} />
-                      </div>
-                    </Col>
-                    <Col className="d-flex justify-content-center m-2"
-                      style={{ border: "1px solid #CFD4DC", borderRadius: "10px" }}>
-                      <div className="p-2">
-                        <img src={Apple} alt="Apple" style={{ maxHeight: "30px" }} />
-                      </div>
-                    </Col>
-                  </Row>
-                </div>*/}
 
                 <div className="text-center">
                   {/* <span style={{ fontWeight: "500" }}>I don’t have an account? </span> */}

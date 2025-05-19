@@ -81,14 +81,6 @@ function PaymentHistory() {
 
   return (
     <div className=" py-4">
-      {/* <div
-        className="fw-semibold fs-6 pb-4"
-        style={{ color: "#1D949A" }}
-        onClick={() => navigate(-1)}
-      >
-        <FaArrowLeft />
-        <span className="pt-1 px-2">Payment History</span>
-      </div> */}
       <div className="fw-semibold fs-5">
         <span className="px-3">Payment History</span>
       </div>

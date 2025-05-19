@@ -3,8 +3,8 @@ import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import CommonTable from "../../../components/table/CommonTable";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import CommonTable from "../../../components/common/table/CommonTable";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
 import UpdateUser from "./UpdateUser";
@@ -470,10 +470,6 @@ function AddUsers() {
                 user={selctedUser}
                 patientUpdate={handleEdit}
             />
-
-
-
-
             <UpdateDoctor
                 status={currentState}
                 show={showDoctorModal}
@@ -481,10 +477,6 @@ function AddUsers() {
                 user={selctedUser}
                 patientUpdate={handleEditDoctor}
             />
-
-
-
-
         </div>
     );
 }

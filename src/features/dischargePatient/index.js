@@ -23,7 +23,6 @@ const DischargePatient = () => {
         },
     };
 
-
     const [patientdetails, setPatientDetails] = useState({})
     const { id } = useParams()
 
@@ -53,17 +52,6 @@ const DischargePatient = () => {
     const location = useLocation();
     const { user } = useSelector(state => state?.auth);
     const navigate = useNavigate();
-
-
-
-
-
-
-
-
-
-
-
 
     const validationSchema = Yup.object({
         diagnosisDetails: Yup.string().required("Diagnosis is required"),

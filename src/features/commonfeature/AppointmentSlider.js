@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-
-// Import required modules
 import { Navigation } from "swiper/modules";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { CiCalendarDate } from "react-icons/ci";

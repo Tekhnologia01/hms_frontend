@@ -44,9 +44,6 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
        }
     }
 
-    
-
-
     useEffect(() => {
         if (show && ipd_id) { // Only fetch when modal is shown and ipd_id exists
             getAllDetails();

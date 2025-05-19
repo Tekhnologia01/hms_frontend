@@ -99,8 +99,6 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
       return;
     }
 
-
-
     callbackFun(formData);
     handleClose();
     setFormData({ bill_total_amount: 0, chargesList: [], selectedCharge: "", quantity: "" });
@@ -187,10 +185,7 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
                 <td>{consultationFee}</td>
                 <td>{consultationFee}</td>
                 <td>
-                  {/* <FaTrash
-                        style={{ fontSize: "16px", cursor: "pointer", color: "red" }}
-                        onClick={() => removeCharge(charge.chargeId)}
-                      /> */}
+                  
                 </td>
               </tr>
               {consultationFee ? (

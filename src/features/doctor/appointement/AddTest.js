@@ -45,9 +45,6 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
     testReason: "",
   })
 
-
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -64,7 +61,6 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
       labTestIds: [...selectedOptions],
     });
   };
-
 
   async function getTest() {
     try {
@@ -112,26 +108,9 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
       <hr></hr>
 
       <div className="pe-5 ps-5 pb-5 pt-3">
-        {/* Close Button */}
-        <Row>
-
-        </Row>
-
-        {/* <div className=" fw-semibold pt-4 pb-3">Doctor Details</div> */}
 
         <Row className="mt-3 m-0">
-          {/* <Col lg={6}>
-            <InputBox
-              label={"Test Status"}
-              placeholder="Pending,Completed"
-              isRequired={true}
-              value={formData.testStatus}
-              onChange={handleChange}
-              name="testStatus"
-            />
-          </Col> */}
-
-
+         
           <Col lg={6}>
             <Form.Label className="fw-semibold">Select Test</Form.Label>
             <MultiSelectWithDropdown

@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import CommanButton from "../form/commonButtton";
 
 const DeleteConfirmationModal = ({ show, handleClose, handleConfirm, message }) => {

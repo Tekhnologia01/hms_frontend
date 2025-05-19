@@ -1,9 +1,4 @@
-
-
-
-        
 import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer";
-import Airavat from "../../../assets/images/Airavat.png";
 
 Font.register({
     family: 'Times New Roman',
@@ -18,21 +13,21 @@ const styles = StyleSheet.create({
         fontFamily: 'Times New Roman',
         padding: 20,
         fontSize: 12,
-        // backgroundColor:"transpernt"
     },
     custom_header: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: "space-between",
-        marginBottom: 15,
+        justifyContent: "flex-end",
+        marginBottom: 30,
+        marginRight:70,
     },
-        custom_header1: {
-       
-        marginTop:120,
+    custom_header1: {
+
+        marginTop: 170,
     },
-            custom_header1: {
-       
-        marginBottom:120,
+    custom_header2: {
+
+        marginBottom: 90,
     },
     headerSection: {
         display: 'flex',
@@ -48,7 +43,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: "center",
-        marginLeft:60
+        marginLeft: 60
     },
     clinicAddress: {
         fontSize: 12,
@@ -104,7 +99,7 @@ const styles = StyleSheet.create({
     signatureText: {
         fontSize: 12,
         marginTop: 5, // Space after the signature line
-        marginRight:50
+        marginRight: 50
     },
 });
 
@@ -112,38 +107,24 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-                {/* <View style={styles.headerSection}>
-                    <Image
-                        src={Airavat}
-                        style={{ width: 130, height: 80, margin: 'auto', marginBottom: 5 }}
-                    />
-                    <View style={styles.clinicInfo}>
-                        <Text style={styles.clinicName}>Airavat Clinic</Text>
-                        <Text style={styles.clinicAddress}>
-                            123 Health Street, Medical City, State 12345
-                        </Text>
-                    </View>
-                </View> */}
 
-                        <View style={styles.custom_header1}>
-                   
-                </View> 
+                {/* <View style={styles.custom_header1}>
+
+                </View> */}
 
                 <View style={styles.custom_header} >
                     <View>
                         <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Patient Name:</Text> {patientDetails?.Patient_Name}</Text>
-                        <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Age:</Text> {patientDetails?.Patient_Age}</Text>
-                        <Text><Text style={{ fontWeight: "bold" }}>Consulting Dr.:</Text> {patientDetails?.Doctor_Name}</Text>
-                    </View>
-                    <View>
                         <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>UH I’d Number:</Text> {patientDetails?.uh_id}</Text>
+                        <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Age:</Text> {patientDetails?.Patient_Age}</Text>
                         <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Sex:</Text> {patientDetails?.Patient_Sex}</Text>
+                        <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Consulting Dr.:</Text> {patientDetails?.Doctor_Name}</Text>
                         <Text><Text style={{ fontWeight: "bold" }}>Date:</Text> {patientDetails?.RegisterDate?.split("T")[0]}</Text>
                     </View>
                 </View>
 
 
-                <View style={{ width: '100%', borderTop: '1px solid #475467', marginTop: 8 }} />
+                {/* <View style={{ width: '100%', borderTop: '1px solid #475467', marginTop: 8 }} /> */}
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold" }}>Prescription</Text>
                 </View>
@@ -185,9 +166,9 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
 
 
 
-                              <View style={styles.custom_header2}>
-                   
-                </View> 
+                <View style={styles.custom_header2}>
+
+                </View>
             </Page>
         </Document>
     );

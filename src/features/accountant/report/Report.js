@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
-import { IoReceiptSharp } from "react-icons/io5";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
-import CommonTable from "../../../components/table/CommonTable";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
+import CommonTable from "../../../components/common/table/CommonTable";
 import { epochTimeToDate } from "../../../utils/epochToDate";
+
 function Report() {
   const [reportData, setReportData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,9 +43,6 @@ function Report() {
     fetchReport();
   }, [selectedDate, currentPage]);
 
-
-
-  
   const columns = [
     { name: "Patient Name", accessor: "Name", class: "py-3 px-4 text-left" },
     { name: "Date", accessor: "date", class: "text-center px-1" },
@@ -79,7 +76,7 @@ function Report() {
       </td>
       <td className="py-3 px-2">{epochTimeToDate(item.date) ?? "-"}</td>
       <td className="py-3 px-2">{item.amount ?? "-"}</td>
- 
+
     </tr>
   );
 

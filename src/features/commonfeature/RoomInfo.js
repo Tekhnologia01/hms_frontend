@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import CommonTable from "../../components/table/CommonTable";
-import NewCommonPagination from "../../components/pagination/NewCommonPagination";
+import CommonTable from "../../components/common/table/CommonTable";
+import NewCommonPagination from "../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
 import CommanButton from "../../components/common/form/commonButtton";
 import AddRoom from "./AddRoom";
 import AddBed from "./AddBed";
 import { useSelector } from "react-redux";
 import DeleteConfirmationModal from "../../components/common/DeleteModal";
-import { ListGroup } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 function RoomInfo() {
@@ -33,7 +32,7 @@ function RoomInfo() {
     const [bed, setBed] = useState(null)
     const [room, setRoom] = useState(null)
 
-        const [pagination,setpagination]=useState()
+    const [pagination, setpagination] = useState()
 
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
@@ -55,20 +54,12 @@ function RoomInfo() {
                 endpoint = `${process.env.REACT_APP_API_URL}/roombed/getbedinfo?page=${currentPage}&limit=${limitPerPage}`;
             }
             const response = await axios.get(endpoint, config);
-
-
-            console.log("+++++++++",response)
             setpagination(response?.data)
-
-
-
-            console.log("-------------------========++++++",pagination)
             setDoctors(response?.data?.data || []);
         } catch (err) {
             toast.error("Error fetching data");
         }
     };
-
 
     useEffect(() => {
         fetchdata();
@@ -90,23 +81,6 @@ function RoomInfo() {
     }, [])
 
     ////////////////////////////////TableCss///////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-    console.log("___________=========",doctors)
-
-
-
-
-
     const cardStyle = {
         width: "225px",
         height: "120px",
@@ -161,9 +135,6 @@ function RoomInfo() {
                     }} />
                     <span className="ps-3"></span>
                     <RiDeleteBinLine style={{ height: "25px", width: "25px", cursor: 'pointer' }} onClick={() => {
-                        // setStatus(0)
-                        // setRoom(item);
-                        // handleShowModalRoom(true);
                         setDeleteItem(item);
                         setDeleteMessage('Do you really want to delete this bed?');
                         setShowDeleteConfirmation(true);
@@ -178,7 +149,6 @@ function RoomInfo() {
 
     const columnsRoom = [
         { name: "Sr.No.", accessor: "Name", class: " text-center " },
-        // { name: "Bed Name.", accessor: "bed_no", class: "text-center px-1" },
         { name: "Room Name", accessor: "room_name", class: "py-3 text-center px-1" },
         { name: "Room Type", accessor: "room_type", class: "py-3 text-center px-1" },
         { name: "Max Bed", accessor: "room_type", class: "py-3 text-center px-1" },
@@ -204,9 +174,6 @@ function RoomInfo() {
                     }} />
                     <span className="ps-3"></span>
                     <RiDeleteBinLine style={{ height: "25px", width: "25px", cursor: 'pointer' }} onClick={() => {
-                        // setStatus(0)
-                        // setRoom(item);
-                        // handleShowModalRoom(true);
                         setDeleteItem(item);
                         setDeleteMessage('Do you really want to delete this record?');
                         setShowDeleteConfirmation(true);
@@ -224,7 +191,6 @@ function RoomInfo() {
         { name: "Room Name", accessor: "room_Name", class: "py-3 text-center px-1" },
         { name: "Room Type", accessor: "room_type", class: "py-3 text-center px-1" },
         { name: "Bed Status", accessor: "room_type", class: "py-3 text-center px-1" },
-        // { name: "Actions", accessor: "actions", class: "py-3 text-center px-1", },
     ];
     const renderRowAvailable = (item, index) => (
         <tr key={item.index} className="border-bottom text-center">
@@ -233,11 +199,6 @@ function RoomInfo() {
             <td className="py-3 px-2">{item?.room_name}</td>
             <td className="py-3 px-2">{item.room_type ?? "-"}</td>
             <td className="py-3 px-2">{item.bed_status ?? "-"}</td>
-            {/* <td>
-                <FiEdit2 style={{ height: "23px", width: "23px" }} />
-                <span className="ps-3"></span>
-                <RiDeleteBinLine style={{ height: "25px", width: "25px" }} />
-            </td> */}
         </tr>
     );
 
@@ -467,7 +428,6 @@ function RoomInfo() {
                                     renderRow={renderRowRoom}
                                     title={"Room Information"}
                                 />
-                                {/* <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors[0]?.pagination?.total_records} setCurrentPage={setCurrentPage} /> */}
                             </div>
                         )
                     }
@@ -481,7 +441,6 @@ function RoomInfo() {
                                     renderRow={renderRowAvailable}
                                     title={"Available Information"}
                                 />
-                                {/* <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination[0]?.total_records} setCurrentPage={setCurrentPage} /> */}
                             </div>
                         )
                     }
@@ -494,15 +453,10 @@ function RoomInfo() {
                                 renderRow={renderRowAvailable}
                                 title={"Occupied Information"}
                             />
-                            {/* <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination[0]?.total_records} setCurrentPage={setCurrentPage} /> */}
                         </div>
 
                     )
                     }
-                    {/* {
-                        doctors?.data?.length > 0 &&
-                        <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={doctors?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
-                    } */}
                 </div>
                 <AddRoom show={showModalRoom} handleClose={handleCloseModalRoom} handleRoomSubmit={handleAddRoom} room={room} openStatus={status} handleupdateroom={handleupdateRoom} />
                 <AddBed show={showModalBed} handleClose={handleCloseModalBed} handleBedSubmit={handleAddBed} bed={bed} openStatus={status} handleupdate={handleupdateBed} />

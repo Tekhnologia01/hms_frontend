@@ -10,9 +10,9 @@ import { useEffect, useState } from "react";
 import CommanButton from "../../../components/common/form/commonButtton";
 import DateSlider from "../../../components/common/DateSlider";
 import { format } from "date-fns";
-import CommonTable from "../../../components/table/CommonTable";
+import CommonTable from "../../../components/common/table/CommonTable";
 import axios from "axios";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 import { useSelector } from "react-redux";
 
 function DoctorsAppointment() {
@@ -226,9 +226,6 @@ function DoctorsAppointment() {
                             <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={appointmentData?.doctor_details?.appointments_count} setCurrentPage={setCurrentPage} />
                         }
                     </div>
-
-              
-
                 </div>
             </div>
         </>

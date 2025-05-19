@@ -35,7 +35,6 @@ function PatientList() {
   }, [currentPage])
 
   const columns = [
-    // { name: "", accessor: "checkbox", class: "w-auto" },
     { name: "Patient Name", accessor: "Patient_Name", class: "py-3 px-4 text-left", width: "250px" },
     { name: "UH ID", accessor: "Patient_Id", class: "text-center px-1" },
     { name: "Date", accessor: "Appointment_Date", class: "text-center px-1" },

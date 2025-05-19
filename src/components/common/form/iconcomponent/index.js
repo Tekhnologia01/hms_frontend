@@ -81,25 +81,3 @@ IconInput.propTypes = {
 };
 
 export default IconInput;
-
-
-
-
-// import React from "react";
-// import { FaPhone } from "react-icons/fa";
-// import IconInput from "./IconInput";
-
-// const ContactForm = () => {
-//   return (
-//     <div>
-//       <IconInput
-//         label="Phone"
-//         name="phone"
-//         placeholder="Enter your phone number"
-//         value=""
-//         onChange={() => {}}
-//         icon={FaPhone} // Pass the phone icon
-//       />
-//     </div>
-//   );
-// };

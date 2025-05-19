@@ -2,7 +2,7 @@ import BarGraph from "../../features/commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../../features/commonfeature/Graphs/circleGraph";
 import React, { useEffect, useState } from "react";
 
-import CommonTable from "../../components/table/CommonTable";
+import CommonTable from "../../components/common/table/CommonTable";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -143,7 +143,7 @@ function Nurse() {
             </div >
 
             <div className="d-flex">
-                <div className="mx-lg-4 m-3 pb-4" style={{ overflowY: "auto" , maxHeight:'250px', overflowX:'auto'}}>
+                <div className="mx-lg-4 m-3 pb-4" style={{ overflowY: "auto", maxHeight: '250px', overflowX: 'auto' }}>
                     <CommonTable
                         minimumWidth={"400px"}
                         headers={columns}

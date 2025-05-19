@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { useNavigate } from "react-router-dom";
-import { FaAmazonPay} from "react-icons/fa";
+import { FaAmazonPay } from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
-import CommonTable from "../../../components/table/CommonTable";
-import {  IoReceiptSharp } from "react-icons/io5";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
+import CommonTable from "../../../components/common/table/CommonTable";
+import { IoReceiptSharp } from "react-icons/io5";
 import PatientInfoModal from "./PatientInfoModal"; // Existing modal
 import PaymentModal from "./PaymentModal"; // New payment modal
 import { MdPayments } from "react-icons/md";
@@ -23,7 +23,7 @@ function AdmitedDepatientBillDetals() {
   const [selectedPatient, setSelectedPatient] = useState(null); // State for selected patient
   const [show, setShow] = useState(false)
 
-  const [patientid,setPatientid]=useState(null)
+  const [patientid, setPatientid] = useState(null)
   const limitPerPage = 10;
   const { user } = useSelector((state) => state?.auth);
   const token = useSelector((state) => state.auth.currentUserToken);
@@ -182,17 +182,11 @@ function AdmitedDepatientBillDetals() {
             />
           </td>
 
-
           {
             item.bill_status == 0 ?
               <td>
-
-
                 <FaAmazonPay
                   style={{ height: "25px", width: "25px", cursor: "pointer" }}
-
-
-
                   onClick={() =>
                     user.RoleId == 4
                       ? navigate(`/receptionist/bill/ipd/deposite/${item.admitted_patient_id}`)
@@ -207,19 +201,19 @@ function AdmitedDepatientBillDetals() {
                 />
               </td> : <td>
 
-   
+
                 <CommanButton
                   label={`Complete`}
                   className="fw-bold fs-6 "
                   style={{ borderRadius: "8px" }}
-                  onClick={() => {setPatientid(item.admitted_patient_id);
-                    setShow(true)}}
+                  onClick={() => {
+                    setPatientid(item.admitted_patient_id);
+                    setShow(true)
+                  }}
                 />
               </td>
           }
         </tr>
-
-     
       </>
     );
   };
@@ -266,50 +260,51 @@ function AdmitedDepatientBillDetals() {
         handleClose={handleClose}
         patient={selectedPatient}
       />
-   <Modal
-          show={show}
-          onHide={handleConfirmModal}
-          centered
-          size="md"
-          className="confirmation-modal"
-          aria-labelledby="confirmation-modal-title"
-        >
-          <Modal.Header closeButton className="border-0 pb-2">
-            <Modal.Title
-              id="confirmation-modal-title"
-              className="fw-bold"
-              style={{ fontSize: "1.5rem", color: "#1D949A" }}
-            >
-              Confirmation
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="pt-2 pb-4">
-            <p
-              className="fw-semibold text-dark"
-              style={{ fontSize: "1.1rem", lineHeight: "1.6" }}
-            >
-              Are you sure you want to complete all the processes for this patient?
-            </p>
-          </Modal.Body>
-          <Modal.Footer className="border-0 pt-0">
-            <CommanButton
-              label="Cancel"
-              className="me-3 ps-4 pe-4 py-2 fw-semibold fs-6 text-dark bg-white"
-              type="button"
-              onClick={() => handleConfirmModal()}
-            />
-            <CommanButton
-              label="Complete"
-              className="ps-4 pe-4 py-2 fw-semibold fs-6"
-              type="button"
-              variant="primary"
-              onClick={() => {handleStatus(patientid);
-                handleConfirmModal()
-              }}
-              style={{ backgroundColor: "#1D949A", borderColor: "#1D949A" }}
-            />
-          </Modal.Footer>
-        </Modal>
+      <Modal
+        show={show}
+        onHide={handleConfirmModal}
+        centered
+        size="md"
+        className="confirmation-modal"
+        aria-labelledby="confirmation-modal-title"
+      >
+        <Modal.Header closeButton className="border-0 pb-2">
+          <Modal.Title
+            id="confirmation-modal-title"
+            className="fw-bold"
+            style={{ fontSize: "1.5rem", color: "#1D949A" }}
+          >
+            Confirmation
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="pt-2 pb-4">
+          <p
+            className="fw-semibold text-dark"
+            style={{ fontSize: "1.1rem", lineHeight: "1.6" }}
+          >
+            Are you sure you want to complete all the processes for this patient?
+          </p>
+        </Modal.Body>
+        <Modal.Footer className="border-0 pt-0">
+          <CommanButton
+            label="Cancel"
+            className="me-3 ps-4 pe-4 py-2 fw-semibold fs-6 text-dark bg-white"
+            type="button"
+            onClick={() => handleConfirmModal()}
+          />
+          <CommanButton
+            label="Complete"
+            className="ps-4 pe-4 py-2 fw-semibold fs-6"
+            type="button"
+            variant="primary"
+            onClick={() => {
+              handleStatus(patientid);
+              handleConfirmModal()
+            }}
+            style={{ backgroundColor: "#1D949A", borderColor: "#1D949A" }}
+          />
+        </Modal.Footer>
+      </Modal>
     </>
   );
 

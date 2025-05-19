@@ -54,13 +54,6 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
     fetchRoomTypes();
   }, [admited]);
 
-  // Convert date and time to epoch
-  const convertToEpoch = (date, time) => {
-    if (!date) return null;
-    const dateTimeString = time ? `${date}T${time}:00` : `${date}T00:00:00`;
-    return new Date(dateTimeString).getTime();
-  };
-
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -94,7 +87,7 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
 
   const fetchRoomTypes = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`, config);
       setRoomType(response?.data?.data || []);
     } catch (err) {
       setErrors({ roomType: "Failed to load room types" });
@@ -103,7 +96,7 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
 
   const fetchRoom = async (roomTypeId) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtypewise?id=${roomTypeId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtypewise?id=${roomTypeId}`, config);
       setRooms(response?.data?.data || []);
     } catch (err) {
       setErrors(prev => ({ ...prev, room: "Failed to load rooms" }));
@@ -120,9 +113,9 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
         setErrors(prev => ({ ...prev, bedName: "No available beds" }));
       }
     } catch (err) {
-      setErrors(prev => ({ 
-        ...prev, 
-        bedName: err.response?.data?.message || "Beds not available" 
+      setErrors(prev => ({
+        ...prev,
+        bedName: err.response?.data?.message || "Beds not available"
       }));
       setBeds([]);
     }
@@ -141,36 +134,34 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
 
+    try {
+      // Combine discharge date and time into a single Date object
+      const combinedDateTime = new Date(`${formData.discharge_date}T${formData.discharge_time}`);
 
-const handleSubmit = async () => {
-  if (!validateForm()) return;
+      // Convert to epoch time in seconds
+      const epochTime = Math.floor(combinedDateTime.getTime() / 1000);
 
-  try {
-    // Combine discharge date and time into a single Date object
-    const combinedDateTime = new Date(`${formData.discharge_date}T${formData.discharge_time}`);
+      const submitData = {
+        admited_id: +admited?.admitted_patient_id,
+        ipd_id: admited.ipd_id,
+        bed_id: +formData?.bedName,
+        start_date: epochTime, // in seconds
+      };
 
-    // Convert to epoch time in seconds
-    const epochTime = Math.floor(combinedDateTime.getTime() / 1000);
-
-    const submitData = {
-      admited_id: +admited?.admitted_patient_id,
-      ipd_id: admited.ipd_id,
-      bed_id: +formData?.bedName,
-      start_date: epochTime, // in seconds
-    };
-
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/roombed/changebed`,
-      submitData,
-      config
-    );
-    handleClose();
-  } catch (error) {
-    console.error("Error updating patient:", error);
-    setErrors({ submit: "Failed to update patient" });
-  }
-};
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/roombed/changebed`,
+        submitData,
+        config
+      );
+      handleClose();
+    } catch (error) {
+      console.error("Error updating patient:", error);
+      setErrors({ submit: "Failed to update patient" });
+    }
+  };
 
   return (
     <Modal show={show} onHide={handleClose} size="lg" dialogClassName="custom-modal">
@@ -254,7 +245,7 @@ const handleSubmit = async () => {
             >
 
               <option value="">Select Bed</option>
-              {beds.filter((bed)=>bed.bed_status=="available").map((bed) => (
+              {beds.filter((bed) => bed.bed_status == "available").map((bed) => (
                 <option key={bed.bed_id} value={bed.bed_id}>
                   {bed.bed_name}
                 </option>
@@ -279,7 +270,7 @@ const handleSubmit = async () => {
             />
             {errors.discharge_date && <div className="text-danger">{errors.discharge_date}</div>}
           </Col>
-          
+
           <Col md={6} className="gy-3">
             <label className="fw-semibold pb-1 pt-1">
               Discharge Time

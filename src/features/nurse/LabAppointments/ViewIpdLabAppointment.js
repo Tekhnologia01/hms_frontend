@@ -26,12 +26,11 @@ function ViewIpdLabAppointment({ type }) {
     const [showModalbill, setShowModalbill] = useState(false);
     const handleShowModalbill = () => setShowModalbill(true);
     const handleCloseModalbill = () => setShowModalbill(false);
-    // const [prescriptionData, setPrescriptionData] = useState([]);
     const token = useSelector((state) => state.auth.currentUserToken);
-  const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     }
     const [testData, setTestData] = useState([]);
     const [appointmentData, setAppointmentData] = useState([]);
@@ -75,7 +74,7 @@ function ViewIpdLabAppointment({ type }) {
     const handleUpdate = async () => {
         try {
             if (!formData?.report_photo) {
-                toast.error("Please upload a report photo", );
+                toast.error("Please upload a report photo",);
 
                 return;
             }
@@ -105,7 +104,7 @@ function ViewIpdLabAppointment({ type }) {
     async function getAppointementDetail() {
         try {
 
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getipdappointmentdetail?admited_id=${params.appointmentId}`,config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getipdappointmentdetail?admited_id=${params.appointmentId}`, config);
             setAppointmentData(response?.data?.data);
         } catch (error) {
 
@@ -232,7 +231,6 @@ function ViewIpdLabAppointment({ type }) {
                                 placeholder="Name"
                                 value={appointmentData?.Patient_Name}
                                 disabled
-                                // onChange={handleChange}
                                 isRequired={true}
                             />
                         </Col>
@@ -257,13 +255,7 @@ function ViewIpdLabAppointment({ type }) {
                                 name="admittedDate"
                             />
                         </Col>
-
-
-
                     </Row>
-
-
-
                     <div className="p-lg-3" onClick={handleBoxClick}>
                         <label className="fw-semibold" style={{ fontSize: "1.1rem" }}>
                             Reports <span className="text-danger fw-bold">*</span>
@@ -298,11 +290,6 @@ function ViewIpdLabAppointment({ type }) {
                             onChange={handleInputChange}
                         />
                     </div>
-
-
-
-
-
                 </Col>
             </Row>
 
@@ -335,16 +322,6 @@ function ViewIpdLabAppointment({ type }) {
 
 
                                 }
-
-                                {/* <CommanButton
-                                    label="Save"
-                                    variant="#7B3F0080"
-                                    className="mb-3 ps-4 pe-4  p-2"
-                                    style={{ borderRadius: "5px" }}
-                                    onClick={handleSave}
-                                />
- */}
-
 
                             </div>
                         </Col>

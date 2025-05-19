@@ -57,13 +57,11 @@ function BillDetails() {
   const handlePayment = async () => {
     // if (paymentMode === "Cash") {
       try {
-        // Calculate total amount including lab charges
         const labChargesTotal = details?.LabchargesList?.reduce((sum, item) => sum + parseFloat(item.amount), 0) || 0;
         const otherChargesTotal = details?.chargesList?.reduce((sum, item) => sum + parseFloat(item.amount), 0) || 0;
         const consultationFee = parseFloat(details?.consultancy_fee) || 0;
         const totalAmount = labChargesTotal + otherChargesTotal + consultationFee;
 
-        // Prepare bill data with all charges for PDF
         const billDataForPDF = {
           ...details,
           allCharges: [
@@ -112,13 +110,10 @@ function BillDetails() {
 
   };
 
-  // Combine both chargesList and LabchargesList for display
   const allCharges = [
     ...(details?.chargesList || []),
-    // ...(details?.LabchargesList || [])
   ];
 
-  // Calculate total amount including lab charges
   const otherChargesTotal = details?.chargesList?.reduce((sum, item) => sum + parseFloat(item.quantity * item.amount), 0) || 0;
   const consultationFee = parseFloat(details?.consultancy_fee) || 0;
   const totalAmount = otherChargesTotal + consultationFee;

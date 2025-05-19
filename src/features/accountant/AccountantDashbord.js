@@ -1,9 +1,9 @@
-import  { useEffect, useState } from "react";
-import { Table,  Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Table, Row, Col } from "react-bootstrap";
 import vijay from "../../assets/images/avatars/vijay1.jpg";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
-import CommonTable from "../../components/table/CommonTable";
+import CommonTable from "../../components/common/table/CommonTable";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { epochTimeToDate } from "../../utils/epochToDate";
@@ -11,11 +11,11 @@ import { epochTimeToDate } from "../../utils/epochToDate";
 function AccountantDashboard() {
     const { user } = useSelector(state => state?.auth);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [limitPerPage, setLimitPerPage] = useState(10);
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [limitPerPage, setLimitPerPage] = useState(10);
     const [reportData, setReportData] = useState()
-    const totalRecords = 200;
-    const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
+    // const totalRecords = 200;
+    // const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
     const [todaysAppintments, setTodaysAppointments] = useState([]);
 
     const [discharge, setDischarge] = useState()
@@ -36,7 +36,6 @@ function AccountantDashboard() {
         }
     }
 
-
     const fetchTodayDischargepatients = async () => {
         try {
             const today = new Date().toISOString().slice(0, 10);
@@ -47,8 +46,6 @@ function AccountantDashboard() {
             console.log("Error fetching doctors => ", err);
         }
     };
-
-
 
     const fetchReport = async () => {
         const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
@@ -64,17 +61,11 @@ function AccountantDashboard() {
         }
     };
 
-
     useEffect(() => {
         fetchTodaysAppointments();
         fetchReport()
         fetchTodayDischargepatients()
     }, []);
-
-
-
-
-
 
     useEffect(() => {
         const handleResize = () => {

@@ -15,7 +15,6 @@ function DoctorAppointmentCard({
   appointmentData
 }) {
 
-
   const navigate = useNavigate();
 
   return (
@@ -26,7 +25,6 @@ function DoctorAppointmentCard({
           xl={2} lg={2} md={2} sm={3} xs={12}
           className="d-flex flex-column border-md-end align-items-center justify-content-center py-2"
         >
-          {/* <span className="fw-semibold">{day}</span> */}
           <span className="fw-semibold">{appointmentData.Appointment_Date}</span>
         </Col>
 
@@ -56,11 +54,6 @@ function DoctorAppointmentCard({
                 </span>
               </Col>
 
-              {/* <Col md={7} xs={12} className="gy-1">
-                <span className="fw-semibold" style={{ fontSize: "0.9rem" }}>
-                  <NavLink to={"/"} >View Documents</NavLink>
-                </span>
-              </Col> */}
 
               <Col md={7} xs={12} className="gy-1">
                 <span className="fw-semibold" style={{ fontSize: "0.9rem" }}>
@@ -77,19 +70,6 @@ function DoctorAppointmentCard({
         <Col xl={2} lg={2} md={3} sm={12} xs={12} className="py-2">
           <div className="h-100 d-flex justify-content-center align-items-center">
 
-            {/* <CommanButton
-              label={appointmentData.Appointment_Status === "Completed" ? "Monitored Patient" : "Monitor Patient"}
-              className="px-4 py-2 fs-6 fw-semibold w-100"
-              style={{ borderRadius:   "5px" }}
-              onClick={() => {
-                appointmentData.Appointment_Status === "Completed"
-                  ? navigate("/doctor/appointments")
-                  : navigate(`${appointmentData?.Appointment_Id}`);
-              }}
-              aria-label="Monitor Patient Button"
-            /> */}
-
-
             <CommanButton
               label={appointmentData.Appointment_Status === "Completed" ? "Monitored Patient" : "Monitor Patient"}
               className="px-4 py-2 fs-6 fw-semibold w-100 text-white"
@@ -104,10 +84,6 @@ function DoctorAppointmentCard({
               }}
               aria-label="Monitor Patient Button"
             />
-
-
-
-
 
           </div>
         </Col>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
-import CommonTable from "../../components/table/CommonTable";
-import NewCommonPagination from "../../components/pagination/NewCommonPagination";
+import CommonTable from "../../components/common/table/CommonTable";
+import NewCommonPagination from "../../components/common/pagination/NewCommonPagination";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
@@ -31,10 +31,10 @@ function HospitalDashboard() {
         }
     }
 
-     useEffect(() => {
-         fetchadmincount()
-        }, []);
-    
+    useEffect(() => {
+        fetchadmincount()
+    }, []);
+
     useEffect(() => {
         const handleResize = () => {
             setScreenWidth(window.innerWidth);

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
@@ -68,14 +68,6 @@ function DoctorDetails() {
               </div>
             </div>
 
-            {/* <div className="border rounded ">
-              <div className="pt-2 fs-5 fw-semibold text-center">Contact</div>
-              <hr></hr>
-              <div className="text-center fw-bold fs-5 pt-3">Doctor Name</div>
-              <div className="text-center pt-2 pb-4 fs-6 text-muted">
-                Doctor Info in Short
-              </div>
-            </div> */}
           </div>
         </Col>
         <Col md={8}>
@@ -100,17 +92,6 @@ function DoctorDetails() {
               {doctor?.department_name}
             </div>
             <hr />
-
-            {/* <div className="fw-semibold fs-5 mt-2">Services</div>
-            <div className="d-flex gap-2 mt-2 flex-wrap">
-              {
-                doctorDetails.services.map((service) => {
-                  return <p className="text-center rounded-5 px-3 py-1" style={{ border: "1px solid #EAECF0" }}>
-                    {service}
-                  </p>
-                })
-              }
-            </div> */}
 
             <div className="fw-semibold fs-6 mt-2">Specializations</div>
             <div className="d-flex gap-2 mt-2 flex-wrap">

@@ -4,7 +4,7 @@ import { TbFileDescription } from "react-icons/tb";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { Card, Col, Pagination, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 import AddLabModal from "./AddLabModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -15,14 +15,14 @@ function LabAppointments() {
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-      }
+    }
 
     const fetchLabs = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`,config)
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`, config)
             setLabs(response?.data?.data);
         } catch (err) {
             console.log(err)
@@ -34,10 +34,6 @@ function LabAppointments() {
     useEffect(() => {
         fetchLabs();
     }, [])
-
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [limitPerPage, setLimitPerPage] = useState(10);
-    // const totalRecords = labs.length;
 
     const navigate = useNavigate();
 
@@ -58,18 +54,6 @@ function LabAppointments() {
                         </div>
                     </div>
                     <div className="d-flex gap-2 justify-content-end">
-                        {/* <InputBox
-                            style={{ height: "40px" }}
-                            placeholder="olivia@untitledui.com"
-                            // value={values.cafeName}
-                            // onChange={handleChange}
-                            name="cafeName"
-                        />
-                        <CommanButton
-                            label="Filter "
-                            className="p-1 px-4 fw-semibold"
-                            style={{ borderRadius: "7px", height: "40px", fontSize: "14px", backgroundColor: "#fff", color: "black", border: "1px solid lightgray" }}
-                        /> */}
                         <CommanButton
                             label="+ Add Lab Test"
                             className="p-1 px-4 fw-semibold"
@@ -77,7 +61,7 @@ function LabAppointments() {
                             style={{ borderRadius: "7px", fontSize: "14px", height: "40px", }}
                         />
                     </div>
-                </div> 
+                </div>
 
                 {
                     loading && <div className="w-100 text-center pt-4 pb-2">Loading...</div>

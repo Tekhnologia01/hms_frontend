@@ -207,16 +207,6 @@ function Departments() {
               >
                 <MdOutlineModeEdit className="fs-5" style={{color:'gray', opacity:'0.7'}} />
               </button>
-              {/* <button
-                className="border-0 bg-transparent p-0"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteDepartment(dept.department_id);
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                <RxCross2 className="fs-5" />
-              </button> */}
             </div>
           </div>
         ))}

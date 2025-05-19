@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { format, addDays, subDays, startOfMonth, endOfMonth } from "date-fns";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
@@ -52,7 +52,6 @@ const DateSlider = ({currentDate, setCurrentDate}) => {
                         border: "none",
                         background: "none",
                         cursor: "pointer",
-                        // fontSize: "20px", 
                         color: "#007BFF",
                     }}
                 >
@@ -67,7 +66,6 @@ const DateSlider = ({currentDate, setCurrentDate}) => {
                         border: "none",
                         background: "none",
                         cursor: "pointer",
-                        // fontSize: "20px",
                         color: "#007BFF",
                     }}
                 >
@@ -123,11 +121,6 @@ const DateSlider = ({currentDate, setCurrentDate}) => {
                     <GrFormNext color="#fff" size={28} />
                 </div>
             </div>
-
-            {/* Selected Date Display */}
-            {/* <div style={{ marginTop: "20px", fontSize: "16px" }}>
-                Selected Date: {format(currentDate, "PPPP")}
-            </div> */}
         </div>
     );
 };

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import axios from "axios";
-import CommonTable from "../../../components/table/CommonTable";
+import CommonTable from "../../../components/common/table/CommonTable";
 import { MdAssignment } from "react-icons/md";
 import { Form, OverlayTrigger } from "react-bootstrap";
 import ViewDischargeSheet from "../../dischargePatient/ViewDischargeSheet";
-import { FaCheck } from "react-icons/fa";
 import { Tooltip } from 'react-bootstrap';
 import { useSelector } from "react-redux";
 import { CiReceipt } from "react-icons/ci";
@@ -56,12 +55,10 @@ function DischargeSummery() {
 
     ];
 
-
     const handledischarge = (ipd_id) => {
         setIpdId(ipd_id)
         setShowDischargeSheet(true)
     }
-
 
     const renderRow = (item, index) => {
         return (
@@ -89,8 +86,6 @@ function DischargeSummery() {
                     </div>
                 </td>
 
-
-
                 {/* Admitted Date */}
                 <td className="py-3 px-2">
                     {item.admitted_date
@@ -98,13 +93,10 @@ function DischargeSummery() {
                         : "-"}
                 </td>
 
-
-
                 <td className="py-3 px-2">{item.discharge_date
                     ? new Date(item.discharge_date * 1000).toLocaleDateString()
                     : "-"}</td>
                 {/* Department */}
-
 
                 <td className="py-3 px-2">{item.bill_status == 1 ? "Done" : "Not Done"}</td>
 
@@ -123,24 +115,6 @@ function DischargeSummery() {
 
                 {/* <td className="py-3 px-2">{item.discharge_status == 2 ? "Done" : "Not Done"}</td> */}
                 <td className="py-3 px-2  gap-2">
-                    {/* {item.discharge_status === 2 ? (
-                        "Done"
-                    ) : (
-                        <>
-
-                            <OverlayTrigger
-                                placement="top"
-                                overlay={<Tooltip>Mark as Done</Tooltip>}
-                            >
-                                <FaCheck
-                                    className="cursor-pointer text-success"
-                                    style={{ fontSize: '1.2rem' }}
-                                    onClick={() => handleStatus(item.admitted_patient_id)}
-                                />
-                            </OverlayTrigger>
-                        </>
-                    )} */}
-
                     {item.bill_report ? (
                         <CiReceipt
                             style={{ width: "25px", height: "25px", cursor: "pointer" }}
@@ -148,7 +122,6 @@ function DischargeSummery() {
                         />
                     ) : (
                         <>
-
                             <OverlayTrigger
                                 placement="top"
                                 overlay={<Tooltip>Bill Status Not Compeleted</Tooltip>}
@@ -192,8 +165,6 @@ function DischargeSummery() {
                     title={"Patient List"}
                 />
             </div>
-
-
 
             <ViewDischargeSheet
                 ipd_id={ipdid}

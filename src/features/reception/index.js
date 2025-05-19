@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import AppointmentSlider from "../commonfeature/AppointmentSlider";
-import CommonTable from "../../components/table/CommonTable";
-import NewCommonPagination from "../../components/pagination/NewCommonPagination";
+import CommonTable from "../../components/common/table/CommonTable";
+import NewCommonPagination from "../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -82,8 +82,6 @@ function ReceptionDashboard() {
         }
     }
 
-
-
     const fetchDoctor = async () => {
         const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
@@ -98,16 +96,10 @@ function ReceptionDashboard() {
             console.log("Error fetching doctors:", err);
         }
     };
-
-
     useEffect(() => {
         fetchPatient();
         fetchDoctor();
     }, [])
-
-
-
-
     const confirmedStyle = {
         backgroundColor: "#EFFBE7",
         color: "#095512",
@@ -180,7 +172,6 @@ function ReceptionDashboard() {
         <>
             <div className="graph-container d-flex flex-md-row flex-column gap-3 p-4 m-0 mt-2 justify-content-center align-items-center">
                 <div style={{
-                    // maxWidth: "550px",
                     width: screenWidth > 768 ? "60%" : "100%",
                     height: "100%",
                     border: "1px solid #F2F4F7",
@@ -194,7 +185,6 @@ function ReceptionDashboard() {
                     </div>
                 </div>
                 <div style={{
-                    // maxWidth: "400px", 
                     width: screenWidth > 768 ? "40%" : "100%",
                     height: "100%", border: "1px solid #F2F4F7",
                     borderRadius: "10px",

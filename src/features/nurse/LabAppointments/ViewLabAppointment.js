@@ -35,22 +35,17 @@ function ViewLabAppointment({ type }) {
 
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-
-
-
-
-
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   const initialState = {
     report_photo: "",
     report_test_id: +params.IpdLabId,
     report_appo_id: +params.appointmentId,
   }
 
-const [formData, setFormData] = useState(initialState);
+  const [formData, setFormData] = useState(initialState);
 
   const handleSave = async () => {
     try {
@@ -64,17 +59,13 @@ const [formData, setFormData] = useState(initialState);
         });
         if (response?.data?.status) {
 
-      toast.success(response?.data?.message)
-
-          // alert(response?.data?.message)
-
-
+          toast.success(response?.data?.message)
           const payload = {
             labAppoiId: +params?.appointmentId,
             labTestId: +params?.IpdLabId,
             testStatus: "Completed"
           }
-          await axios.post(`${process.env.REACT_APP_API_URL}/lab/updatelabtest`, payload,config);
+          await axios.post(`${process.env.REACT_APP_API_URL}/lab/updatelabtest`, payload, config);
           navigate(-1);
         }
         else {
@@ -89,10 +80,6 @@ const [formData, setFormData] = useState(initialState);
 
     }
   }
-
-
-
-
   const handleUpdate = async () => {
     try {
       if (!formData?.report_photo) {
@@ -110,9 +97,6 @@ const [formData, setFormData] = useState(initialState);
           "Content-Type": "multipart/form-data"
         }
       });
-
-   
-
       toast.success(response?.data?.message)
       setFormData(initialState);
       navigate(-1);
@@ -122,10 +106,9 @@ const [formData, setFormData] = useState(initialState);
     }
   };
 
-
   async function getAppointementDetail() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`, config);
       setAppointmentData(response?.data?.data);
     } catch (error) {
 
@@ -141,7 +124,6 @@ const [formData, setFormData] = useState(initialState);
     const { name, type } = e.target;
 
     if (type === "file") {
-      // Handle file inputs
       const file = e.target.files[0];
       setFormData({
         ...formData,
@@ -150,12 +132,9 @@ const [formData, setFormData] = useState(initialState);
     }
   };
 
-
   const handleBoxClick = () => {
     document.getElementById("report_photo").click();
   };
-
-
 
   return (
     <div className="mx-lg-4 m-3 pb-3">
@@ -230,9 +209,6 @@ const [formData, setFormData] = useState(initialState);
           </div>
 
           <hr></hr>
-
-
-
         </Col>
 
         <Col md={7} className="m-0 ">
@@ -247,14 +223,12 @@ const [formData, setFormData] = useState(initialState);
               />
             </Col>
 
-
             <Col md={6} className="gy-3">
               <InputBox
                 label={"Patient Name "}
                 placeholder="Name"
                 value={appointmentData?.Patient_Name}
                 disabled
-                // onChange={handleChange}
                 isRequired={true}
               />
             </Col>
@@ -355,11 +329,7 @@ const [formData, setFormData] = useState(initialState);
                       style={{ borderRadius: "5px" }}
                       onClick={handleSave}
                     />
-
-
                 }
-
-
               </div>
             </Col>
           </Row>

@@ -273,20 +273,12 @@ function Sidebar({ isVisible, isCompact, role }) {
         </div>
       </div>
 
-
       <Modal show={showLogoutModal} onHide={() => setShowLogoutModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Logout</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to logout?</Modal.Body>
         <Modal.Footer>
-          {/* <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>
-            Cancel
-          </Button> */}
-          {/* <Button variant="danger" onClick={handleConfirmLogout}>
-            Logout
-          </Button> */}
-
 
           <CommanButton
             label={`Cancel`}
@@ -304,10 +296,6 @@ function Sidebar({ isVisible, isCompact, role }) {
             onClick={handleConfirmLogout}
           />
         </Modal.Footer>
-
-
-
-
       </Modal>
     </>
   );

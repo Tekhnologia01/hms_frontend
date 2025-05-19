@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import CommanButton from "../../../components/common/form/commonButtton";
 import SelectBox from "../../../components/common/form/selectBox/SelectBox";
-import { convertDateTimeToEpoch, epochToTime, timeToEpoch } from "../../../utils/epochToDate";
+import { convertDateTimeToEpoch } from "../../../utils/epochToDate";
 import { validateAdmitForm } from "../../../validation/PatientValidation";
 import { toast } from "react-toastify";
 
@@ -275,13 +275,6 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
             setFormData({ ...formData, admit_time: selectedTime })
         }
     };
-
-    // const handleDischargeTimeChange = (e) => {
-    //     const selectedTime = e.target.value; // Get time in HH:MM format
-    //     if (selectedTime) {
-    //         setFormData({ ...formData, discharge_time: selectedTime })
-    //     }
-    // }
 
     const closeModal = () => {
         const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();

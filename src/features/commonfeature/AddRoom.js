@@ -54,9 +54,6 @@ const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handle
             });
         }
     }, [show, openStatus, room]); 
-    
-  
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -80,7 +77,6 @@ const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handle
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // formData.appointment_id = +params.appointmentId;
 
         if (formData?.room_type_id && formData?.room_name && formData?.max_bed) {
 

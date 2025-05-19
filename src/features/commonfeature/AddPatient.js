@@ -285,17 +285,6 @@ function AddPatient() {
               {errors.patient_city && <p className="text-danger">{errors.patient_city}</p>}
 
             </Col>
-
-            {/* <Col md={6} className="gy-3">
-              <InputBox
-                label="UH I'd"
-                placeholder="UH I'd generated automatically..."
-                isRequired={true}
-                name=""
-                value={""}
-                onChange={() => { }}
-              />
-            </Col> */}
             <Col md={6} className="gy-3">
 
               <label className="fw-semibold pb-1 pt-1">

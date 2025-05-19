@@ -4,9 +4,6 @@ const CommonTable = ({
     title,
     headers,      // Array of header labels
     bodyData,     // Array of row data
-    currentPage,  // Current Page Number
-    totalPages,   // Total Page Count
-    onPageChange, // Function to Handle Page Change
     renderRow,    // Function to render each row
     minimumWidth,
     showstatus

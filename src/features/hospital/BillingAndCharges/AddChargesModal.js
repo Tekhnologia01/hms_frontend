@@ -1,6 +1,5 @@
 import { Col, Modal, Row } from "react-bootstrap";
 import { FaTimes } from "react-icons/fa";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";

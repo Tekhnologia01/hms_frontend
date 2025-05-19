@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
-import { jwtDecode } from "jwt-decode";
 import InputBox from "../../../components/common/form/inputbox/index";
 import { useNavigate } from "react-router-dom";
 import Airavat from "../../../assets/images/Airavat.png";
-import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
 import Google from "../../../assets/images/google.png";
 import Facebook from "../../../assets/images/facebook.png";
@@ -42,31 +40,24 @@ function Register() {
                 </div>
 
                 <div className="pb-2 ">
-                  {/* <label className="fs-6 pb-2">Name</label> */}
-
-
                   <label className="fs-6 pb-2 fw-semibold">
-                      Name <span className="text-danger fw-bold">*</span>
+                    Name <span className="text-danger fw-bold">*</span>
                   </label>
 
                   <InputBox
                     placeholder="Enter your e-mail"
-                    // value={values.cafeName}
-                    // onChange={handleChange}
                     name="cafeName"
                   />
                 </div>
 
                 <div className=" pb-2">
                   <label className="fs-6 pb-2 fw-semibold">
-                  Email <span className="text-danger fw-bold">*</span>
+                    Email <span className="text-danger fw-bold">*</span>
                   </label>
 
 
                   <InputBox
                     placeholder="Enter your e-mail"
-                    // value={values.cafeName}
-                    // onChange={handleChange}
                     name="cafeName"
                   />
                 </div>
@@ -76,9 +67,6 @@ function Register() {
                     label="Password"
                     name="password"
                     placeholder="Enter your password"
-                    // value={formData.password}
-                    // onChange={handleChange}
-                    // error={errors.password}
                     required
                   />
                 </div>
@@ -89,7 +77,6 @@ function Register() {
                     variant="#7B3F0080"
                     className="mb-3 ps-4 pe-4 w-100 p-2"
                     style={{ borderRadius: "5px" }}
-                    // onClick={handleFormSubmit}
                   />
                 </div>
 
@@ -183,7 +170,6 @@ function Register() {
               </Col>
             </Row>
           </Container>
-          {/* </div> */}
         </Col>
         <Col md={6} className=" vh-100 d-none d-md-block ">
           <div className="d-flex flex-column justify-content-center gradient-custom-2 h-100">

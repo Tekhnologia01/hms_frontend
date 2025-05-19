@@ -104,9 +104,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
 
             <div className="pe-5 ps-5 pb-5 pt-3">
 
-
-
-
                 <Row className="m-0">
                     <Col lg={6}>
                         <InputBox

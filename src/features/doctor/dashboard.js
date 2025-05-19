@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Table, Row, Col } from "react-bootstrap";
-// import { FaArrowDown } from "react-icons/fa";
 import vijay from "../../assets/images/avatars/vijay1.jpg";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
-import CommonTable from "../../components/table/CommonTable";
+import CommonTable from "../../components/common/table/CommonTable";
 import axios from "axios";
 import { useSelector } from "react-redux";
 

@@ -4,7 +4,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import EditClassModel from "./EditClassModel";
 import CommanButton from "../../../components/common/form/commonButtton";
-import CommonTable from "../../../components/table/CommonTable";
+import CommonTable from "../../../components/common/table/CommonTable";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify"; // <-- add this line
@@ -30,7 +30,7 @@ function Charges() {
         ? await axios.put(`${process.env.REACT_APP_API_URL}/bill/UpdateBillingAndCharges/${newData?.billing_and_charges_no}`, newData, config)
         : await axios.post(`${process.env.REACT_APP_API_URL}/bill/BillingAndCharges`, newData, config);
 
-        toast.success(isEdit ? "Charges updated successfully" : "Charges added successfully");
+      toast.success(isEdit ? "Charges updated successfully" : "Charges added successfully");
     } catch (error) {
       toast.error(error?.response?.data?.error || "Something went wrong. Please try again.");
     }
@@ -38,8 +38,6 @@ function Charges() {
     handleCloseModal();
     setRowData([]);
   };
-
-
 
   const fetchChargesData = async () => {
     try {
@@ -52,16 +50,11 @@ function Charges() {
     }
   }
 
-
   useEffect(() => {
     fetchChargesData();
   }, [rowData])
 
-
-
-
   const columns = [
-    // { name: "", accessor: "checkbox", class: "w-auto" },
     { name: "No.", accessor: "srNo", class: "text-center px-1", width: "60px" },
     { name: "Class", accessor: "class", class: "py-3 px-2 text-left", width: "230px" },
     { name: "Bed", accessor: "bed", class: "text-center px-1" },
@@ -104,11 +97,7 @@ function Charges() {
             setRowData(item);
           }}
         />}
-
-
-
         </td>
-
       }
     </tr>
   );
@@ -127,8 +116,6 @@ function Charges() {
         </div>
         <div className="fw-bold py-4 fs-4 d-flex align-items-center justify-content-between">
           <span>Billing & Charges</span>
-
-
           {user?.RoleId !== 5 &&
             <div>
               <CommanButton
@@ -140,17 +127,13 @@ function Charges() {
                   handleShowModal();
                 }}
               />
-
             </div>
-
           }
         </div>
 
         <div>
           <CommonTable minimumWidth={"850px"} headers={columns} bodyData={chargesData} renderRow={renderRow} title={"Charges"} />
         </div>
-
-
         <EditClassModel
           show={showModal}
           handleClose={handleCloseModal}

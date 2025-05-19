@@ -626,31 +626,9 @@ function ViewPatient() {
 
         <div className="">
           <Row className="m-0">
-            {/* <Col lg={6}>
-              <input
-                type="checkbox"
-                id="notifyPatientCheckbox"
-                style={{ marginRight: "10px" }}
-              />
-              <label htmlFor="notifyPatientCheckbox" className="mb-0">
-                Notify Patient about Availability of Consultation Note
-              </label>
-            </Col> */}
-
+          
             <Col lg={12} className="d-flex justify-content-end">
               <div className="d-flex gap-2">
-                {/* {
-                  (role === "Doctor" || role === "Lab") &&
-                  <>
-                    <CommanButton
-                      label="Save"
-                      variant="#7B3F0080"
-                      className="mb-3 ps-4 pe-4  p-2"
-                      style={{ borderRadius: "5px" }}
-                      onClick={completeAppointment}
-                    />
-                  </>
-                } */}
                 {user?.RoleId === 2 && <CommanButton
                   label="End Appointment"
                   variant="#7B3F0080"

@@ -5,7 +5,7 @@ import { TbFileDescription } from "react-icons/tb";
 import { FaArrowLeft, FaCalendarCheck } from "react-icons/fa";
 import { FiEdit2, FiEye } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
-import CommonTable from "../../../components/table/CommonTable";
+import CommonTable from "../../../components/common/table/CommonTable";
 import axios from "axios";
 import { MdOutlineOpenWith } from "react-icons/md";
 import { useSelector } from "react-redux";
@@ -30,8 +30,6 @@ function LabAppointmentDetail({ appointmenttype }) {
 
     const [patientList, setPatientList] = useState([]);
     const [testData, setTestData] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
 
     const columns = [
         { name: "Patients Name", accessor: "patient_name", class: "py-3 w-25 text-left px-2" },
@@ -163,25 +161,7 @@ function LabAppointmentDetail({ appointmenttype }) {
                         <FaArrowLeft />
                         <span className="pt-1 px-2">Lab Appointments/{testData?.test_name}</span>
                     </div>
-                    {/* <div className="d-flex mt-4 m-lg-0 gap-2 justify-content-end">
-                        <InputBox
-                            style={{ height: "40px" }}
-                            placeholder="olivia@untitledui.com"
-                            // value={values.cafeName}
-                            // onChange={handleChange}
-                            name="cafeName"
-                        />
-                        <CommanButton
-                            label="Filter "
-                            className="p-1 px-4 fw-semibold"
-                            style={{ borderRadius: "7px", height: "40px", fontSize: "14px", backgroundColor: "#fff", color: "black", border: "1px solid lightgray" }}
-                        />
-                        <CommanButton
-                            label="+ Add Lab"
-                            className="p-1 px-4 fw-semibold"
-                            style={{ borderRadius: "7px", fontSize: "14px", height: "40px", }}
-                        />
-                    </div> */}
+
                 </div>
 
                 <div>
@@ -221,13 +201,6 @@ function LabAppointmentDetail({ appointmenttype }) {
                                 <p className="m-0 mt-1 fw-semibold fs-4">{patientList?.length}</p>
                                 <p className="m-0 fw-semibold">Appointment</p>
                             </div>
-                            {/* <div style={{ width: "150px", minHeight: "120px", borderRadius: "6px", border: "1px soild #1E959B33", backgroundColor: "#1E959B33" }} className="d-flex border flex-column justify-content-center align-items-center h-100">
-                                <div>
-                                    <FaBedPulse size={26} color="#1E959B" />
-                                </div>
-                                <p className="m-0 mt-1 fw-semibold fs-4">{labData.newAdmitted}</p>
-                                <p className="m-0 fw-semibold">New Admitted</p>
-                            </div> */}
                         </Col>
                     </Row>
                 </div>
@@ -241,95 +214,6 @@ function LabAppointmentDetail({ appointmenttype }) {
                                 }
                             </div>
                         </Col>
-
-
-
-
-                        {/* <Col lg={6}>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <div className="p-3 px-2 fs-5 fw-semibold">Patients Details</div>
-                                <div>
-                                    <CommanButton
-                                        label="View Details"
-                                        className="p-1 px-4 fw-semibold"
-                                        onClick={() => navigate(`${patientList[0]?.appo_id}`)}
-                                        style={{ borderRadius: "7px", fontSize: "14px", height: "40px", }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="py-2 border p-3 py-3" style={{ borderRadius: "5px", color: "#46494C" }}>
-                                <div className="border-bottom pb-2 mb-2" >
-                                    <div className="d-flex gap-2 justify-content-between">
-                                        <div className="d-flex align-items-center">
-                                            <img
-                                                src={`${process.env.REACT_APP_API_URL}/${patientList[0]?.patient_image}`}
-                                                alt={patientList[0]?.patient_name}
-                                                style={{
-                                                    width: "40px",
-                                                    height: "40px",
-                                                    borderRadius: "50%",
-                                                    objectFit: "cover",
-                                                }}
-                                            />
-                                            <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                <p>{patientList[0]?.patientName}</p>
-                                                <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "12px" }}>{patientList[0]?.age + " Years " + patientList[0]?.sex}</p>
-                                            </div>
-                                        </div>
-                                        <div className="d-flex border-start ps-4 flex-column ms-2" style={{ height: "40px" }}>
-                                            <p>Email</p>
-                                            <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "13px" }}>{patientList[0]?.email}</p>
-                                        </div>
-                                        <div className="d-flex border-start ps-4  flex-column ms-2" style={{ height: "40px" }}>
-                                            <p>Phone</p>
-                                            <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "13px" }}>+91 {patientList[0]?.phone}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="d-flex" style={{ lineHeight: "17px" }}>
-                                    <div style={{ width: "25%" }}>
-                                        <div>
-                                            <p>BP: 120/80</p>
-                                            <p>Pulse: 801m</p>
-                                            <p>Weight: 62 Kg</p>
-                                        </div>
-                                        <div className="mt-4">
-                                            <p className="fw-semibold text-dark">Test:</p>
-                                            <p>X-Ray</p>
-                                            <p>Blood Test</p>
-                                            <p>Urine Test</p>
-                                            <p>Endoscopy</p>
-                                        </div>
-                                    </div>
-                                    <div className="border-start ps-3">
-                                        <div>
-                                            <p className="fw-semibold text-dark">
-                                                Last Checked:
-                                            </p>
-                                            <p>Dr-Everly on 20 November 2022</p>
-                                            <p>Presciption - #20112022P0PS</p>
-
-                                        </div>
-                                        <div className="mt-4">
-                                            <p className="fw-semibold text-dark">
-                                                Observation:
-                                            </p>
-                                            <p>High Fever and cough at normal</p>
-                                        </div>
-                                        <div className="mt-4">
-                                            <p className="fw-semibold text-dark">
-                                                Prescription:
-                                            </p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                            <p>Cap CALPOL 500mg 1 + 1 + 1 - X 5 Days</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <Slider slides={patientList[0]?.reports} />
-                        </Col> */}
                     </Row>
                 </div>
             </div>

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "react-bootstrap";
 import { FaTimes } from "react-icons/fa";

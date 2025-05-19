@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { Form } from "react-bootstrap";
 
 function DoctorAppointment() {
-
   const { user } = useSelector(state => state?.auth);
   const [appointmentData, setAppointmentData] = useState([]);
   const [days, setDays] = useState([]);
@@ -21,7 +20,6 @@ function DoctorAppointment() {
     const today = new Date().getDay();
     return today === 0 ? 7 : today;
   });
-
 
   const navigate = useNavigate();
 
@@ -78,18 +76,6 @@ function DoctorAppointment() {
             <Form.Control type="date" value={selectedDate} onChange={handleDateChange} />
           </Form.Group>
 
-          {/* <Form.Select
-            value={selectedDay}
-            name="day"
-            onChange={(e) => { setSelectedDay(e.target.value) }}
-          // isRequired={true}
-          >
-            {
-              days?.map(day => {
-                return <option key={day.day_id} value={day.day_id}>{day.day_name}</option>
-              })
-            }
-          </Form.Select> */}
         </Form.Group>
       </div>
       {

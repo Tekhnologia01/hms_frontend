@@ -3,8 +3,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import CommanButton from "../../../components/common/form/commonButtton";
-import CommonTable from "../../../components/table/CommonTable";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import CommonTable from "../../../components/common/table/CommonTable";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 
 function Emergency() {
     const navigate = useNavigate();

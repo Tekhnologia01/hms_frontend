@@ -184,7 +184,6 @@ function AddUserForm({ user }) {
             return;
         }
 
-
         // Validate form data if needed
         if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match");
@@ -764,20 +763,6 @@ function AddUserForm({ user }) {
                                 </Form.Group>
                                 {errors.shift_id && <p className="text-danger">{errors.shift_id}</p>}
                             </Col>
-
-
-                            {/* End Time */}
-                            {/* <Col md={3} className="gy-3">
-                                <InputBox
-                                    label={"End Time"}
-                                    type="time"  // HTML time input
-                                    isRequired={true}
-                                    value={formData.end_time}
-                                    onChange={handleInputChange}
-                                    name="end_time"
-                                />
-                            </Col> */}
-
                             <Col md={6} className="gy-3">
                                 <Form.Group controlId="datePicker">
                                     <InputBox
@@ -848,15 +833,6 @@ function AddUserForm({ user }) {
                                 {errors.confirmPassword && <p className="text-danger">{errors.confirmPassword}</p>}
                             </Col>
                         </Row>
-
-                        {/* <div className="fw-semibold fs-6 pl-2 mb-2">
-                            <span
-                                style={{ cursor: "pointer", color: "#1E959B" }}
-                                className="px-3"
-                            >
-                                Send Username & Password to User Email I'd
-                            </span>
-                        </div> */}
 
                         <div className="px-2 justify-content-start mt-4 mb-3 gap-4 d-flex flex-wrap">
                             <CommanButton

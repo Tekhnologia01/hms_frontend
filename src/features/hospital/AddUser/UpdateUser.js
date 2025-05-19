@@ -79,13 +79,6 @@ const UpdateUser = ({ show = false, handleClose, user, patientUpdate,status }) =
 
   return (
     <Modal show={show} onHide={()=>{  
-    // setFormData( {
-    //     name: "",
-    //     phone_no: "",
-    //     age: "",
-    //     email_id: "",
-    //     user_id: "",
-    //   })
       handleClose()}} size="lg" dialogClassName="custom-modal">
       <div className="pe-5 ps-5 pt-2">
         <FaTimes

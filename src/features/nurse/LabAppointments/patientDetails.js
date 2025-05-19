@@ -100,8 +100,6 @@ function LabPatientDetails() {
                             <InputBox
                                 label={"Healthcare Provider"}
                                 placeholder="Doctor name"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -110,8 +108,6 @@ function LabPatientDetails() {
                             <InputBox
                                 label={"Consultation Type"}
                                 placeholder="Clinic Consulting"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -121,8 +117,6 @@ function LabPatientDetails() {
                             <InputBox
                                 label={"Patient Name "}
                                 placeholder="Name"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -131,8 +125,6 @@ function LabPatientDetails() {
                             <InputBox
                                 label={"Location"}
                                 placeholder="City"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -142,8 +134,6 @@ function LabPatientDetails() {
                             <InputBox
                                 label={"Start Time"}
                                 placeholder="Timing"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -152,8 +142,6 @@ function LabPatientDetails() {
                             <InputBox
                                 label={"Date of Consultation"}
                                 placeholder="Date"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -162,8 +150,6 @@ function LabPatientDetails() {
 
                     <div className="pt-3 px-2">
                         <Note
-                            // value={noteValue}
-                            // onChange={(e) => setNoteValue(e.target.value)}
                             placeholder="Reason for consultation here..."
                             className="custom-class"
                             label="Reason For Consultation"
@@ -173,8 +159,6 @@ function LabPatientDetails() {
 
                     <div className="pt-1 px-2">
                         <Note
-                            // value={noteValue}
-                            // onChange={(e) => setNoteValue(e.target.value)}
                             placeholder="prescription details here...."
                             className="custom-class"
                             label="Precription"
@@ -218,7 +202,6 @@ function LabPatientDetails() {
                                 variant="#7B3F0080"
                                 className="ps-4 pe-4 p-2 fw-semibold"
                                 style={{ borderRadius: "8px" }}
-                            // onClick={handleFormSubmit}
                             />
                         </Col>
                     </Row>

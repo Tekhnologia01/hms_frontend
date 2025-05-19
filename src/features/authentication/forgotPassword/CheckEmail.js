@@ -21,8 +21,6 @@ function EnterOtp() {
           userEmail: email,
           otp: otp,
         });
-  
-
 
         if (response?.data?.status) { 
           navigate(`/setpassword/${email}`);

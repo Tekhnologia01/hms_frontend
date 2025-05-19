@@ -1,13 +1,11 @@
-import{ useState } from "react";
+import { useState } from "react";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { useNavigate } from "react-router-dom";
-import CommonTable from "../../../components/table/CommonTable";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import CommonTable from "../../../components/common/table/CommonTable";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 
 function NursePatientList() {
-
     const navigate = useNavigate();
-
     const [currentPage, setCurrentPage] = useState(1);
     const [limitPerPage, setLimitPerPage] = useState(10);
 
@@ -79,7 +77,6 @@ function NursePatientList() {
                 <CommonTable minimumWidth={"700px"} headers={columns} bodyData={patients} renderRow={renderRow} title={"Patients List"} />
             </div>
 
-            {/* Pagination */}
             {
                 patients.length > 0 &&
                 <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={totalRecords} setCurrentPage={setCurrentPage} />

@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-
-// Import required modules
 import { Navigation } from "swiper/modules";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
@@ -41,7 +35,6 @@ function Slider({ slides }) {
                 centeredSlides={false}
                 initialSlide={0}
                 spaceBetween={30}
-                // navigation={true}
                 modules={[Navigation]}
                 className="mySwiper"
                 breakpoints={{

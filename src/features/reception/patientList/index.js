@@ -1,11 +1,11 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import { FiEdit2 } from "react-icons/fi";
 import CommanButton from "../../../components/common/form/commonButtton";
 import BookAppointment from "../../commonfeature/BookAppointment";
-import CommonTable from "../../../components/table/CommonTable";
-import NewCommonPagination from "../../../components/pagination/NewCommonPagination";
+import CommonTable from "../../../components/common/table/CommonTable";
+import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import AdmitPatient from "../../admitPatient/admissionForm";
@@ -119,7 +119,7 @@ function PatientAppointmentList() {
     if (cardState === "opd" && user.role === "Reception") {
       getOPDPatients();
     }
-   else if (cardState === "opd" && user.role === "Admin") {
+    else if (cardState === "opd" && user.role === "Admin") {
       getOPDPatients();
     }
     else if (cardState === "opd" && user.role === "Doctor") {

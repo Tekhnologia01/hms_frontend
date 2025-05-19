@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { Modal, Form, Row, Col } from "react-bootstrap";
 import { MdPayments } from "react-icons/md";
 import axios from "axios";
 import CommanButton from "../../../components/common/form/commonButtton";
@@ -53,13 +53,6 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
       mode: "",
     });
   }, [patient]);
-
-
-  //   const useEffect= useState({
-  //     name: patient?.Name || "",
-  //     amount: "",
-  //     date: "",
-  //   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

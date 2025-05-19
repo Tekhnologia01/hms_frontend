@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import CommonTable from "../../../../components/table/CommonTable";
-import NewCommonPagination from "../../../../components/pagination/NewCommonPagination";
+import CommonTable from "../../../../components/common/table/CommonTable";
+import NewCommonPagination from "../../../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import vijay from "../../../../assets/images/avatars/vijay1.jpg"
@@ -85,9 +85,6 @@ function Department() {
   const cardData = [
     { label: "Total Staff", route: "staff", list: "staffList", count: "totalReceptionist" },
     { label: "Total Doctors", route: "doctor", list: "doctorList", count: "totalDoctors" },
-    // { label: "Total Nurse", route: "nurse", list: "nurseList", count: "totalLabAssistance" },
-    // { label: "Total Patients", route: "patient", list: "totalPatientList" },
-    // { label: "Admit Patients", route: "admitpatient", list: "admitPatientList" }
   ];
 
   const columnDefinitions = {
@@ -96,24 +93,15 @@ function Department() {
       { name: "Date of Joining", accessor: "dateOfJoining", class: "text-center px-1", width: "20%" },
       { name: "Shift Timing", accessor: "shiftTiming", class: "text-center px-1" },
       { name: "Department", accessor: "Department_name", class: "text-center px-1" },
-      // { name: "Actions", accessor: "actions", class: "text-center px-1", width: "13%" }
     ],
     doctor: [
       { name: "Name", accessor: "Name", class: "py-3 px-4 text-left", width: "40%" },
       { name: "Date of Joining", accessor: "dateOfJoining", class: "text-center px-1" },
-      // { name: "Attending Patients", accessor: "attendingPatient", class: "text-center px-1" },
-      // { name: "Shift Timing", accessor: "shiftTiming", class: "text-center px-1" },
       { name: "Department", accessor: "Department_name", class: "text-center px-1" }
     ],
 
   };
-
-
   const columns = columnDefinitions[selectedCard] || [];
-
-
-
-
   const renderdoctor = (item) => (
     <tr key={item.id} className="border-bottom text-center">
       <td className="px-2 text-start lh-1">
@@ -138,12 +126,10 @@ function Department() {
         </div>
       </td>
       <td className="py-3 px-2"> {item.joining_date} </td>
-      {/* <td className="py-3 px-2">{item.shift_name} </td> */}
       <td className="py-3 px-2">{item.Department_name || "-"}</td>
 
     </tr>
   );
-
 
   const renderstaff = (item) => (
     <tr key={item.id} className="border-bottom text-center">
@@ -169,17 +155,13 @@ function Department() {
         </div>
       </td>
       <td className="py-3 px-2">
-  {item.joining_date ? new Date(item.joining_date).toLocaleDateString('en-GB') : ""}
-</td>
+        {item.joining_date ? new Date(item.joining_date).toLocaleDateString('en-GB') : ""}
+      </td>
       <td className="py-3 px-2">{item.shift_name} </td>
       <td className="py-3 px-2">{item.Department_name || "-"}</td>
 
     </tr>
   );
-
-
-
-
 
   return (
     <div className="px-3">
@@ -233,12 +215,6 @@ function Department() {
           <div className="w-full text-center fs-5 fw-semibold">No data found</div>
         )}
       </div>}
-
-
-
-
-
-
       {(selectedData && selectedData?.pagination?.TotalRecords > 0 && !isLoading) && <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={selectedData?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />}
     </div>
   );

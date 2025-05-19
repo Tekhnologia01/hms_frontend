@@ -7,14 +7,14 @@ import CommanButton from '../../../components/common/form/commonButtton';
 import InputBox from '../../../components/common/form/inputbox';
 import MultiSelectWithDropdown from '../../../components/common/form/multiselect';
 import { epochTimeToDate } from '../../../utils/epochToDate';
-import CommonTable from '../../../components/table/CommonTable';
+import CommonTable from '../../../components/common/table/CommonTable';
 import { FaEye } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 function AddLabTest() {
     const { admitedId } = useParams();
     const token = useSelector((state) => state.auth.currentUserToken);
-    
+
     const getCurrentDate = () => {
         const today = new Date();
         const year = today.getFullYear();

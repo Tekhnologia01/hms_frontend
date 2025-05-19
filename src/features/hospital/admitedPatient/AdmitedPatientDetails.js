@@ -1,26 +1,24 @@
 import { Row, Col } from "react-bootstrap";
 import { IoMdAdd } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
-import CommonTable from "../../../components/table/CommonTable";
+import CommonTable from "../../../components/common/table/CommonTable";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import AddCharges from "../../commonfeature/AddCharges";
 import DeleteConfirmationModal from "../../../components/common/DeleteModal";
 import AddVisit from "../../commonfeature/AddVisite";
-import { convertEpochToDateTime, epochTimeToDate } from "../../../utils/epochToDate";
+import { epochTimeToDate } from "../../../utils/epochToDate";
 import CourseDetails from "./CourseDetails";
 import CommanButton from "../../../components/common/form/commonButtton";
 import Setdicharge from "../../commonfeature/Setdischarge";
 import { useSelector } from "react-redux";
 import AddLabTest from "./AddlabTest";
-import { toast } from "react-toastify";
 function AdmitedPatientDetails() {
     const { admitedId } = useParams()
     const [patient, setPatient] = useState();
     const [charge, setCharges] = useState([]);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [deleteMessage, setDeleteMessage] = useState('');
     const [selectedcharges, setSelectedCharges] = useState({});
     const [doctorVisit, setDoctorVisits] = useState([]);
     const [selectedvisit, setSelectedvisit] = useState([]);
@@ -54,7 +52,6 @@ function AdmitedPatientDetails() {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getipdpatientcharges?admited_id=${admitedId}`, config)
             setCharges(response?.data?.data[0])
-            // setPatient(response?.data[0][0])
         } catch (error) {
 
         }
@@ -93,10 +90,6 @@ function AdmitedPatientDetails() {
             <td className="py-3 px-2">{item?.fees_name}</td>
             <td className="py-3 px-2">{epochTimeToDate(item?.date)}</td>
             <td>
-                {/* <FiEdit2
-                    style={{ height: "23px", width: "23px", cursor: "pointer", color: "#1D949A" }}
-                // Add onClick handler here if needed
-                /> */}
                 <span className="ps-3"></span>
                 <RiDeleteBinLine
                     style={{ height: "25px", width: "25px", cursor: "pointer", color: "#DC3545" }}
@@ -105,7 +98,6 @@ function AdmitedPatientDetails() {
                         setSelectedCharges(item)
                         setShowDeleteConfirmation(true);
                     }}
-                // Add onClick handler here if needed
                 />
             </td>
         </tr>
@@ -116,10 +108,6 @@ function AdmitedPatientDetails() {
             <td className="py-3 px-2">{item?.user_name}</td>
             <td className="py-3 px-2">{epochTimeToDate(item?.ipd_doctor_date)}</td>
             <td>
-                {/* <FiEdit2
-                    style={{ height: "23px", width: "23px", cursor: "pointer", color: "#1D949A" }}
-                // Add onClick handler here if needed
-                /> */}
                 <span className="ps-3"></span>
                 <RiDeleteBinLine
                     style={{ height: "25px", width: "25px", cursor: "pointer", color: "#DC3545" }}
@@ -128,7 +116,6 @@ function AdmitedPatientDetails() {
                         setSelectedvisit(item)
                         setShowDeleteConfirmation(true);
                     }}
-                // Add onClick handler here if needed
                 />
             </td>
         </tr>
@@ -227,8 +214,6 @@ function AdmitedPatientDetails() {
                                 <IoMdAdd
 
                                     onClick={() => {
-                                        // navigate(`/doctor/patient_list/ipd/${item.admitted_patient_id}`)
-                                        // setAdmited(item)
                                         handleAddChargesModal()
                                     }}
 
@@ -238,7 +223,6 @@ function AdmitedPatientDetails() {
                                         cursor: "pointer",
                                         color: "#1D949A",
                                     }}
-                                // Add onClick handler here if needed
                                 />
                             </div>
                         </div>
@@ -312,11 +296,6 @@ function AdmitedPatientDetails() {
             <AddLabTest />
             <CourseDetails />
 
-
-
-
-
-
             <AddCharges
                 admited={patient}
                 show={showAddChargesModal}
@@ -325,8 +304,6 @@ function AdmitedPatientDetails() {
                     fetchCharges()
                 }}
             />
-
-
             <Setdicharge
                 admited={patient}
                 show={showDischagredateModal}
@@ -338,7 +315,6 @@ function AdmitedPatientDetails() {
 
             <AddVisit
                 admited={patient}
-                // patientUpdate={patientUpdate}
                 show={showDoctorVisitModal}
                 handleClose={() => {
                     handleDoctorVisitCloseModal();
@@ -350,7 +326,6 @@ function AdmitedPatientDetails() {
                 show={showDeleteConfirmation}
                 handleClose={() => setShowDeleteConfirmation(false)}
                 handleConfirm={handleDelete}
-            // message={"deleteMessage"}
             />
 
 

@@ -1,7 +1,6 @@
 import { Form, Row, Col, Button, Card } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import Note from '../../../components/common/form/textarea';
-import { useState } from 'react';
 
 const ExaminationForm = ({ formData, setFormData }) => {
     const user = useSelector(state => state?.auth?.user);

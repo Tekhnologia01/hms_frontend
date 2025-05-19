@@ -9,9 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Slider from "../../commonfeature/Slider";
 
 function SelectedPatientDetails() {
-
     const navigate = useNavigate();
-
     const inputstyle = {
         fontSize: "1rem",
     };
@@ -115,8 +113,6 @@ function SelectedPatientDetails() {
                             <InputBox
                                 label={"Healthcare Provider"}
                                 placeholder="Doctor name"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -125,8 +121,6 @@ function SelectedPatientDetails() {
                             <InputBox
                                 label={"Consultation Type"}
                                 placeholder="Clinic Consulting"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -136,8 +130,6 @@ function SelectedPatientDetails() {
                             <InputBox
                                 label={"Patient Name "}
                                 placeholder="Name"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -146,8 +138,6 @@ function SelectedPatientDetails() {
                             <InputBox
                                 label={"Location"}
                                 placeholder="City"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -157,8 +147,6 @@ function SelectedPatientDetails() {
                             <InputBox
                                 label={"Start Time"}
                                 placeholder="Timing"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -167,8 +155,6 @@ function SelectedPatientDetails() {
                             <InputBox
                                 label={"Date of Consultation"}
                                 placeholder="Date"
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 isRequired={true}
                                 name="cafeName"
                             />
@@ -177,8 +163,6 @@ function SelectedPatientDetails() {
 
                     <div className="pt-3 px-2">
                         <Note
-                            // value={noteValue}
-                            // onChange={(e) => setNoteValue(e.target.value)}
                             placeholder="Reason for consultation here..."
                             className="custom-class"
                             label="Reason For Consultation"
@@ -188,8 +172,6 @@ function SelectedPatientDetails() {
 
                     <div className="pt-1 px-2">
                         <Note
-                            // value={noteValue}
-                            // onChange={(e) => setNoteValue(e.target.value)}
                             placeholder="prescription details here...."
                             className="custom-class"
                             label="Precription"

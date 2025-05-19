@@ -58,7 +58,6 @@ function IPDBillList() {
     { name: "Diseases", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
     { name: "Doctor Name", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
     { name: "Bill Status", accessor: "appo_biil_status", class: "py-3 text-center px-1" },
-    // { name: "Actions", accessor: "actions", class: "py-3 text-center px-1" },
   ];
 
   const renderRow = (item, index) => (
@@ -88,11 +87,7 @@ function IPDBillList() {
       <td className="py-3 px-2" style={{ width: "150px" }}>{item.disease ?? "-"}</td>
       <td className="py-3 px-2" style={{ width: "180px" }}>{item.doctor_name ?? "-"}</td>
       <td className="py-3 px-2" style={{ width: "160px" }}>{item.appo_biil_status ?? "-"}</td>
-      {/* <td style={{ width: "80px" }}>
-        <NavLink to={`/reception/billing/opd/${item.Appo_id}`} className={"text-decoration-none text-black"}>
-          <IoReceiptOutline style={{ height: "23px", width: "23px", cursor: "pointer" }} />
-        </NavLink>
-      </td> */}
+     
     </tr>
 
   );

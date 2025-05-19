@@ -45,8 +45,6 @@ function AddEmergencyPatient() {
                                 label={"Patient Name"}
                                 placeholder="Name here..."
                                 isRequired={true}
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 name="cafeName"
                             />
                         </Col>
@@ -55,9 +53,6 @@ function AddEmergencyPatient() {
                                 label={"Phone No."}
                                 placeholder="Phone no here..."
                                 isRequired={true}
-
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 name="cafeName"
                             />
                         </Col>
@@ -67,9 +62,6 @@ function AddEmergencyPatient() {
                                 label={"Email I'd"}
                                 placeholder="Email I'd here..."
                                 isRequired={true}
-
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 name="cafeName"
                             />
                         </Col>
@@ -78,9 +70,6 @@ function AddEmergencyPatient() {
                                 label={"Sex"}
                                 placeholder="Sex here..."
                                 isRequired={true}
-
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 name="cafeName"
                             />
                         </Col>
@@ -90,9 +79,6 @@ function AddEmergencyPatient() {
                                 label={"Age"}
                                 placeholder="Age here..."
                                 isRequired={true}
-
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 name="cafeName"
                             />
                         </Col>
@@ -102,22 +88,15 @@ function AddEmergencyPatient() {
                                 label={"Address"}
                                 placeholder="Address here..."
                                 isRequired={true}
-
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 name="cafeName"
                             />
                         </Col>
-
 
                         <Col md={6} className="gy-3">
                             <InputBox
                                 label={"City"}
                                 placeholder="City here..."
                                 isRequired={true}
-
-                                // value={values.cafeName}
-                                // onChange={handleChange}
                                 name="cafeName"
                             />
                         </Col>
