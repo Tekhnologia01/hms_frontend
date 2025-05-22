@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Form } from "react-bootstrap"; // Using Bootstrap for styling
 
 const InputBox = ({
@@ -59,4 +59,4 @@ const InputBox = ({
   );
 };
 
-export default InputBox;
+export default memo(InputBox);

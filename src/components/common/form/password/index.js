@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -92,4 +92,4 @@ PasswordInput.propTypes = {
   style: PropTypes.object,
 };
 
-export default PasswordInput;
+export default memo(PasswordInput);

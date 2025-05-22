@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { memo, useRef } from "react";
 import { format, addDays, subDays, startOfMonth, endOfMonth } from "date-fns";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
@@ -125,4 +125,4 @@ const DateSlider = ({currentDate, setCurrentDate}) => {
     );
 };
 
-export default DateSlider;
+export default memo(DateSlider);

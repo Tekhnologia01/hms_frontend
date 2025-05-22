@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import { IoIosArrowDown } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
@@ -107,4 +107,4 @@ const SelectBox = ({
   );
 };
 
-export default SelectBox;
+export default memo(SelectBox);

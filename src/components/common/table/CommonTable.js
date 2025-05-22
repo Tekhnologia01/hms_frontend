@@ -44,8 +44,7 @@ const CommonTable = ({
                 </table>
             </div>
 
-            {/* Pagination (Common Component) */}
-            {/* {totalPages > 1 && <CommonPagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />} */}
+          
         </div>
     );
 };
