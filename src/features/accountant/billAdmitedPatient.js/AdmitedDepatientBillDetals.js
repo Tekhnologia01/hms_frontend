@@ -311,6 +311,3 @@ function AdmitedDepatientBillDetals() {
 }
 
 export default AdmitedDepatientBillDetals;
-
-
-

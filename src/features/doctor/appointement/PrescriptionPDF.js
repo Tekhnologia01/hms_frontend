@@ -19,14 +19,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: "flex-end",
         marginBottom: 30,
-        marginRight:70,
+        marginRight: 70,
     },
     custom_header1: {
-
         marginTop: 170,
     },
     custom_header2: {
-
         marginBottom: 90,
     },
     headerSection: {
@@ -163,8 +161,6 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
                     <View style={styles.signatureLine}></View>
                     <Text style={styles.signatureText}>Signature</Text>
                 </View>
-
-
 
                 <View style={styles.custom_header2}>
 

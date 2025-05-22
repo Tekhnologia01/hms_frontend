@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Col, Form, Modal, Row } from "react-bootstrap";
 import { FaTimes } from "react-icons/fa";
 import CommanButton from "../../../components/common/form/commonButtton";
-import SearchDropdown from "../../../components/common/form/searchDropdown";
 import Note from "../../../components/common/form/textarea";
 import InputBox from "../../../components/common/form/inputbox";
 import MultiSelectWithDropdown from "../../../components/common/form/multiselect";

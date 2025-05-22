@@ -1,15 +1,9 @@
-
-
-
-
 import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { BiTimeFive } from "react-icons/bi";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { getDateAndDay } from "../../../utils/getDateAndDay";
-import { epochTimeToDate } from "../../../utils/epochToDate";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function DoctorAppointmentCard({
   appointmentData
