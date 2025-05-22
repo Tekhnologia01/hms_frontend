@@ -17,7 +17,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
     const [roomTypes, setRoomTypes] = useState([]);
     const { user } = useSelector(state => state?.auth);
     const [errors, setErrors] = useState({});
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -26,7 +26,6 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
 
     const getCurrentDateTime = () => {
         const now = new Date();
-
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
@@ -38,6 +37,10 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
 
         return { dateStr, timeStr };
     };
+
+
+
+    
 
     const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();
 
@@ -248,18 +251,12 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
             };
 
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/admit/${user?.userId}`, payload, config);
-       
+
             setFormData(initialState);
             handleClose();
             toast.success(response?.data?.message || 'Admit patient successfully!');
         } catch (error) {
-
-
-
-
             toast.error(error?.response?.data?.error || 'Error in Admit patient !');
-
-
         }
     };
 
@@ -311,8 +308,8 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                                 defaultValue="Select Patient"
                                 value={formData.uh_id}
                                 options={patients?.map((patient) => ({
-                                    label: patient.Name,
-                                    option: patient.uh_id,
+                                    label: patient?.Name,
+                                    option: patient?.uh_id,
                                 }))}
                                 isDisabled={appointmentData?.uh_id}
                                 onChange={(e) => handleInputChange({ target: { name: "uh_id", value: e.target.value } })}
@@ -341,8 +338,8 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                             <Form.Select style={{ height: "45.5px" }} name="department_id" value={formData.department_id} onChange={handleInputChange} isRequired={true}>
                                 <option value="">Select Department</option>
                                 {departments?.map((dept) => (
-                                    <option key={dept.department_id} value={dept.department_id}>
-                                        {dept.department_name}
+                                    <option key={dept?.department_id} value={dept?.department_id}>
+                                        {dept?.department_name}
                                     </option>
                                 ))}
                             </Form.Select>

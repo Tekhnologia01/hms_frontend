@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 import { Modal } from "react-bootstrap";
 import CommanButton from "../form/commonButtton";
 
@@ -33,4 +33,4 @@ const DeleteConfirmationModal = ({ show, handleClose, handleConfirm, message }) 
     );
 };
 
-export default DeleteConfirmationModal;
+export default memo(DeleteConfirmationModal);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Select from 'react-select';
 
 const MultiSelectWithDropdown = ({ selectedDays, onDayChange, options }) => {
@@ -21,4 +21,4 @@ const MultiSelectWithDropdown = ({ selectedDays, onDayChange, options }) => {
   );
 };
 
-export default MultiSelectWithDropdown;
+export default memo(MultiSelectWithDropdown);

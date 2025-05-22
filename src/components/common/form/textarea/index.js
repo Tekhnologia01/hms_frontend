@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import './notes.css'
 
 const Note = ({
@@ -55,4 +55,4 @@ const Note = ({
   );
 };
 
-export default Note;
+export default memo(Note);

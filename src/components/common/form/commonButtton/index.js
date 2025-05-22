@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Button } from "react-bootstrap"; // Using Bootstrap for styling
 
 const CommanButton = ({ label, onClick, variant = "", className, style, type, disabled }) => {
@@ -32,4 +32,4 @@ const CommanButton = ({ label, onClick, variant = "", className, style, type, di
   );
 };
 
-export default CommanButton;
+export default memo(CommanButton);
