@@ -31,7 +31,7 @@ function IpdBill() {
                 `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientreceipt?admited_id=${params?.admitedId}`,
                 config
             );
-            setDetails(response?.data?.data[0][0]);
+            setDetails(response?.data?.data[0]);
         } catch (error) {
             console.error('Error fetching receipt:', error);
             throw error;

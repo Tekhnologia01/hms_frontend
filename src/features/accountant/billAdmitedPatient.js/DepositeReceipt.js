@@ -26,7 +26,7 @@ function DepositeReceipt() {
         config
       );
 
-      setDetails(response?.data?.data[0][0]);
+      setDetails(response?.data?.data[0]);
     } catch (error) {
       console.error('Error fetching receipt:', error);
       throw error; // Handle or propagate the error

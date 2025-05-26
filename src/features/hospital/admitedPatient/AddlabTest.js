@@ -12,6 +12,7 @@ import { FaEye } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 function AddLabTest() {
+    const { user } = useSelector(state => state?.auth)
     const { admitedId } = useParams();
     const token = useSelector((state) => state.auth.currentUserToken);
 
@@ -121,51 +122,60 @@ function AddLabTest() {
 
     return (
         <div className="py-4">
-            <Row className="mt-3 m-0">
-                <Col lg={4}>
-                    <Form.Label className="fw-semibold">Select Test</Form.Label>
-                    <MultiSelectWithDropdown
-                        selectedDays={formData.labTestIds}
-                        options={tests.map((test) => ({
-                            value: test.test_id,
-                            label: test.test_name,
-                        }))}
-                        onDayChange={handleTestChange}
-                    />
-                </Col>
+            {user.RoleId === 4 || user.RoleId === 5 ? (
+                null
+            ) : (<>
+                <Row className="mt-3 m-0">
+                    <Col lg={4}>
+                        <Form.Label className="fw-semibold">Select Test</Form.Label>
+                        <MultiSelectWithDropdown
+                            selectedDays={formData.labTestIds}
+                            options={tests.map((test) => ({
+                                value: test.test_id,
+                                label: test.test_name,
+                            }))}
+                            onDayChange={handleTestChange}
+                        />
+                    </Col >
 
-                <Col lg={4}>
-                    <InputBox
-                        type="date"
-                        label="Recommendation Date"
-                        value={formData.recommendationDate}
-                        name="recommendationDate"
-                        onChange={handleChange}
-                    />
-                </Col>
+                    <Col lg={4}>
+                        <InputBox
+                            type="date"
+                            label="Recommendation Date"
+                            value={formData.recommendationDate}
+                            name="recommendationDate"
+                            onChange={handleChange}
+                        />
+                    </Col>
 
-                <Col lg={4} style={{ paddingTop: "2rem" }}>
-                    <CommanButton
-                        label="Add Test"
-                        variant="#7B3F0080"
-                        className="ps-3 pe-3 p-2 fw-semibold"
-                        style={{ borderRadius: "5px" }}
-                        onClick={handleTestSubmit}
-                    />
-                </Col>
-            </Row>
+                    <Col lg={4} style={{ paddingTop: "2rem" }}>
+                        <CommanButton
+                            label="Add Test"
+                            variant="#7B3F0080"
+                            className="ps-3 pe-3 p-2 fw-semibold"
+                            style={{ borderRadius: "5px" }}
+                            onClick={handleTestSubmit}
+                        />
+                    </Col>
+                </Row >
 
-            {admitedData.length > 0 && (
-                <div className="p-2">
-                    <CommonTable
-                        minimumWidth={"100%"}
-                        headers={columns}
-                        bodyData={admitedData}
-                        renderRow={renderRow}
-                        title={"Lab Test List"}
-                    />
-                </div>
-            )}
+                {
+                    admitedData.length > 0 && (
+                        <div className="p-2">
+                            <CommonTable
+                                minimumWidth={"100%"}
+                                headers={columns}
+                                bodyData={admitedData}
+                                renderRow={renderRow}
+                                title={"Lab Test List"}
+                            />
+                        </div>
+                    )
+                }
+            </>)
+            }
+
+
         </div>
     );
 }

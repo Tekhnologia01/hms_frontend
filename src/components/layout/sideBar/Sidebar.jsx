@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CgLoadbarSound } from "react-icons/cg";
 import { FaCalendarPlus, FaMoneyBillWave, FaReceipt, FaUserMd, FaUserPlus } from "react-icons/fa";
 import { TbUsers, TbUser } from "react-icons/tb";
+import { MdOutlineAdd } from "react-icons/md";
 import { FiTag } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdBedroomChild, MdOutlineLogin, MdOutlineSettings } from "react-icons/md";
@@ -105,6 +106,7 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/reception/doctor_list", label: "Doctors List", icon: <FaUserMd /> },
       { path: "/reception/patient_list", label: "Patients List", icon: <TbUsers /> },
       { path: "/reception/add_patient", label: "Add Patient", icon: <FaUserPlus /> },
+      { path: "/reception/add_charges", label: "Add Charges", icon: <MdOutlineAdd /> },
       { path: "/reception/room", label: "Bed Management", icon: <MdBedroomChild /> },
       {
         label: "Billing",
@@ -125,6 +127,7 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/accountant", label: "Dashboard", icon: <CgLoadbarSound /> },
       { path: "/accountant/bill", label: "Billing", icon: <FaReceipt /> },
       { path: "/accountant/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
+      { path: "/accountant/add_charges", label: "Add Charges", icon: <MdOutlineAdd /> },
       {
         path: "/accountant/payment", label: "Payment History", icon: <FaRegMoneyBill1 />
       },

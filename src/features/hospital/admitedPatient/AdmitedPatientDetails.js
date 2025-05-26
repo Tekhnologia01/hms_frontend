@@ -15,6 +15,8 @@ import Setdicharge from "../../commonfeature/Setdischarge";
 import { useSelector } from "react-redux";
 import AddLabTest from "./AddlabTest";
 function AdmitedPatientDetails() {
+    const { user } = useSelector(state => state?.auth)
+
     const { admitedId } = useParams()
     const [patient, setPatient] = useState();
     const [charge, setCharges] = useState([]);
@@ -140,7 +142,7 @@ function AdmitedPatientDetails() {
     }
 
     return (
-        <div className="pt-4 px-4" style={{ backgroundColor: "#F8F9FA", minHeight: "100vh" }}>
+        <div className="pt-4 px-4" style={{ minHeight: "100vh" }}>
             {/* Header */}
             <div className="fw-semibold fs-4 mb-4" style={{ color: "#1D949A" }}>
                 Patient Details
@@ -181,16 +183,20 @@ function AdmitedPatientDetails() {
                 </Col>
             </Row>
 
-
-            <div className="d-flex justify-content-end pe-3">
-                <span className="pe-3 pt-2">{epochTimeToDate(patient?.discharge_date)} </span>
-                <CommanButton
-                    onClick={() => handledischargedateModal()}
-                    label="Discharge Date"
-                    className="me-3 p-2 px-3 fw-semibold fs-6"
-                    style={{ borderRadius: "5px" }}
-                />
-            </div>
+            {user.RoleId === 4 ? (
+                null
+            ) : (
+                <div className="d-flex justify-content-end pe-3">
+                    <span className="pe-3 pt-2">{epochTimeToDate(patient?.discharge_date)} </span>
+                    <CommanButton
+                        onClick={() => handledischargedateModal()}
+                        label="Discharge Date"
+                        className="me-3 p-2 px-3 fw-semibold fs-6"
+                        style={{ borderRadius: "5px" }}
+                    />
+                </div>
+            )
+            }
 
 
             <Row className="m-0 mt-4">

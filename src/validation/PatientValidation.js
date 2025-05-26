@@ -32,10 +32,13 @@ export const validatePatientForm = (data) => {
   if (!data.patient_id_proof.trim()) {
     errors.patient_id_proof = "ID proof type is required";
   }
-
-  if (!data.patient_proof_image) {
-    errors.patient_proof_image = "ID proof image is required";
+  if (!data.id_number) {
+    errors.id_number = "ID Proof Number is required";
   }
+
+  // if (!data.patient_proof_image) {
+  //   errors.patient_proof_image = "ID proof image is required";
+  // }
 
   // if (!data.patient_photo) {
   //   errors.patient_photo = "Patient photo is required";

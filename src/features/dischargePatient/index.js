@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Form, Modal, Row } from "react-bootstrap";
+import { Col, Form, Row, Button, Spinner, Modal } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -13,10 +13,18 @@ import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../
 import CommonToast from "../../components/common/Toaster";
 import ViewDischargeSheet from "./ViewDischargeSheet";
 import { toast } from "react-toastify";
+import { FaSave, FaBook } from 'react-icons/fa';
+import { useCallback } from "react";
 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
     const token = useSelector((state) => state.auth.currentUserToken);
+    const [courseDetails, setCourseDetails] = useState('');
+    const [saveStatus, setSaveStatus] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // const { admitedId } = useParams();
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -59,8 +67,8 @@ const DischargePatient = () => {
 
         // Date and Time validations
         discharge_date: Yup.date()
-            .required("Discharge date is required")
-            .min(new Date(), "Discharge date cannot be in the past"),
+            .required("Discharge date is required"),
+        // .min(new Date(), "Discharge date cannot be in the past"),
 
         discharge_time: Yup.string()
             .required("Discharge time is required")
@@ -112,6 +120,54 @@ const DischargePatient = () => {
         if (!dateString) return '';
         const [month, day, year] = dateString.split('/');
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    };
+
+    const fetchCourseData = useCallback(async () => {
+        try {
+            setIsLoading(true);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${id}`, config);
+            setCourseDetails(response?.data?.data?.course_details || '');
+        } catch (error) {
+            setSaveStatus({ variant: 'danger', message: error.message || 'Failed to load course' });
+        } finally {
+            setIsLoading(false);
+        }
+    }, [id]);
+
+    const saveCourseData = async () => {
+        if (!courseDetails.trim()) {
+            setSaveStatus({ variant: 'danger', message: 'Please enter course details' });
+            return;
+        }
+
+        try {
+            setIsSaving(true);
+            setSaveStatus(null);
+
+            let response;
+            if (courseDetails && courseDetails.length > 0) {
+                response = await axios.put(
+                    `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${id}`,
+                    { course_details: courseDetails, admited_id: id },
+                    config
+                );
+            } else {
+                response = await axios.post(
+                    `${process.env.REACT_APP_API_URL}/treatment/addcourse`,
+                    { course_details: courseDetails, admited_id: id },
+                    config
+                );
+            }
+
+            setSaveStatus({
+                variant: 'success',
+                message: 'Course updated successfully!'
+            });
+        } catch (error) {
+            setSaveStatus({ variant: 'danger', message: error.message || 'Failed to save course' });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     async function getPrescription() {
@@ -177,7 +233,8 @@ const DischargePatient = () => {
     useEffect(() => {
         getDischargeDetails();
         getPrescription();
-        getPatientinfo()
+        getPatientinfo();
+        fetchCourseData();
     }, [location.state]);
 
     const handleSubmit = async (values) => {
@@ -512,7 +569,7 @@ const DischargePatient = () => {
                                                         style={{ height: "45.5px" }}
                                                         name="discharge_date"
                                                         type="date"
-                                                        min={new Date().toISOString().split("T")[0]}
+                                                    // min={new Date().toISOString().split("T")[0]}
                                                     />
                                                     <ErrorMessage name="discharge_date" component="div" className="text-danger" />
                                                 </Form.Group>
@@ -561,6 +618,49 @@ const DischargePatient = () => {
                                         </Row>
                                     </Col>
                                 </Row>
+
+                                <Row className="mb-4 mt-4">
+                                    <Col>
+                                        <div className="d-flex justify-content-between align-items-center mb-3">
+                                            <h2 className="fw-bold fs-5 col-md-6 mt-2 px-0">
+                                                Course Details
+                                            </h2>
+                                            <Button
+                                                onClick={saveCourseData}
+                                                disabled={isSaving}
+                                                className="d-flex align-items-center"
+                                                style={{
+                                                    backgroundColor: "#1D949A",
+                                                   
+                                                }}
+                                            >
+                                                {isSaving ? (
+                                                    <>
+                                                        <Spinner as="span" animation="border" size="sm" className="me-2" />
+                                                        Saving...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <FaSave className="me-2" />
+                                                        Save Course
+                                                    </>
+                                                )}
+                                            </Button>
+                                        </div >
+
+                                        <Form.Group controlId="courseDetails">
+                                            <Form.Control
+                                                as="textarea"
+                                                rows={3}
+                                                placeholder="Describe the course objectives, requirements, and other relevant details..."
+                                                value={courseDetails}
+                                                onChange={(e) => setCourseDetails(e.target.value)}
+                                                className="border-2 shadow-sm"
+                                            />
+                                        </Form.Group>
+                                    </Col >
+                                </Row >
+
                                 <Row className="">
                                     <Col >
                                         {<AddPrescriptionTable isIPD={true} ipd_id={location.state} rows={prescriptionData} setRows={setPrescriptionData} role={user?.RoleId} appointmentData={patientdetails} />}

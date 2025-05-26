@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 function AddPatient() {
   const [errors, setErrors] = useState({});
   const [bloodGroup, setBloodGroup] = useState([]);
-  const [photoError, setPhotoError] = useState(false);
+  const [proof, setProof] = useState("");
   const navigate = useNavigate();
   const { user } = useSelector(state => state?.auth)
   const token = useSelector((state) => state.auth.currentUserToken);
@@ -48,15 +48,8 @@ function AddPatient() {
 
   const handleSubmit = async (e) => {
     const validationErrors = validatePatientForm(formData);
-    if (!formData.patient_photo) {
-      setPhotoError(true);
-      validationErrors.patient_photo = "Profile photo is required";
-    } else {
-      setPhotoError(false);
-    }
     setErrors(validationErrors); // Store errors in state
 
-    // If there are errors, stop form submission
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
@@ -71,14 +64,9 @@ function AddPatient() {
     data.append("patient_address", formData.patient_address);
     data.append("patient_city", formData.patient_city);
     data.append("patient_id_proof", formData.patient_id_proof);
-    if (formData.patient_proof_image) {
-      data.append("patient_proof_image", formData.patient_proof_image);
-    }
-
-    if (formData.patient_photo) {
-      data.append("patient_photo", formData.patient_photo);
-    }
-
+    data.append("id_number", formData.id_number);
+    data.append("patient_proof_image", formData.patient_proof_image);
+    data.append("patient_photo", formData.patient_photo);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/patient/addpatient/${user?.userId}`,
@@ -99,6 +87,7 @@ function AddPatient() {
         patient_address: "",
         patient_city: "",
         patient_id_proof: "",
+        id_number: "",
         patient_proof_image: null,
         patient_photo: null,
         patient_blood_group: ""
@@ -149,7 +138,6 @@ function AddPatient() {
       <Row className="mt-2 m-0">
         <Col md={4}>
           <div className="d-flex flex-column align-items-center justify-content-center">
-            {/* Profile Image Selection */}
             <input
               type="file"
               id="profileInput"
@@ -158,7 +146,6 @@ function AddPatient() {
               style={{ display: "none" }}
               onChange={(e) => {
                 handleFileChange(e);
-                setPhotoError(false);
               }}
             />
             <img
@@ -170,7 +157,6 @@ function AddPatient() {
                 height: "80px",
                 objectFit: "cover",
                 cursor: "pointer",
-                border: photoError ? "2px solid red" : "2px solid #e9ecef"
               }}
               onClick={() => document.getElementById("profileInput").click()}
             />
@@ -178,11 +164,6 @@ function AddPatient() {
             <span className="fw" style={{ fontSize: "13px", color: "gray" }}>
               Click to select picture
             </span>
-            {photoError && (
-              <div className="text-danger mt-2" style={{ fontSize: "0.9rem" }}>
-                Profile photo is required
-              </div>
-            )}
           </div>
 
           <div className="text-center mt-3 fw-semibold" style={{ fontSize: "1rem" }}>
@@ -256,7 +237,6 @@ function AddPatient() {
                 </Form.Select>
               </Form.Group>
               {errors.patient_sex && <p className="text-danger">{errors.patient_sex}</p>}
-
             </Col>
 
 
@@ -270,7 +250,6 @@ function AddPatient() {
                 onChange={handleInputChange}
               />
               {errors.patient_address && <p className="text-danger">{errors.patient_address}</p>}
-
             </Col>
 
             <Col md={6} className="gy-3">
@@ -302,7 +281,6 @@ function AddPatient() {
               />
             </Col>
 
-
             <Col md={6} className="gy-3">
               <Form.Group controlId="idSelect">
                 <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>
@@ -312,7 +290,9 @@ function AddPatient() {
                   style={{ padding: '0.6rem' }}
                   value={formData.patient_id_proof}
                   name="patient_id_proof"
-                  onChange={handleInputChange}
+                  onChange={
+                    handleInputChange
+                  }
                   isRequired={true}
                 >
                   <option value="">Select I'd Proof</option>
@@ -326,11 +306,24 @@ function AddPatient() {
               {errors.patient_id_proof && <p className="text-danger">{errors.patient_id_proof}</p>}
 
             </Col>
+
+            <Col md={6} className="gy-3">
+              <InputBox
+                label="Id Proof No"
+                placeholder={proof ? `Enter ${proof} number` : "Enter id proof number"}
+                isRequired={true}
+                name="id_number"
+                value={formData.id_number}
+                onChange={handleInputChange}
+              />
+              {errors.id_number && <p className="text-danger">{errors.id_number}</p>}
+
+            </Col>
+
           </Row>
-          {/* ID Proof Image Upload */}
           <div className="px-3 mt-1" >
             <label className="fw-semibold mb-2" style={{ fontSize: "1.1rem" }}>
-              ID Proof Image <span className="text-danger fw-bold">*</span>
+              ID Proof Image
             </label>
             <div className="d-flex flex-column align-items-center p-3 border rounded" onClick={() => document.getElementById("proofInput").click()} style={{ backgroundColor: "#f9f9f9", cursor: 'pointer' }}>
               <input
@@ -358,9 +351,6 @@ function AddPatient() {
               )}
             </div>
           </div>
-
-          {errors.patient_proof_image && <p className="text-danger ps-3">{errors.patient_proof_image}</p>}
-
         </Col>
       </Row>
     </div>

@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const BillPDF = ({ billData,discount }) => {
+const BillPDF = ({ billData, discount }) => {
   const calculateRoomDays = (startDate, endDate) => {
     if (!endDate) {
       const now = Math.floor(Date.now() / 1000);
@@ -120,10 +120,10 @@ const BillPDF = ({ billData,discount }) => {
       const days = calculateRoomDays(item.start_date, item.end_date);
       return sum + (item.total * days);
     }, 0) || 0;
-    
-    const otherCharges = billData?.othercharges?.reduce((sum, item) => 
+
+    const otherCharges = billData?.othercharges?.reduce((sum, item) =>
       sum + (item.amount * (item.quantity || 1)), 0) || 0;
-      
+
     const doctorVisits = billData?.doctorvisiting?.reduce((sum, item) => sum + item.amount, 0) || 0;
     return roomCharges + otherCharges + doctorVisits;
   };
@@ -145,10 +145,10 @@ const BillPDF = ({ billData,discount }) => {
       <Page size="A4" style={styles.page}>
         {/* Header with smaller logo */}
         <View style={styles.header}>
-          <Image 
-            src={Airavat} 
+          <Image
+            src={Airavat}
             style={styles.logo}
-            cache={false} 
+            cache={false}
           />
         </View>
 
@@ -156,29 +156,29 @@ const BillPDF = ({ billData,discount }) => {
         <View style={styles.section}>
           <View>
             <Text style={styles.text}>
-              <Text style={{ fontWeight: 'bold' }}>Patient Name: </Text> 
+              <Text style={{ fontWeight: 'bold' }}>Patient Name: </Text>
               {billData.Name || 'N/A'}
             </Text>
             <Text style={styles.text}>
-              <Text style={{ fontWeight: 'bold' }}>Department: </Text> 
+              <Text style={{ fontWeight: 'bold' }}>Department: </Text>
               {billData.department || 'N/A'}
             </Text>
             <Text style={styles.text}>
-              <Text style={{ fontWeight: 'bold' }}>Consulting Dr.: </Text> 
+              <Text style={{ fontWeight: 'bold' }}>Consulting Dr.: </Text>
               {billData.doctor_name || 'N/A'}
             </Text>
           </View>
           <View>
             <Text style={[styles.text, { textAlign: 'right' }]}>
-              <Text style={{ fontWeight: 'bold' }}>IPD ID: </Text> 
+              <Text style={{ fontWeight: 'bold' }}>IPD ID: </Text>
               {billData.ipd_id || 'N/A'}
             </Text>
             <Text style={[styles.text, { textAlign: 'right' }]}>
-              <Text style={{ fontWeight: 'bold' }}>Receipt No.: </Text> 
+              <Text style={{ fontWeight: 'bold' }}>Receipt No.: </Text>
               {billData.receipt_number || `IPD-${billData.ipd_id || ''}`}
             </Text>
             <Text style={[styles.text, { textAlign: 'right' }]}>
-              <Text style={{ fontWeight: 'bold' }}>Admitted Date: </Text> 
+              <Text style={{ fontWeight: 'bold' }}>Admitted Date: </Text>
               {formatDate(billData.admitted_date)}
             </Text>
           </View>
@@ -195,7 +195,7 @@ const BillPDF = ({ billData,discount }) => {
             <Text style={styles.tableHeader}>Description</Text>
             <Text style={styles.tableHeader}>Date</Text>
             <Text style={styles.tableHeader}>Qty</Text>
-            <Text style={styles.tableHeader}>Amount (₹)</Text>
+            <Text style={styles.tableHeader}>Amount</Text>
           </View>
 
           {/* Room Charges */}
@@ -207,7 +207,7 @@ const BillPDF = ({ billData,discount }) => {
                 <Text style={styles.tableCellLeft}>Room Charge (Type {room.room_type})</Text>
                 <Text style={styles.tableCell}>{formatDate(room.start_date)}</Text>
                 <Text style={styles.tableCell}>{days} {days === 1 ? 'day' : 'days'}</Text>
-                <Text style={styles.tableCell}>₹{room.total * days}</Text>
+                <Text style={styles.tableCell}>{room.total * days}</Text>
               </View>
             );
           })}
@@ -219,7 +219,7 @@ const BillPDF = ({ billData,discount }) => {
               <Text style={styles.tableCellLeft}>{charge.charge_name}</Text>
               <Text style={styles.tableCell}>{formatDate(charge.charge_date)}</Text>
               <Text style={styles.tableCell}>{charge.quantity || 1}</Text>
-              <Text style={styles.tableCell}>₹{charge.amount * (charge.quantity || 1)}</Text>
+              <Text style={styles.tableCell}>{charge.amount * (charge.quantity || 1)}</Text>
             </View>
           ))}
 
@@ -232,12 +232,12 @@ const BillPDF = ({ billData,discount }) => {
               <Text style={styles.tableCellLeft}>Doctor Visit - {visit.doctor_name}</Text>
               <Text style={styles.tableCell}>{formatDate(visit.visit_date)}</Text>
               <Text style={styles.tableCell}>1</Text>
-              <Text style={styles.tableCell}>₹{visit.amount}</Text>
+              <Text style={styles.tableCell}>{visit.amount}</Text>
             </View>
           ))}
 
 
-         <View style={styles.totalRow}>
+          <View style={styles.totalRow}>
             <Text style={[styles.tableCellLeft, { flex: 4, textAlign: 'right', borderRightWidth: 0 }]}>
               Discount
             </Text>
@@ -252,7 +252,7 @@ const BillPDF = ({ billData,discount }) => {
               Grand Total
             </Text>
             <Text style={[styles.tableCell, { fontWeight: 'bold', borderRightWidth: 0 }]}>
-              ₹{totalAmount-discount}
+              ₹{totalAmount - discount}
             </Text>
           </View>
 

@@ -39,6 +39,8 @@ import AddCharges from "../features/hospital/BillingAndCharges/AddCharges";
 import ReceptionistBillList from "../features/reception/billling/ReceptionistBillList";
 import BillDetails from "../features/reception/billling/BillDetails";
 import AccountantDashboard from "../features/accountant/AccountantDashbord";
+import AddAccCharges from "../features/accountant/addCharges/AddCharges";
+import AddRecCharges from "../features/reception/billling/addRecCharges";
 import ViewLabAppointment from "../features/nurse/LabAppointments/ViewLabAppointment";
 import ViewIpdLabAppointment from "../features/nurse/LabAppointments/ViewIpdLabAppointment";
 import DischargePatient from "../features/dischargePatient";
@@ -113,6 +115,7 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/reception/patient_list" element={<PatientAppointmentList />} />
         <Route path="/reception/add_patient" element={<AddPatient />} />
         <Route path="/reception/room" element={<RoomInfo/>} />
+        <Route path="/reception/add_charges" element={<AddRecCharges />} />
         <Route path="/reception/billing/opd" element={<ReceptionistBillList/>} />
         <Route path="/reception/account" element={<Account />} />
         <Route path="/reception/settings" element={<Setting />} />
@@ -144,6 +147,7 @@ function AppRoutes({ getDefaultRoute }) {
        {/* Accountant routes */}
        <Route path="/accountant" element={<AccountantDashboard />} />
         <Route path="/accountant/discharge_summery" element={<DischargeSummery />} />
+        <Route path="/accountant/add_charges" element={<AddAccCharges />} />
         <Route path="/accountant/bill" element={<AdmitedDepatientBillDetals />} />
         <Route path="/accountant/bill/ipd/deposite/:admitedId" element={<DepositeReceipt />} />
         <Route path="/accountant/bill/ipd/:admitedId" element={<IpdBill />} />
