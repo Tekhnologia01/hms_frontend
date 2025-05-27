@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     logo: {
         width: 120,
         height: 80,
-        margin: 'auto',
-        marginBottom: 5
+        margin: '0 auto',
+        // marginBottom: 5
     },
     headerName: {
         fontSize: 18,
@@ -81,6 +81,11 @@ const styles = StyleSheet.create({
     },
     margin_t: {
         marginTop: 6,
+    },
+    reg: {
+        color: "#606060",
+        textAlign: "center",
+        fontSize: 10,
     },
     custom_header: {
         display: 'flex',
@@ -288,6 +293,10 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                         src={Airavat}
                         style={styles.logo}
                     />
+                </View>
+
+                <View>
+                    <Text style={styles.reg}>Reg No : MH/THA/NA073</Text>
                 </View>
 
                 <View style={styles.custom_header}>

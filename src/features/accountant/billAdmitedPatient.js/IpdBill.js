@@ -118,7 +118,6 @@ function IpdBill() {
                 toast.success("Bill generated and uploaded successfully!")
             }
         } catch (e) {
- 
             toast.error("Error generating bill")
 
         }
@@ -141,13 +140,34 @@ function IpdBill() {
     const isBillNotPaid = details?.bill_status == 0;
     const isDischared = details?.discharge_status == 1;
 
-    // Enable button only if both conditions are true
     const shouldEnableButton = isAmountEqual && isBillNotPaid && isDischared;
+
+    const combineRoomEntries = (rooms = []) => {
+        if (!rooms.length) return [];
+        const combined = [];
+        let current = { ...rooms[0], days: 0, start_date: rooms[0].start_date, end_date: rooms[0].end_date };
+        current.days = Math.ceil((rooms[0].end_date - rooms[0].start_date) / (24 * 60 * 60));
+        for (let i = 1; i < rooms.length; i++) {
+            const prev = current;
+            const curr = rooms[i];
+            const isSameType = prev.room_type === curr.room_type && prev.total === curr.total && prev.room_type_name === curr.room_type_name;
+            const isConsecutive = prev.end_date === curr.start_date;
+            if (isSameType && isConsecutive) {
+                current.end_date = curr.end_date;
+                current.days += Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60));
+            } else {
+                combined.push({ ...current });
+                current = { ...curr, days: Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60)), start_date: curr.start_date, end_date: curr.end_date };
+            }
+        }
+        combined.push({ ...current });
+        return combined;
+    };
 
     return (
         <div className="mx-lg-4 m-3 pb-3">
             <div className="pt-1">
-                <div className="fw-semibold pb-lg-3" style={{ color: "#1D949A", fontSize: "18px" }} onClick={() => navigate(-1)}>
+                <div className="fw-semibold pb-lg-3" style={{ color: "#1D949A", fontSize: "18px", cursor:"pointer", width:"fit-content" }} onClick={() => navigate(-1)}>
                     <FaArrowLeft />
                     <span className="pt-1 px-2">Billing / IPD Bills / Bill Details</span>
                 </div>
@@ -186,21 +206,22 @@ function IpdBill() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {details.room1?.map((room, index) => {
-                                        const days = calculateRoomDays(room.start_date, room.end_date);
-                                        return (
-                                            <tr key={`room-${index}`}>
-                                                <td className="text-center">{index + 1}</td>
-                                                <td className="text-center">Room Charge {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`} </td>
-                                                <td className="text-center">{new Date(room.start_date * 1000).toLocaleDateString()}</td>
-                                                <td className="text-center">{days} {days === 1 ? 'day' : 'days'}</td>
-                                                <td className="text-center">{room.total * days}</td>
-                                            </tr>
-                                        );
-                                    })}
+                                    {/* Combine room entries before rendering */}
+                                    {combineRoomEntries(details.room1)?.map((room, index) => (
+                                        <tr key={`room-${index}`}>
+                                            <td className="text-center">{index + 1}</td>
+                                            <td className="text-center">Room Charges {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`} </td>
+                                            <td className="text-center">
+                                                {new Date(room.start_date * 1000).toLocaleDateString()}
+                                                {room.days > 1 ? ` - ${new Date(room.end_date * 1000).toLocaleDateString()}` : ""}
+                                            </td>
+                                            <td className="text-center">{room.days} {room.days === 1 ? 'day' : 'days'}</td>
+                                            <td className="text-center">{room.total * room.days}</td>
+                                        </tr>
+                                    ))}
                                     {details.othercharges?.map((charge, index) => (
                                         <tr key={`charge-${index}`}>
-                                            <td className="text-center">{index + details.room1.length + 1}</td>
+                                            <td className="text-center">{index + combineRoomEntries(details.room1).length + 1}</td>
                                             <td className="text-center">{charge.charge_name}</td>
                                             <td className="text-center">{new Date(charge.charge_date * 1000).toLocaleDateString()}</td>
                                             <td className="text-center">{charge.quantity || 1}</td>
@@ -209,7 +230,7 @@ function IpdBill() {
                                     ))}
                                     {details.doctorvisiting?.map((visit, index) => (
                                         <tr key={`visit-${index}`} >
-                                            <td className="text-center">{index + details.room1.length + details.othercharges.length + 1}</td>
+                                            <td className="text-center">{index + combineRoomEntries(details.room1).length + (details.othercharges?.length || 0) + 1}</td>
                                             <td className="text-center">Doctor Visit - {visit.doctor_name}</td>
                                             <td className="text-center">{new Date(visit.visit_date * 1000).toLocaleDateString()}</td>
                                             <td className="text-center">1</td>
@@ -333,3 +354,6 @@ function IpdBill() {
 }
 
 export default IpdBill;
+
+// Note: combineRoomEntries only combines consecutive entries of the same room type/rate.
+// If the same room type appears again later, it will be a new row with its own date range.

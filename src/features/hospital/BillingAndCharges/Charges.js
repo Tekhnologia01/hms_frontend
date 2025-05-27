@@ -108,7 +108,7 @@ function Charges() {
       <div className="py-4 px-3">
         <div
           className="fw-semibold fs-6"
-          style={{ color: "#1D949A" }}
+          style={{ color: "#1D949A", cursor:"pointer", width: "fit-content" }}
           onClick={() => navigate(-1)}
         >
           <FaArrowLeft />

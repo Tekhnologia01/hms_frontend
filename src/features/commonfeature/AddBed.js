@@ -86,9 +86,9 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
         <Modal show={show} onHide={handleClose} size="lg" dialogClassName="custom-modal">
             <div className="pe-5 ps-5 pt-2">
                 <FaTimes style={closeIconStyle} onClick={handleClose} />
-                <div className="fw-bold fs-5">{openStatus === 0 ? "Edit Bed" : "Add Bed"}</div>
+                <div className="fw-bold fs-5 p-2">{openStatus === 0 ? "Edit Bed" : "Add Bed"}</div>
             </div>
-            <hr />
+            <hr style={{marginTop:"0px"}} />
             <div className="pe-5 ps-5 pb-5 pt-3">
                 <Formik
                     initialValues={{

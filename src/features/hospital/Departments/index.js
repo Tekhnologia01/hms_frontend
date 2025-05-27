@@ -15,10 +15,10 @@ function Departments() {
   const userId = useSelector((state) => state?.auth?.user?.userId);
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
   async function getDepartments() {
     try {
       setIsLoading(true);
@@ -205,7 +205,7 @@ function Departments() {
                 }}
                 style={{ cursor: "pointer" }}
               >
-                <MdOutlineModeEdit className="fs-5" style={{color:'gray', opacity:'0.7'}} />
+                <MdOutlineModeEdit onMouseEnter={(e) => e.currentTarget.style.opacity = "1"} onMouseLeave={(e) => e.currentTarget.style.opacity = "0.7"} className="fs-5" style={{ color: 'gray', opacity: '0.7' }} />
               </button>
             </div>
           </div>
@@ -237,7 +237,7 @@ function Departments() {
           </Form>
         </div>
         <div className="m-3 d-flex align-items-center gap-3 justify-content-end ">
-          <Button  onClick={() => setShowAddModal(false)} style={{backgroundColor:'white', color:"black"}}>
+          <Button onClick={() => setShowAddModal(false)} style={{ backgroundColor: 'white', color: "black" }}>
             Cancel
           </Button>
           <CommanButton onClick={handleAddDepartment} label={"Add Department"} />
@@ -278,7 +278,7 @@ function Departments() {
           </Form>
         </div>
         <div className="m-3 d-flex align-items-center gap-3 justify-content-end ">
-          <Button  onClick={() => setShowEditModal(false)} style={{backgroundColor:'white', color:"black"}}>
+          <Button onClick={() => setShowEditModal(false)} style={{ backgroundColor: 'white', color: "black" }}>
             Cancel
           </Button>
           <CommanButton

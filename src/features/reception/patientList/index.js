@@ -289,6 +289,7 @@ function PatientAppointmentList() {
               height: "40px",
               borderRadius: "50%",
               objectFit: "cover",
+              border: "1px solid #ccc",
             }}
             className="ms-3"
           />

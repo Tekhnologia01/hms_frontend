@@ -204,7 +204,7 @@ const BillPDF = ({ billData, discount }) => {
             return (
               <View style={styles.tableRow} key={`room-${index}`}>
                 <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
-                <Text style={styles.tableCellLeft}>Room Charge (Type {room.room_type})</Text>
+                <Text style={styles.tableCellLeft}>Room Charge {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`}</Text>
                 <Text style={styles.tableCell}>{formatDate(room.start_date)}</Text>
                 <Text style={styles.tableCell}>{days} {days === 1 ? 'day' : 'days'}</Text>
                 <Text style={styles.tableCell}>{room.total * days}</Text>
@@ -242,7 +242,7 @@ const BillPDF = ({ billData, discount }) => {
               Discount
             </Text>
             <Text style={[styles.tableCell, { fontWeight: 'bold', borderRightWidth: 0 }]}>
-              ₹{discount}
+              {discount}
             </Text>
           </View>
 
@@ -252,7 +252,7 @@ const BillPDF = ({ billData, discount }) => {
               Grand Total
             </Text>
             <Text style={[styles.tableCell, { fontWeight: 'bold', borderRightWidth: 0 }]}>
-              ₹{totalAmount - discount}
+              {totalAmount - discount}
             </Text>
           </View>
 

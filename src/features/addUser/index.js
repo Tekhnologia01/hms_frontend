@@ -261,7 +261,7 @@ function AddUserForm({ user }) {
                 <Row md={12} className="m-0">
                     <div
                         className="fw-semibold fs-5 pb-4"
-                        style={{ color: "#1D949A" }}
+                        style={{ color: "#1D949A", cursor: "pointer", width: "fit-content" }}
                         onClick={() => navigate(-1)}
                     >
                         <FaArrowLeft />

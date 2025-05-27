@@ -12,9 +12,9 @@ const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handle
     const [roomType, setRoomType] = useState([]);
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     }
 
     const closeIconStyle = {
@@ -53,7 +53,7 @@ const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handle
                 created_by: userId,
             });
         }
-    }, [show, openStatus, room]); 
+    }, [show, openStatus, room]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -66,7 +66,7 @@ const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handle
     useEffect(() => {
         const fetchRoomTypes = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`,config);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/roombed/getroomtype`, config);
                 setRoomType(response?.data?.data || []);
             } catch (err) {
                 console.log(err);
@@ -117,16 +117,16 @@ const AddRoom = ({ show, handleClose, handleRoomSubmit, room, openStatus, handle
     return (
         <Modal show={show} onHide={handleClose} size="lg" dialogClassName="custom-modal">
             <div className="pe-5 ps-5 pt-2">
-            <FaTimes 
-    style={closeIconStyle} 
-    onClick={() => {
-        handleClose();  
-    }} 
-/>
-                <div className="fw-bold fs-5 pt-1">{openStatus == 1 ? "Add Room" : " Edit Room "}</div>
+                <FaTimes
+                    style={closeIconStyle}
+                    onClick={() => {
+                        handleClose();
+                    }}
+                />
+                <div className="fw-bold fs-5 p-2">{openStatus == 1 ? "Add Room" : " Edit Room "}</div>
             </div>
 
-            <hr />
+            <hr style={{marginTop:0}}/>
 
             <div className="pe-5 ps-5 pb-5 pt-3">
                 <Row className="m-0">
