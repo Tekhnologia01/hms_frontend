@@ -106,7 +106,20 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/reception/doctor_list", label: "Doctors List", icon: <FaUserMd /> },
       { path: "/reception/patient_list", label: "Patients List", icon: <TbUsers /> },
       { path: "/reception/add_patient", label: "Add Patient", icon: <FaUserPlus /> },
-      { path: "/reception/add_charges", label: "Add Charges", icon: <MdOutlineAdd /> },
+      // { path: "/reception/add_charges", label: "Add Charges", icon: <MdOutlineAdd /> },
+      {
+        label: "Add Charges",
+        icon: <MdOutlineAdd />,
+        subLinks: [
+          { path: "/reception/add_charges/ipd", label: "IPD Charges", icon: <FaMoneyBillWave /> },
+          { path: "/reception/add_charges/opd", label: "OPD Charges", icon: <RiBillLine /> },
+        ],
+      },
+
+
+
+
+
       { path: "/reception/room", label: "Bed Management", icon: <MdBedroomChild /> },
       {
         label: "Billing",
@@ -123,11 +136,28 @@ function Sidebar({ isVisible, isCompact, role }) {
     ],
 
 
+
+
+
+
+
     Accountant: [
       { path: "/accountant", label: "Dashboard", icon: <CgLoadbarSound /> },
       { path: "/accountant/bill", label: "Billing", icon: <FaReceipt /> },
       { path: "/accountant/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
       { path: "/accountant/add_charges", label: "Add Charges", icon: <MdOutlineAdd /> },
+
+
+      {
+        label: "Add Charges",
+        icon: <MdOutlineAdd />,
+        subLinks: [
+          { path: "/accountant/add_charges/ipd", label: "IPD Charges", icon: <FaMoneyBillWave /> },
+          { path: "/accountant/add_charges/opd", label: "OPD Charges", icon: <RiBillLine /> },
+        ],
+      },
+
+
       {
         path: "/accountant/payment", label: "Payment History", icon: <FaRegMoneyBill1 />
       },
@@ -204,7 +234,7 @@ function Sidebar({ isVisible, isCompact, role }) {
               {isExpanded ? (
                 <FaTimes className="toggle-icon" />
               ) : (
-                  <MdOutlineArrowRightAlt className="toggle-icon" />
+                <MdOutlineArrowRightAlt className="toggle-icon" />
               )}
             </div>
           )}
