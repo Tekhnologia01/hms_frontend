@@ -98,7 +98,7 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
       setErrors({ chargesList: "Add at least one billing item" });
       return;
     }
-
+ 
     callbackFun(formData);
     handleClose();
     setFormData({ bill_total_amount: 0, chargesList: [], selectedCharge: "", quantity: "" });

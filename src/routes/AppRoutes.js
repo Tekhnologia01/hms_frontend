@@ -52,6 +52,8 @@ import DepositeReceipt from "../features/accountant/billAdmitedPatient.js/Deposi
 import DischargeSummery from "../features/accountant/dischargeSummery/DischargeSummery";
 import OpdReport from "../features/accountant/report/OpdReport";
 import Payment from "../features/accountant/paymentHistory/index"
+import AddOpdCharges from "../features/accountant/addCharges/Addopdcharges";
+import Showopdcharges from "../features/accountant/addCharges/Showopdcharges";
 
 function AppRoutes({ getDefaultRoute }) {
   return (
@@ -76,6 +78,7 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/hospital/patient_list/:patientId" element={<ViewPatient />} />
         <Route path="/hospital/departments" element={<Departments />} />
         <Route path="/hospital/departments/:deptId" element={<Department />} />
+
         {/* <Route path="/hospital/emergency" element={<Emergency />} /> */}
         <Route path="/hospital/emergency/add_patient" element={<AddEmergencyPatient />} />
         <Route path="/hospital/billing/ipd" element={<Charges />} />
@@ -85,6 +88,9 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/hospital/room" element={<RoomInfo/>} />
         <Route path="/hospital/payment/ipd" element={<Report/>} />
         <Route path="/hospital/payment/opd" element={<OpdReport/>} />
+
+
+
         {/* Lab routes */}
         <Route path="/lab" element={<Nurse />} />
         <Route path="/lab/lab_appointments" element={<LabAppointments />} />
@@ -105,7 +111,6 @@ function AppRoutes({ getDefaultRoute }) {
 
         
         {/* Reception routes 1 */}
-
         <Route path="/reception" element={<ReceptionDashboard />} />
         <Route path="/reception/doctors_appointments" element={<AppointmentDoctor />} />
         <Route path="/reception/doctors_appointments/doctor/:doctorId" element={<DoctorDetails />} />
@@ -115,7 +120,11 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/reception/patient_list" element={<PatientAppointmentList />} />
         <Route path="/reception/add_patient" element={<AddPatient />} />
         <Route path="/reception/room" element={<RoomInfo/>} />
-        <Route path="/reception/add_charges" element={<AddRecCharges />} />
+
+        <Route path="/reception/add_charges/ipd" element={<AddRecCharges />} />
+        <Route path="/reception/add_charges/opd" element={<AddOpdCharges />} />
+        <Route path="/reception/add_charges/opd/show/appo_id" element={<Showopdcharges />} />
+
         <Route path="/reception/billing/opd" element={<ReceptionistBillList/>} />
         <Route path="/reception/account" element={<Account />} />
         <Route path="/reception/settings" element={<Setting />} />
@@ -140,14 +149,16 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/doctor/payment_history" element={<PaymentHistory />} />
         <Route path="/doctor/account" element={<Account />} />
         <Route path="/doctor/settings" element={<Setting />} />
-
         {/* doctor/patient_list */}
 
         
+
        {/* Accountant routes */}
        <Route path="/accountant" element={<AccountantDashboard />} />
         <Route path="/accountant/discharge_summery" element={<DischargeSummery />} />
         <Route path="/accountant/add_charges" element={<AddAccCharges />} />
+        <Route path="/accountant/add_charges/ipd" element={<AddAccCharges />} />
+        <Route path="/accountant/add_charges/opd" element={<AddAccCharges />} />
         <Route path="/accountant/bill" element={<AdmitedDepatientBillDetals />} />
         <Route path="/accountant/bill/ipd/deposite/:admitedId" element={<DepositeReceipt />} />
         <Route path="/accountant/bill/ipd/:admitedId" element={<IpdBill />} />
@@ -162,7 +173,7 @@ function AppRoutes({ getDefaultRoute }) {
       </Route>
 
 
-    
+
       {/* Redirect to default route only for authenticated users */}
       <Route path="*" element={<Navigate to={getDefaultRoute()} replace />} />
     </Routes>

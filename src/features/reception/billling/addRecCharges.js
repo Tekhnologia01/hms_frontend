@@ -212,22 +212,22 @@ function PatientAppointmentList() {
 
     return (
 
-        <div className="py-4 px-3 patients_list">
-
+        <div className="py-4 px-3 ">
+{/* 
             <div>
                 <Row className="align-items-center m-0">
                     <Col md={6}>
                         <div className="fw-bold fs-3">Patient List</div>
                     </Col>
                 </Row>
-            </div>
+            </div> */}
 
             {patientCounts &&
-                <div className="cards-container d-flex align-items-center justify-content-start mt-3 ms-3 gap-4 flex-wrap">
+                <div className="cards-container d-flex align-items-center justify-content-start  ms-3  flex-wrap">
 
                 </div>}
 
-            <div className="mt-5">
+            <div className="mt-3">
                 {cardState === "ipd" && <div>
                     <CommonTable minimumWidth={"1000px"} headers={ipdColumns} bodyData={patients?.data} renderRow={renderIPDRow} title={"Patients List"} />
                 </div>}
