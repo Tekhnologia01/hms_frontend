@@ -7,20 +7,27 @@ import InputBox from "../../../components/common/form/inputbox";
 import SelectBox from "../../../components/common/form/selectBox/SelectBox";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
 
 const Showopdcharges = ({ patientName, consultationFee }) => {
+  const { appo_id } = useParams();
   const [formData, setFormData] = useState({
-    bill_total_amount: 0,
-    chargesList: [],
-    selectedCharge: "",
-    quantity: "",
+    total_amount: 0,
+    appo_id: appo_id,
+    quantity: 1,
+    selectedCharge: null,
+
   });
 
   const [chargesData, setChargesData] = useState([]);
   const [chargesDataTable, setChargesDataTable] = useState([]);
+  const [opdChargesDataTable, setOpdChargesData] = useState([]);
+  console.log(opdChargesDataTable, "opdChargesDataTable");
   const [errors, setErrors] = useState({});
-
   const token = useSelector((state) => state.auth.currentUserToken);
+  const location = useLocation();
+  const { appointmentData } = location.state || {};
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -28,39 +35,45 @@ const Showopdcharges = ({ patientName, consultationFee }) => {
   };
 
 
- const fetchCharges = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`, config);
-        setChargesData(response?.data?.data.data || []);
-      } catch (error) {
-        console.error("Error fetching charges:", error);
-      }
-    };
+  const fetchCharges = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/getcharges`, config);
+      setChargesData(response?.data?.data.data || []);
+    } catch (error) {
+      console.error("Error fetching charges:", error);
+    }
+  };
 
-     const fetchopdcharges= async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/opdcharges?appo_id=`, config);
-        setChargesData(response?.data?.data.data || []);
-      } catch (error) {
-        console.error("Error fetching charges:", error);
-      }
-    };
+  const fetchOpdCharges = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/fees/opdcharges?appo_id=${appo_id}`, config);
+      setOpdChargesData(response?.data?.data || []);
+    } catch (error) {
+      console.error("Error fetching charges:", error);
+    }
+  };
 
-
+  const removeCharge = async (id) => {
+    try {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/fees/deleteopdcharges?opd_charge_id=${id}`, config);
+      fetchOpdCharges();
+      console.log("Charges deleted successfully:", response.data);
+    } catch (error) {
+      console.error("Error deleting charges:", error);
+    }
+  };
 
   useEffect(() => {
-   
+    fetchOpdCharges();
     fetchCharges();
   }, []);
 
-  // Handle input changes for select and quantity
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-    // Clear errors for the field being updated
     setErrors((prev) => ({
       ...prev,
       [name]: "",
@@ -121,76 +134,49 @@ const Showopdcharges = ({ patientName, consultationFee }) => {
     setErrors({});
   };
 
-  // Remove a charge from the table
-  const removeCharge = (chargeId) => {
-    // Find the charge to remove
-    const chargeToRemove = chargesDataTable.find((charge) => charge.chargeId === chargeId);
-    if (!chargeToRemove) return;
 
-    // Update chargesDataTable and bill_total_amount
-    setChargesDataTable((prev) => prev.filter((charge) => charge.chargeId !== chargeId));
-    setFormData((prev) => ({
-      ...prev,
-      bill_total_amount: prev.bill_total_amount - chargeToRemove.total,
-      chargesList: prev.chargesList.filter((charge) => charge.chargeId !== chargeId),
-    }));
-  };
 
   // Handle form submission
   const handleSubmit = async () => {
+
     try {
-      // Prepare data for submission
-      const submissionData = {
-        patientName: patientName,
-        bill_total_amount: formData.bill_total_amount + parseFloat(consultationFee || 0),
-        charges: [
-          {
-            chargeId: "consultation_fee",
-            billingType: "Consultant Fees",
-            quantity: 1,
-            amount: parseFloat(consultationFee || 0),
-            total: parseFloat(consultationFee || 0),
-          },
-          ...formData.chargesList.map((charge) => ({
-            chargeId: charge.chargeId,
-            billingType: charge.billingType,
-            quantity: charge.quantity,
-            amount: charge.amount,
-            total: charge.total,
-          })),
-        ],
+      let newErrors = {};
+      if (!formData.selectedCharge) {
+        newErrors.selectedCharge = "Please select a billing item";
+      }
+      if (!formData.quantity || isNaN(formData.quantity) || formData.quantity <= 0) {
+        newErrors.quantity = "Please enter a valid quantity";
+      }
+
+      const selectedCharge = chargesData.find((charge) => charge.fees_id === formData.selectedCharge);
+      if (!selectedCharge) {
+        setErrors((prev) => ({
+          ...prev,
+          selectedCharge: "Invalid billing item selected",
+        }));
+
       };
 
-      // Log the data for debugging (remove in production)
-      console.log("Submission Data:", submissionData);
+      let opdData = {
+        appo_id: formData.appo_id,
+        fees_id: formData.selectedCharge,
+        quantity: formData.quantity,
+        total_fee: (formData.quantity * selectedCharge?.fees_amount) || 0,
+      };
 
-      // Example: Send data to an API endpoint
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/billing/submit`,
-        submissionData,
-        config
-      );
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/fees/addopdchargesappoimnetwise`, opdData, config);
+      console.log("Response from adding charges:", response.data);
+      fetchOpdCharges();
 
-      // Handle successful submission
-      console.log("Billing submitted successfully:", response.data);
-
-      // Optionally reset form after submission
-      setFormData({
-        bill_total_amount: 0,
-        chargesList: [],
-        selectedCharge: "",
-        quantity: "",
-      });
-      setChargesDataTable([]);
-      setErrors({});
-
-      // Optionally show a success message to the user
-      alert("Billing submitted successfully!");
     } catch (error) {
-      console.error("Error submitting billing data:", error);
-      setErrors({ submit: "Failed to submit billing data. Please try again." });
+      console.error("Error submitting form:", error);
+      setErrors((prev) => ({
+        ...prev,
+        submit: "Failed to add charges. Please try again.",
+      }));
+
     }
-  };
+  }
 
   return (
     <div className="p-4">
@@ -200,7 +186,7 @@ const Showopdcharges = ({ patientName, consultationFee }) => {
             label="Patient Name"
             placeholder="Enter name"
             isRequired
-            value={patientName}
+            value={appointmentData?.patient_name || ""}
             name="patientName"
             disabled
           />
@@ -233,7 +219,7 @@ const Showopdcharges = ({ patientName, consultationFee }) => {
           {errors.quantity && <p className="text-danger">{errors.quantity}</p>}
         </Col>
 
-        <Col lg={1} className="pt-5">
+        {/* <Col lg={1} className="pt-5">
           <FaPlus
             style={{
               fontSize: "20px",
@@ -243,12 +229,13 @@ const Showopdcharges = ({ patientName, consultationFee }) => {
             }}
             onClick={addCharges}
           />
-        </Col>
+        </Col> */}
+
       </Row>
 
       <div className="d-flex justify-content-end pt-4">
         <CommanButton
-          label="Submit"
+          label="Add"
           className="ps-3 pe-3 p-2 fw-semibold"
           style={{ borderRadius: "5px" }}
           onClick={handleSubmit}
@@ -274,22 +261,22 @@ const Showopdcharges = ({ patientName, consultationFee }) => {
               <td>1</td>
               <td>Consultant Fees</td>
               <td>1</td>
-              <td>{consultationFee || 0}</td>
-              <td>{consultationFee || 0}</td>
+              <td>{appointmentData?.consultancy_fee || 0}</td>
+              <td>{appointmentData?.consultancy_fee || 0}</td>
               <td></td>
             </tr>
-            {chargesDataTable.length > 0 ? (
-              chargesDataTable.map((charge, index) => (
-                <tr key={charge.chargeId}>
+            {opdChargesDataTable.length > 0 ? (
+              opdChargesDataTable.map((charge, index) => (
+                <tr key={charge?.opd_bill_fees_id}>
                   <td>{index + 2}</td>
-                  <td>{charge.billingType}</td>
-                  <td>{charge.quantity}</td>
-                  <td>{charge.amount}</td>
-                  <td>{charge.total}</td>
+                  <td>{charge?.fees_name}</td>
+                  <td>{charge?.quantity}</td>
+                  <td>{charge?.fees_amount}</td>
+                  <td>{charge?.total_fee}</td>
                   <td>
                     <FaTrash
                       style={{ fontSize: "16px", cursor: "pointer", color: "red" }}
-                      onClick={() => removeCharge(charge.chargeId)}
+                      onClick={() => removeCharge(charge.opd_bill_fees_id)}
                     />
                   </td>
                 </tr>

@@ -145,7 +145,6 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/accountant", label: "Dashboard", icon: <CgLoadbarSound /> },
       { path: "/accountant/bill", label: "Billing", icon: <FaReceipt /> },
       { path: "/accountant/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
-      { path: "/accountant/add_charges", label: "Add Charges", icon: <MdOutlineAdd /> },
 
 
       {

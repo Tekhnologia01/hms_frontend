@@ -1,90 +1,82 @@
 import { useEffect, useState } from "react";
-import vijay from "../../../assets/images/avatars/vijay1.jpg";
+import { IoReceiptOutline } from "react-icons/io5";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import CommonTable from "../../../components/common/table/CommonTable";
 import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
+import ViewOPDBill from "../../reception/billling/ViewOPDBill";
 import { useSelector } from "react-redux";
-import { MdOutlineBedroomChild } from "react-icons/md";
-import Bill from "../../doctor/appointement/Billl"
-import { useNavigate, useParams } from "react-router-dom";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
-function AddOpdCharges() {
+
+function ReceptionistBillList() {
+    const navigate = useNavigate();
+    const [doctors, setDoctors] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const limitPerPage = 10;
+    const [selectedDate, setSelectedDate] = useState(() => {
+        const today = new Date().toISOString().split("T")[0]; // Format to YYYY-MM-DD
+        return today;
+    });
+    const [showBill, setShowBill] = useState(false);
+    const [billData, setBillData] = useState();
+
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     }
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState();
-    const limitPerPage = 10;
-    const [patients, setPatients] = useState([]);
-    const [showModalbill, setShowModalbill] = useState(false);
-    const [appointmentData, setAppointmentData] = useState(null);
 
-    const params = useParams()
-
-
-
-    const navigate=useNavigate()
-
-    const handleOpenModalbill = (patient) => {
-        setAppointmentData(patient);
-        setShowModalbill(true);
-    };
-
-    const handleCloseModalbill = () => {
-        setShowModalbill(false);
-        setAppointmentData(null);
-    };
-
-    async function getAppointementDetail() {
+    const fetchDetails = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getAppointmentWiseDoctorpatientDetails?appo_id=${params.appointmentId}`, config);
-            setAppointmentData(response?.data?.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/getappointmentdatewise?appointment_date=${selectedDate}&page=${currentPage}&limit=${limitPerPage}`, config);
 
-        } catch (error) {
-            console.error(error?.response?.message ? error.response?.message : "Error while getting data");
-        }
-    }
-
-    async function getOPDPatients() {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_opd?page=${currentPage}&limit=${limitPerPage}`, config);
-            setPatients(response?.data?.data);
-            setTotalPages(response?.data?.data?.pagination?.TotalPages);
+            setDoctors(response?.data?.data);
         } catch (err) {
-            console.log("Error fetching departments:", err);
+            console.log("Error fetching doctors => ", err);
         }
+    };
+
+    // const handleRowClick = (user) => {
+    //     navigate(`show/${user?.Appo_id}`, { state: user?.patient_name })
+    // }
+
+    const handleRowClick = (appointment) => {
+        navigate(`show/${appointment.Appo_id}`, {
+            state: {
+                appointmentData: appointment
+            }
+        });
+    };
+
+    const handelViewBill = (item, index) => {
+        setBillData(item);
+        setShowBill(true);
     }
 
     useEffect(() => {
-        getOPDPatients();
-        getAppointementDetail();
-    }, []);
+        fetchDetails();
+    }, [currentPage, selectedDate]);
 
-
-    const ipdColumns = [
-        { name: "Patient Name", accessor: "patientName", class: "py-3 px-5 text-left", width: "250px" },
-        { name: "UH Id", accessor: "uhId", class: "text-center px-1" },
-        { name: "Appo Date", accessor: "date", class: "text-center px-1" },
-        { name: "Doctor name", accessor: "doctorName", class: "py-3 text-center px-1", },
-
-        { name: "Sex", accessor: "sex", class: "py-3 text-center px-1" },
-        { name: "Age", accessor: "age", class: "py-3 text-center px-1", width: "30px" },
-        { name: "Time", accessor: "department", class: "py-3 text-center px-1" },
-        { name: "Action", accessor: "action", class: " text-center" }
-
+    const columns = [
+        { name: "Patient Name", accessor: "Name", class: "py-3  px-4 text-left" },
+        { name: "UH ID", accessor: "joining_date", class: "text-center px-3" },
+        { name: "Sex", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+        { name: "Age", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+        { name: "Diseases", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+        { name: "Doctor Name", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
+        { name: "Actions", accessor: "actions", class: "py-3 text-center px-1" },
     ];
-    const renderIPDRow = (item, index) => (
+
+    const renderRow = (item, index) => (
         <tr key={item.id} className="border-bottom text-center">
-            <td className="px-2 text-start lh-1">
-
+            <td className="px-2 text-start lh-1" style={{ width: "200px" }}>
                 <div className="d-flex align-items-center">
-
                     <img
-                        src={item?.patient_image ? `${process.env.REACT_APP_API_URL}/${item?.patient_image}` : vijay}
-                        alt={item?.patient_name}
+                        src={item.patient_image ? `${process.env.REACT_APP_API_URL}/${item.patient_image}` : ""}
+                        alt={item.Name}
                         style={{
                             width: "40px",
                             height: "40px",
@@ -93,77 +85,70 @@ function AddOpdCharges() {
                         }}
                         className="ms-3"
                     />
-                    <div className="ms-2">
-                        <p className="fw-semibold m-auto">{item?.patient_name}</p>
+                    <div className="ms-2 pt-3">
+                        <p className="fw-semibold">{item.patient_name}</p>
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item?.uh_id}</td>
-            <td className="py-3 px-2">{item?.appo_date} </td>
-            <td className="py-3 px-2">{item?.user_name}</td>
-            <td className="py-3 px-2">{item?.patient_sex}</td>
-            <td className="py-3 px-2">{item?.patient_age}</td>
-            <td className="py-3 px-2">{item?.appo_time}</td>
-            {
-
-                <td>
-                    <MdOutlineBedroomChild
-                        style={{ height: "23px", width: "23px", cursor: "pointer" }}
-                        // onClick={() => handleOpenModalbill(item)}
-                         onClick={() => navigate(`/reception/add_charges/opd/show/${item?.appo_id}`)}
-
-                        
-                    />
-
-
-
-
-
-                </td>
-            }
+            <td className="py-3 px-4" style={{ width: "120px" }}>{item.uh_id}</td>
+            <td className="py-4 px-4" style={{ width: "100px" }}>{item.patient_sex ?? "-"}</td>
+            <td className="py-3 px-2" style={{ width: "80px" }}>{item.patient_age ?? "-"}</td>
+            <td className="py-3 px-2" style={{ width: "150px" }}>{item.disease ?? "-"}</td>
+            <td className="py-3 px-2" style={{ width: "180px" }}>{item.doctor_name ?? "-"}</td>
+            <td style={{ width: "80px" }}>
+                <IoIosAddCircleOutline onClick={() => handleRowClick(item)} style={{ height: "23px", width: "23px", cursor: "pointer" }} />
+            </td>
         </tr>
     );
 
-
-
     return (
+        <>
+            <div className="py-4 px-3">
+                <div
+                    className="fw-semibold fs-6"
+                    style={{ color: "#1D949A", cursor: "pointer" }}
+                    onClick={() => navigate(-1)}
+                >
+                    <FaArrowLeft />
+                    <span className="pt-1 px-2">OPD Billing List</span>
+                </div>
+                <div className="d-flex justify-content-end">
 
-        <div className="py-4 px-3 ">
-            {/* 
-            <div>
-                <Row className="align-items-center m-0">
-                    <Col md={6}>
-                        <div className="fw-bold fs-3">Patient List</div>
-                    </Col>
-                </Row>
-            </div> */}
+                    <div className="mb-3">
 
+                        <input
+                            type="date"
+                            className="form-control w-auto"
+                            value={selectedDate}
+                            onChange={(e) => {
+                                setSelectedDate(e.target.value);
+                            }}
+                        />
+                    </div>
 
-
-
-            <div className="mt-3">
-                <div>
-                    <CommonTable minimumWidth={"1000px"} headers={ipdColumns} bodyData={patients?.data} renderRow={renderIPDRow} title={"Patients List"} />
                 </div>
 
-                {
-                    totalPages > 1 &&
-                    <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={patients?.pagination?.TotalRecords} setCurrentPage={setCurrentPage} />
-                }
+                <div>
+                    <CommonTable
+                        minimumWidth={"700px"}
+                        headers={columns}
+                        bodyData={doctors[0]}
+                        renderRow={renderRow}
+                        title={"OPD Bills"}
+                    />
+                    {doctors?.data?.length > 0 && (
+                        <NewCommonPagination
+                            currentPage={currentPage}
+                            limitPerPage={limitPerPage}
+                            totalRecords={doctors?.pagination?.TotalRecords}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    )}
+                    <ViewOPDBill show={showBill} setShow={setShowBill} data={billData} />
+                </div>
             </div>
-
-            <Bill
-                show={showModalbill}
-                patientName={appointmentData?.patient_name}
-                consultationFee={appointmentData?.consultancy_fee}
-                handleClose={handleCloseModalbill}
-            // callbackFun={handleBill}
-            />
-
-
-
-        </div>
+        </>
     );
 }
 
-export default AddOpdCharges;
+export default ReceptionistBillList;
