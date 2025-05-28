@@ -1,111 +1,138 @@
 .prescription_tbl .form-control {
-    border: none !important;
-    padding: 0.5rem 1rem !important;
-    margin: 0.5rem !important;
-    background-color: rgba(128, 128, 128, .1);
+  border: none !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0.5rem !important;
+  background-color: rgba(128, 128, 128, 0.1);
 }
 
 .prescription_tbl th {
-    text-align: center;
-    padding: .75rem;
+  text-align: center;
+  padding: 0.75rem;
 }
 
 .prescription_tbl .form-control:disabled {
-    background-color: transparent;
-    /* color: #999; */
-    cursor: not-allowed;
+  background-color: transparent;
+  /* color: #999; */
+  cursor: not-allowed;
 }
 
 .prescription_tbl .form-control:focus {
-    border-color: #98DBDE !important;
-    /* background-color: white !important; */
-    outline: #98DBDE !important;
-    box-shadow: 0 0 0 .05rem #98DBDE;
+  border-color: #98dbde !important;
+  /* background-color: white !important; */
+  outline: #98dbde !important;
+  box-shadow: 0 0 0 0.05rem #98dbde;
 }
 
 /* Modern Input Styling */
 .modern-input {
-    border: 1px solid #d1d5db; /* Tailwind gray-300 */
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 14px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #d1d5db; /* Tailwind gray-300 */
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modern-input:focus {
+  outline: none;
+  border-color: #1d949a; /* Brand color */
+  box-shadow: 0 0 0 3px rgba(29, 148, 154, 0.1);
+}
+
+/* Modern Dropdown Styling */
+.modern-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 4px;
+  animation: slideDown 0.2s ease-out;
+}
+
+/* Scrollbar Styling */
+.modern-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modern-dropdown::-webkit-scrollbar-track {
+  background: #f1f5f9; /* Tailwind slate-100 */
+  border-radius: 8px;
+}
+
+.modern-dropdown::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* Tailwind slate-300 */
+  border-radius: 8px;
+}
+
+.modern-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; /* Tailwind slate-400 */
+}
+
+/* Dropdown Item Styling */
+.dropdown-item {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #1f2a44; /* Dark text for readability */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #f1f5f9; /* Tailwind slate-100 */
+}
+
+.dropdown-item.selected {
+  background: #e6f7fa; /* Light brand color for selected item */
+  font-weight: 500;
+}
+
+/* Animation for Dropdown */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .modern-input:focus {
-    outline: none;
-    border-color: #1d949a; /* Brand color */
-    box-shadow: 0 0 0 3px rgba(29, 148, 154, 0.1);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Modern Dropdown Styling */
-  .modern-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 99999; 
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    max-height: 200px;
-    overflow-y: auto;
-    margin-top: 4px;
-    animation: slideDown 0.2s ease-out;
-  }
-  
-  /* Scrollbar Styling */
-  .modern-dropdown::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .modern-dropdown::-webkit-scrollbar-track {
-    background: #f1f5f9; /* Tailwind slate-100 */
-    border-radius: 8px;
-  }
-  
-  .modern-dropdown::-webkit-scrollbar-thumb {
-    background: #cbd5e1; /* Tailwind slate-300 */
-    border-radius: 8px;
-  }
-  
-  .modern-dropdown::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8; /* Tailwind slate-400 */
-  }
-  
-  /* Dropdown Item Styling */
-  .dropdown-item {
-    padding: 10px 12px;
-    font-size: 14px;
-    color: #1f2a44; /* Dark text for readability */
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .dropdown-item:hover {
-    background: #f1f5f9; /* Tailwind slate-100 */
-  }
-  
-  .dropdown-item.selected {
-    background: #e6f7fa; /* Light brand color for selected item */
-    font-weight: 500;
-  }
-  
-  /* Animation for Dropdown */
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Ensure table cells don't overflow */
-  .prescription_tbl td {
+}
+
+/* Ensure table cells don't overflow */
+/* .prescription_tbl td {
     position: relative;
     vertical-align: middle;
+  } */
+
+@media (max-width: 991px) {
+  .prescription_tbl {
+    min-width: 700px;
   }
+  .prescription-scroll-x {
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .prescription_tbl {
+    min-width: 600px;
+    font-size: 13px;
+  }
+  .prescription-scroll-x {
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+
+/* Always allow horizontal scroll for the scroll container */
+.prescription-scroll-x {
+  overflow-x: auto;
+  width: 100%;
+}

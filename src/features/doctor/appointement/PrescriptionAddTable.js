@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
@@ -11,6 +11,7 @@ import { FaFilePrescription } from "react-icons/fa";
 import PrescriptionPDF from "./PrescriptionPDF";
 import { PDFViewer } from "@react-pdf/renderer";
 import { toast } from "react-toastify";
+import ReactDOM from "react-dom";
 
 const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appointmentData, isIPD }) => {
     const inputRefs = useRef([]);
@@ -20,6 +21,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
     const [medicineList, setMedicineList] = useState([]);
     const [medicineSearch, setMedicineSearch] = useState("");
     const [showMedicineDropdown, setShowMedicineDropdown] = useState(false);
+    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
     const userId = useSelector(state => state?.auth?.user?.userId);
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
@@ -207,6 +209,17 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         }
     };
 
+    // Helper to get input position for dropdown
+    const handleInputFocus = (e) => {
+        const rect = e.target.getBoundingClientRect();
+        setDropdownPosition({
+            top: rect.bottom + window.scrollY,
+            left: rect.left + window.scrollX,
+            width: rect.width
+        });
+        setShowMedicineDropdown(true);
+    };
+
     return (
         <>
             <div className="row p-2 pt-0 m-0">
@@ -227,7 +240,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
 
             <div className="mt-2">
                 <div className="border rounded-2">
-                    <div >
+                    <div className="prescription-scroll-x" style={{ width: "100%" }}>
                         {rows && (
                             <table className="bordered w-100 prescription_tbl" style={{ tableLayout: "fixed", minWidth: "800px" }}>
                                 <thead>
@@ -253,9 +266,9 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                         <Form.Control
                                                             type="text"
                                                             value={row.medicine_name}
-                                                            onFocus={() => {
+                                                            onFocus={e => {
                                                                 fetchMedicines();
-                                                                setShowMedicineDropdown(true);
+                                                                handleInputFocus(e);
                                                             }}
                                                             onChange={(e) => {
                                                                 handleChange(index, "medicine_name", e.target.value);
@@ -267,8 +280,18 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                             autoComplete="off"
                                                             className="modern-input"
                                                         />
-                                                        {showMedicineDropdown && (
-                                                            <div className="modern-dropdown">
+                                                        {/* Dropdown rendered via portal */}
+                                                        {showMedicineDropdown && ReactDOM.createPortal(
+                                                            <div
+                                                                className="modern-dropdown"
+                                                                style={{
+                                                                    position: "absolute",
+                                                                    top: dropdownPosition.top,
+                                                                    left: dropdownPosition.left,
+                                                                    width: dropdownPosition.width,
+                                                                    zIndex: 99999
+                                                                }}
+                                                            >
                                                                 {medicineList
                                                                     .filter((med) =>
                                                                         (medicineSearch || row.medicine_name || "")
@@ -296,7 +319,8 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                                             {med.medicine_name}
                                                                         </div>
                                                                     ))}
-                                                            </div>
+                                                            </div>,
+                                                            document.body
                                                         )}
                                                     </>
                                                 ) : (

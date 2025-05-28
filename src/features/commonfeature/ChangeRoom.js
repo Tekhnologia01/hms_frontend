@@ -258,7 +258,7 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
         <Row className="m-0 pb-3">
           <Col md={6} className="gy-3">
             <label className="fw-semibold pb-1 pt-1">
-              Discharge Date <span style={{ color: "red" }}>*</span>
+              Room Change Date <span style={{ color: "red" }}>*</span>
             </label>
             <Form.Control
               min={new Date(formData.admit_date).toISOString().split("T")[0]}
@@ -273,7 +273,7 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
 
           <Col md={6} className="gy-3">
             <label className="fw-semibold pb-1 pt-1">
-              Discharge Time
+              Room Change Time
             </label>
             <Form.Control
               name="discharge_time"

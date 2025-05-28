@@ -194,7 +194,7 @@ function IpdBill() {
                                 </Col>
                             </Row>
                             <hr color="#475467" className="mx-3" />
-                            <h4 className="m-4">Billing Details</h4>
+                            <h4 className="m-4">Billing Details</h4> 
                             <Table bordered style={{ borderColor: '#EAECF0' }}>
                                 <thead>
                                     <tr>

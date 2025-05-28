@@ -10,11 +10,11 @@ import Note from "../../components/common/form/textarea";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AddPrescriptionTable from "../doctor/appointement/PrescriptionAddTable";
 import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../../utils/epochToDate";
-import CommonToast from "../../components/common/Toaster";
 import ViewDischargeSheet from "./ViewDischargeSheet";
 import { toast } from "react-toastify";
 import { FaSave, FaBook } from 'react-icons/fa';
 import { useCallback } from "react";
+import CourseDetails from "../hospital/admitedPatient/CourseDetails";
 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
@@ -306,8 +306,6 @@ const formatDateForInput = (dateString) => {
 
     return (
         <>
-            <CommonToast />
-
             <div className="mx-lg-4 m-3 pb-3">
                 <div className="d-flex align-items-end justify-content-between pt-1 flex-wrap">
                     <div className="fw-semibold pb-lg-3" style={{ color: "#1D949A", fontSize: "18px" }} onClick={() => navigate(-1)}>
@@ -661,6 +659,9 @@ const formatDateForInput = (dateString) => {
                                         </Form.Group>
                                     </Col >
                                 </Row >
+
+                                {/* <CourseDetails /> */}
+
 
                                 <Row className="">
                                     <Col >

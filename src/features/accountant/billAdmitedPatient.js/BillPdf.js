@@ -140,6 +140,28 @@ const BillPDF = ({ billData, discount }) => {
     });
   };
 
+  const combineRoomEntries = (rooms = []) => {
+    if (!rooms?.length) return [];
+    const combined = [];
+    let current = { ...rooms[0], days: 0, start_date: rooms[0]?.start_date, end_date: rooms[0]?.end_date };
+    current.days = Math.ceil((rooms[0].end_date - rooms[0]?.start_date) / (24 * 60 * 60));
+    for (let i = 1; i < rooms?.length; i++) {
+      const prev = current;
+      const curr = rooms[i];
+      const isSameType = prev.room_type === curr.room_type && prev.total === curr.total && prev.room_type_name === curr.room_type_name;
+      const isConsecutive = prev.end_date === curr.start_date;
+      if (isSameType && isConsecutive) {
+        current.end_date = curr.end_date;
+        current.days += Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60));
+      } else {
+        combined.push({ ...current });
+        current = { ...curr, days: Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60)), start_date: curr.start_date, end_date: curr.end_date };
+      }
+    }
+    combined.push({ ...current });
+    return combined;
+  };
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -199,18 +221,18 @@ const BillPDF = ({ billData, discount }) => {
           </View>
 
           {/* Room Charges */}
-          {billData.room1?.map((room, index) => {
-            const days = calculateRoomDays(room.start_date, room.end_date);
-            return (
-              <View style={styles.tableRow} key={`room-${index}`}>
-                <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
-                <Text style={styles.tableCellLeft}>Room Charge {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`}</Text>
-                <Text style={styles.tableCell}>{formatDate(room.start_date)}</Text>
-                <Text style={styles.tableCell}>{days} {days === 1 ? 'day' : 'days'}</Text>
-                <Text style={styles.tableCell}>{room.total * days}</Text>
-              </View>
-            );
-          })}
+          {combineRoomEntries(billData.room1)?.map((room, index) => (
+            <View style={styles.tableRow} key={`room-${index}`}>
+              <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
+              <Text style={styles.tableCellLeft}>Room Charge {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`}</Text>
+              <Text style={styles.tableCell}>
+                {formatDate(room.start_date)}
+                {room.days > 1 ? ` - ${formatDate(room.end_date)}` : ""}
+              </Text>
+              <Text style={styles.tableCell}>{room.days} {room.days === 1 ? 'day' : 'days'}</Text>
+              <Text style={styles.tableCell}>{room.total * room.days}</Text>
+            </View>
+          ))}
 
           {/* Other Charges */}
           {billData.othercharges?.map((charge, index) => (
@@ -260,8 +282,7 @@ const BillPDF = ({ billData, discount }) => {
         </View>
 
         {/* Payment Mode with smaller font */}
-        <Text style={styles.subtitle}>Payment Mode</Text>
-        <Text style={styles.text}>{billData.payment_method || 'Cash'}</Text>
+        <Text style={styles.subtitle}>Payment Mode : <Text style={styles.text}>{billData.payment_method || 'Cash'}</Text> </Text>
 
         {/* Signature Section with reduced size */}
         <View style={styles.signatureRow}>

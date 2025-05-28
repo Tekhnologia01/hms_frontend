@@ -3,7 +3,6 @@ import { Modal } from "react-bootstrap";
 import DischargeSheetPDF from "./dischargeSheetPDF";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CommonToast from "../../components/common/Toaster";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -54,7 +53,6 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
 
     return (
         <Modal show={show} onHide={() => setShow(false)} fullscreen>
-            <CommonToast />
             <Modal.Header closeButton>
                 <Modal.Title>Discharge Sheet</Modal.Title>
             </Modal.Header>
