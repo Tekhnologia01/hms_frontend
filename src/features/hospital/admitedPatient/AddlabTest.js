@@ -160,7 +160,7 @@ function AddLabTest() {
                 </Row >
 
                 {
-                    admitedData.length > 0 && (
+                    admitedData?.length > 0 && (
                         <div className="p-2">
                             <CommonTable
                                 minimumWidth={"100%"}

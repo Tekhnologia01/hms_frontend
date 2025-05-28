@@ -215,7 +215,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
         setErrors(validationErrors); // Store errors in state
 
         // If there are errors, stop form submission
-        if (Object.keys(validationErrors).length > 0) {
+        if (Object.keys(validationErrors)?.length > 0) {
             return;
         }
         e.preventDefault();

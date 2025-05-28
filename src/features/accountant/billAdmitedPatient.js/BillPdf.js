@@ -215,19 +215,19 @@ const BillPDF = ({ billData, discount }) => {
           {/* Other Charges */}
           {billData.othercharges?.map((charge, index) => (
             <View style={styles.tableRow} key={`charge-${index}`}>
-              <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + (billData.room1?.length || 0) + 1}</Text>
-              <Text style={styles.tableCellLeft}>{charge.charge_name}</Text>
-              <Text style={styles.tableCell}>{formatDate(charge.charge_date)}</Text>
+              <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + (billData?.room1?.length || 0) + 1}</Text>
+              <Text style={styles.tableCellLeft}>{charge?.charge_name}</Text>
+              <Text style={styles.tableCell}>{formatDate(charge?.charge_date)}</Text>
               <Text style={styles.tableCell}>{charge.quantity || 1}</Text>
               <Text style={styles.tableCell}>{charge.amount * (charge.quantity || 1)}</Text>
             </View>
           ))}
 
           {/* Doctor Visits */}
-          {billData.doctorvisiting?.map((visit, index) => (
+          {billData?.doctorvisiting?.map((visit, index) => (
             <View style={styles.tableRow} key={`visit-${index}`}>
               <Text style={[styles.tableCell, { flex: 0.5 }]}>
-                {index + (billData.room1?.length || 0) + (billData.othercharges?.length || 0) + 1}
+                {index + (billData?.room1?.length || 0) + (billData?.othercharges?.length || 0) + 1}
               </Text>
               <Text style={styles.tableCellLeft}>Doctor Visit - {visit.doctor_name}</Text>
               <Text style={styles.tableCell}>{formatDate(visit.visit_date)}</Text>

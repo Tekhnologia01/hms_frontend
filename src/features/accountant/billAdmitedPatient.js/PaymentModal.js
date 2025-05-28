@@ -75,7 +75,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
     }
     if (!formData.date) newErrors.date = "Payment date is required";
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors)?.length === 0;
   };
 
   const handlePaymentSubmit = async (e) => {

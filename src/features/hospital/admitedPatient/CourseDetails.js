@@ -145,7 +145,7 @@ function CourseDetails() {
       setSaveStatus(null);
 
       let response;
-      if (courseDetails && courseDetails.length > 0) {
+      if (courseDetails && courseDetails?.length > 0) {
         response = await axios.put(
           `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${admitedId}`,
           { course_details: courseDetails, admited_id: admitedId },
@@ -278,7 +278,7 @@ function CourseDetails() {
               </div>
             )}
 
-            {treatmentPoints.length === 0 ? (
+            {treatmentPoints?.length === 0 ? (
               <div className="text-center py-4 bg-light rounded shadow-sm">
                 <p className="text-muted">No treatment points added yet</p>
               </div>

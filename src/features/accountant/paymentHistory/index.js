@@ -159,7 +159,7 @@ function PaymentHistory() {
             </div>
 
             <div className="mt-4">
-                {payments.length > 5 && (
+                {payments?.length > 5 && (
                     <NewCommonPagination
                         currentPage={currentPage}
                         setCurrentPage={setCurrentPage}

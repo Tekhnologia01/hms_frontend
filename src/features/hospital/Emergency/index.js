@@ -97,7 +97,7 @@ function Emergency() {
                     <CommonTable minimumWidth={"900px"} headers={columns} renderRow={renderRow} bodyData={data.emergencyPatientList} title={`Emergency patient list`} />
                 </div>
 
-                {data.emergencyPatientList.length > 0 && <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={totalRecords} setCurrentPage={setCurrentPage} />}
+                {data.emergencyPatientList?.length > 0 && <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={totalRecords} setCurrentPage={setCurrentPage} />}
 
             </div>
         </>

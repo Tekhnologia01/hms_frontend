@@ -70,7 +70,7 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
   const handleSave = (e) => {
     e.preventDefault();
 
-    if (formData?.labTestIds.length > 0 && formData?.recommendationDate !== "" && formData?.testReason !== "") {
+    if (formData?.labTestIds?.length > 0 && formData?.recommendationDate !== "" && formData?.testReason !== "") {
       handleTestSave(formData);
       handleClose();
       toast.success("Test added successfully");

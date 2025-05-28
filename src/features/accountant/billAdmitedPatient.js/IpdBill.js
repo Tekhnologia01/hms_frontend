@@ -143,11 +143,11 @@ function IpdBill() {
     const shouldEnableButton = isAmountEqual && isBillNotPaid && isDischared;
 
     const combineRoomEntries = (rooms = []) => {
-        if (!rooms.length) return [];
+        if (!rooms?.length) return [];
         const combined = [];
-        let current = { ...rooms[0], days: 0, start_date: rooms[0].start_date, end_date: rooms[0].end_date };
-        current.days = Math.ceil((rooms[0].end_date - rooms[0].start_date) / (24 * 60 * 60));
-        for (let i = 1; i < rooms.length; i++) {
+        let current = { ...rooms[0], days: 0, start_date: rooms[0]?.start_date, end_date: rooms[0]?.end_date };
+        current.days = Math.ceil((rooms[0].end_date - rooms[0]?.start_date) / (24 * 60 * 60));
+        for (let i = 1; i < rooms?.length; i++) {
             const prev = current;
             const curr = rooms[i];
             const isSameType = prev.room_type === curr.room_type && prev.total === curr.total && prev.room_type_name === curr.room_type_name;
@@ -221,7 +221,7 @@ function IpdBill() {
                                     ))}
                                     {details.othercharges?.map((charge, index) => (
                                         <tr key={`charge-${index}`}>
-                                            <td className="text-center">{index + combineRoomEntries(details.room1).length + 1}</td>
+                                            <td className="text-center">{index + combineRoomEntries(details.room1)?.length + 1}</td>
                                             <td className="text-center">{charge.charge_name}</td>
                                             <td className="text-center">{new Date(charge.charge_date * 1000).toLocaleDateString()}</td>
                                             <td className="text-center">{charge.quantity || 1}</td>
@@ -230,7 +230,7 @@ function IpdBill() {
                                     ))}
                                     {details.doctorvisiting?.map((visit, index) => (
                                         <tr key={`visit-${index}`} >
-                                            <td className="text-center">{index + combineRoomEntries(details.room1).length + (details.othercharges?.length || 0) + 1}</td>
+                                            <td className="text-center">{index + combineRoomEntries(details.room1)?.length + (details.othercharges?.length || 0) + 1}</td>
                                             <td className="text-center">Doctor Visit - {visit.doctor_name}</td>
                                             <td className="text-center">{new Date(visit.visit_date * 1000).toLocaleDateString()}</td>
                                             <td className="text-center">1</td>
