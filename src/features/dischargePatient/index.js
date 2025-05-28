@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Col, Form, Row, Button, Spinner, Modal } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
@@ -12,10 +12,10 @@ import AddPrescriptionTable from "../doctor/appointement/PrescriptionAddTable";
 import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../../utils/epochToDate";
 import ViewDischargeSheet from "./ViewDischargeSheet";
 import { toast } from "react-toastify";
-import { FaSave, FaBook } from 'react-icons/fa';
-import { useCallback } from "react";
+import { FaSave } from 'react-icons/fa';
+// import { useCallback } from "react";
 // import CourseDetails from "../hospital/admitedPatient/CourseDetails";
-
+ 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
     const token = useSelector((state) => state.auth.currentUserToken);
@@ -23,15 +23,18 @@ const DischargePatient = () => {
     const [saveStatus, setSaveStatus] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-
+    const [initialCourseDetails, setInitialCourseDetails] = useState(''); // <-- add this
+ 
+ 
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
-
+ 
     const [patientdetails, setPatientDetails] = useState({})
     const { id } = useParams()
+ 
     const [dischargeDetails, setDischargeDetails] = useState({
         diagnosisDetails: "",
         chiefComplaints: "",
@@ -54,112 +57,112 @@ const DischargePatient = () => {
         icd_code: "",
     });
     const [showDischargeSheet, setShowDischargeSheet] = useState(false);
-
+ 
     const location = useLocation();
     const { user } = useSelector(state => state?.auth);
     const navigate = useNavigate();
-
+ 
     const validationSchema = Yup.object({
         diagnosisDetails: Yup.string().required("Diagnosis is required"),
         chiefComplaints: Yup.string().required("Chief Complaints are required"),
-
+ 
         discharge_date: Yup.date()
             .required("Discharge date is required"),
-
+ 
         discharge_time: Yup.string()
             .required("Discharge time is required")
             .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
-
+ 
         follow_up_date: Yup.date()
             .required("Follow Up date is required")
             .min(Yup.ref('discharge_date'), "Follow-up must be after discharge"),
-
+ 
         follow_up_time: Yup.string()
             .required("Follow Up time is required")
             .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
-
+ 
         temperature: Yup.number()
             .required("Temperature is required"),
-
+ 
         icd_code: Yup.string().required("Icd code required"),
-
+ 
         pulse: Yup.number()
             .required("Pulse is required")
             .min(30, "Pulse cannot be below 30 bpm")
             .max(200, "Pulse cannot exceed 200 bpm")
             .integer("Must be a whole number"),
-
+ 
         blood_pressure: Yup.string()
             .required("Blood Pressure is required"),
-
+ 
         respiratory_rate: Yup.number()
             .required("Respiratory Rate is required")
             .min(8, "RR cannot be below 8 breaths/min")
             .max(60, "RR cannot exceed 60 breaths/min")
             .integer("Must be a whole number"),
-
+ 
         local_examination: Yup.string().required("Local Examination is required"),
         discharge_advice: Yup.string().required("Discharge Advice is required"),
     });
-
-
+ 
+ 
     async function getPatientinfo() {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_patientinfo_admited_idwise?admited_id=${id}`, config);
             setPatientDetails(response?.data.data[0])
         } catch (error) {
-
+ 
         }
     }
-
-const formatDateForInput = (dateString) => {
-    if (!dateString) return '';
-    const [day, month, year] = dateString.split('/');
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-};
-
-
+ 
+    const formatDateForInput = (dateString) => {
+        if (!dateString) return '';
+        const [month, day, year] = dateString.split('/');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    };
+ 
     const fetchCourseData = useCallback(async () => {
         try {
             setIsLoading(true);
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${id}`, config);
             setCourseDetails(response?.data?.data?.course_details || '');
+            setInitialCourseDetails(response?.data?.data?.course_details);
         } catch (error) {
             setSaveStatus({ variant: 'danger', message: error.message || 'Failed to load course' });
         } finally {
             setIsLoading(false);
         }
     }, [id]);
-
+ 
     const saveCourseData = async () => {
         if (!courseDetails?.trim()) {
             setSaveStatus({ variant: 'danger', message: 'Please enter course details' });
             return;
         }
-
+ 
         try {
             setIsSaving(true);
             setSaveStatus(null);
-
-
-
-
-            console.log("first____________________")
+ 
             let response;
-            if (courseDetails && courseDetails?.length > 0) {
-                response = await axios.put(
-                    `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${id}`,
-                    { course_details: courseDetails, admited_id: id },
-                    config
-                );
-            } else {
+            if (!initialCourseDetails || initialCourseDetails?.length === 0) {
                 response = await axios.post(
                     `${process.env.REACT_APP_API_URL}/treatment/addcourse`,
                     { course_details: courseDetails, admited_id: id },
                     config
                 );
+                setInitialCourseDetails(courseDetails);
+                fetchCourseData()
+            } else {
+                response = await axios.put(
+                    `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${id}`,
+                    { course_details: courseDetails, admited_id: id },
+                    config
+                );
+                setInitialCourseDetails(courseDetails);
+                fetchCourseData();
             }
-
+ 
             setSaveStatus({
                 variant: 'success',
                 message: 'Course updated successfully!'
@@ -170,7 +173,7 @@ const formatDateForInput = (dateString) => {
             setIsSaving(false);
         }
     };
-
+ 
     async function getPrescription() {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/prescription/getipdprescription?ipd_id=${location.state}`, config);
@@ -189,18 +192,18 @@ const formatDateForInput = (dateString) => {
                 }
             ]);
         } catch (error) {
-
+ 
         }
     }
-
+ 
     async function getDischargeDetails() {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_discahrge_details?ipd_id=${location.state}`, config);
-
+ 
             if (response?.data?.status) {
                 const dateTime = convertEpochToDateTime(response?.data?.data?.discharge_date_time);
                 const followUpDateTime = convertEpochToDateTime(response?.data?.data?.follow_up_date_time);
-
+ 
                 setDischargeDetails({
                     discharge_details_id: response?.data?.data?.discharge_details_id,
                     diagnosisDetails: response?.data?.data?.diagnosis,
@@ -225,25 +228,19 @@ const formatDateForInput = (dateString) => {
                     follow_up_date_time: response?.data?.data?.follow_up_date_time,
                     icd_code: response?.data?.data?.icd_code,
                 });
-
             }
         } catch (error) {
-
+ 
         }
     }
-
-
-
-
-
-
+ 
     useEffect(() => {
         getDischargeDetails();
         getPrescription();
         getPatientinfo();
         fetchCourseData();
     }, [location.state]);
-
+ 
     const handleSubmit = async (values) => {
         try {
             const payload = {
@@ -266,9 +263,9 @@ const formatDateForInput = (dateString) => {
                 "follow_up_date": convertDateTimeToEpoch(values?.follow_up_date, values?.follow_up_time),
                 "icd_code": values?.icd_code,
             };
-
+ 
             let response;
-
+ 
             if (values?.discharge_details_id) {
                 response = await axios.put(
                     `${process.env.REACT_APP_API_URL}/patient/updatedischarge?userId=${user?.userId}`,
@@ -285,7 +282,7 @@ const formatDateForInput = (dateString) => {
                     config
                 );
             }
-
+ 
             if (response?.data?.status) {
                 toast.success(
                     values?.discharge_details_id
@@ -295,11 +292,11 @@ const formatDateForInput = (dateString) => {
                 getDischargeDetails();
                 setShowDischargeSheet(true);
             } else {
-
+ 
                 toast.error("Failed to save discharge details")
             }
         } catch (error) {
-
+ 
             toast.error(
                 error?.response?.data?.error
                     ? error?.response?.data?.error
@@ -307,7 +304,7 @@ const formatDateForInput = (dateString) => {
             );
         }
     };
-
+ 
     return (
         <>
             <div className="mx-lg-4 m-3 pb-3">
@@ -327,18 +324,18 @@ const formatDateForInput = (dateString) => {
                         const handleCheckboxChange = (event) => {
                             const { value, checked } = event.target;
                             let selectedSigns = values.signs ? values.signs.split(",") : [];
-
+ 
                             if (checked) {
                                 selectedSigns.push(value);
                             } else {
                                 selectedSigns = selectedSigns.filter(sign => sign !== value);
                             }
-
+ 
                             setFieldValue("signs", selectedSigns.join(","));
                         };
-
+ 
                         const isEditMode = !!values.discharge_details_id;
-
+ 
                         return (
                             <Form onSubmit={handleSubmit} className="pe-5 ps-5 pb-5 pt-3">
                                 <Row>
@@ -462,7 +459,7 @@ const formatDateForInput = (dateString) => {
                                         <ErrorMessage name="respiratory_rate" component="div" className="text-danger" />
                                     </Col>
                                 </Row>
-
+ 
                                 <Row className="mb-4">
                                     <Col md={4} lg={6} className="mb-2">
                                         <Form.Group controlId="cvs">
@@ -546,7 +543,7 @@ const formatDateForInput = (dateString) => {
                                         />
                                         <ErrorMessage name="discharge_advice" component="div" className="text-danger" />
                                     </Col>
-
+ 
                                     <Col md={4} lg={6} className="mb-2">
                                         <Form.Group controlId="icd_code">
                                             <Form.Label className="fw-semibold">ICD Code <span className="text-danger fw-bold">*</span> </Form.Label>
@@ -559,10 +556,10 @@ const formatDateForInput = (dateString) => {
                                                 isRequired
                                                 onChange={handleChange} />
                                             <ErrorMessage name="icd_code" component="div" className="text-danger" />
-
+ 
                                         </Form.Group>
                                     </Col>
-
+ 
                                     <Col md={6}>
                                         <Row className="gy-4">
                                             <Form.Label className="fw-semibold">Select Discharge Date & Time <span className="text-danger fw-bold">*</span></Form.Label>
@@ -577,7 +574,7 @@ const formatDateForInput = (dateString) => {
                                                     <ErrorMessage name="discharge_date" component="div" className="text-danger" />
                                                 </Form.Group>
                                             </Col>
-
+ 
                                             <Col md={6}>
                                                 <Form.Group>
                                                     <Field
@@ -606,7 +603,7 @@ const formatDateForInput = (dateString) => {
                                                     <ErrorMessage name="follow_up_date" component="div" className="text-danger" />
                                                 </Form.Group>
                                             </Col>
-
+ 
                                             <Col md={6}>
                                                 <Form.Group>
                                                     <Field
@@ -621,20 +618,20 @@ const formatDateForInput = (dateString) => {
                                         </Row>
                                     </Col>
                                 </Row>
-
-                                {/* <Row className="mb-4 mt-4">
+ 
+                                <Row className="mb-4 mt-4">
                                     <Col>
                                         <div className="d-flex justify-content-between align-items-center mb-3">
                                             <h2 className="fw-bold fs-5 col-md-6 mt-2 px-0">
                                                 Course Details
                                             </h2>
                                             <Button
-                                                onClick={()=>{saveCourseData()}}
+                                                onClick={saveCourseData}
                                                 disabled={isSaving}
                                                 className="d-flex align-items-center"
                                                 style={{
                                                     backgroundColor: "#1D949A",
-                                                   
+ 
                                                 }}
                                             >
                                                 {isSaving ? (
@@ -650,7 +647,7 @@ const formatDateForInput = (dateString) => {
                                                 )}
                                             </Button>
                                         </div >
-
+ 
                                         <Form.Group controlId="courseDetails">
                                             <Form.Control
                                                 as="textarea"
@@ -662,11 +659,11 @@ const formatDateForInput = (dateString) => {
                                             />
                                         </Form.Group>
                                     </Col >
-                                </Row > */}
-
+                                </Row >
+ 
                                 {/* <CourseDetails /> */}
-
-
+ 
+ 
                                 <Row className="">
                                     <Col >
                                         {<AddPrescriptionTable isIPD={true} ipd_id={location.state} rows={prescriptionData} setRows={setPrescriptionData} role={user?.RoleId} appointmentData={patientdetails} />}
@@ -691,11 +688,11 @@ const formatDateForInput = (dateString) => {
                     show={showDischargeSheet}
                     setShow={setShowDischargeSheet}
                     data={dischargeDetails}
-
+ 
                 />
             </div>
         </>
     );
 };
-
+ 
 export default DischargePatient;
