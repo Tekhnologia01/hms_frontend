@@ -80,7 +80,7 @@ const UpdatePatient = ({ show = false, handleClose, patient,patientUpdate }) => 
               placeholder="Patient Name here..."
               isRequired={true}
               name="patient_name"
-              value={formData.patient_name}
+              value={formData?.patient_name}
               onChange={handleInputChange}
             />
             {errors.patient_name && <p className="text-danger">{errors.patient_name}</p>}
@@ -92,7 +92,7 @@ const UpdatePatient = ({ show = false, handleClose, patient,patientUpdate }) => 
               placeholder="Phone no here..."
               isRequired={true}
               name="patient_phone_no"
-              value={formData.patient_phone_no}
+              value={formData?.patient_phone_no}
               onChange={handleInputChange}
             />
             {errors.patient_phone_no && <p className="text-danger">{errors.patient_phone_no}</p>}
@@ -104,7 +104,7 @@ const UpdatePatient = ({ show = false, handleClose, patient,patientUpdate }) => 
               placeholder="Age here..."
               isRequired={true}
               name="patient_age"
-              value={formData.patient_age}
+              value={formData?.patient_age}
               onChange={handleInputChange}
             />
             {errors.patient_age && <p className="text-danger">{errors.patient_age}</p>}
@@ -125,7 +125,7 @@ const UpdatePatient = ({ show = false, handleClose, patient,patientUpdate }) => 
 
         <div className="d-flex justify-content-end pt-lg-4">
 
-                  <CommanButton label="Update" className="mb-3 ps-3 pe-3 p-2 fw-semibold" style={{ borderRadius: "5px",}} onClick={handleSubmit} />
+          <CommanButton label="Update" className="mb-3 ps-3 pe-3 p-2 fw-semibold" style={{ borderRadius: "5px",}} onClick={handleSubmit} />
 
         </div>
       </div>

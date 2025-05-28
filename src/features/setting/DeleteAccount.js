@@ -1,12 +1,12 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import CommanButton from "../../components/common/form/commonButtton";
 import PasswordInput from "../../components/common/form/password";
 import { Row, Col } from "react-bootstrap";
 import DeleteModal from "./DeleteModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Add this import
+import { useNavigate } from "react-router-dom";
 
 function DeleteAccount() {
   const [showModal, setShowModal] = useState(false);
@@ -15,11 +15,11 @@ function DeleteAccount() {
     password: "",
     confirmPassword: "",
   });
-  const [message, setMessage] = useState({ text: "", type: "" }); // Add message state
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [message, setMessage] = useState({ text: "", type: "" }); 
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const token = useSelector((state) => state.auth.currentUserToken);
-  const navigate = useNavigate(); // Initialize navigate
+  const token = useSelector((state) => state?.auth?.currentUserToken);
+  const navigate = useNavigate(); 
 
   const config = {
     headers: {
@@ -40,7 +40,7 @@ function DeleteAccount() {
     try {
       const payload = {
         user_id: userId,
-        password: formData.password,
+        password: formData?.password,
       }
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/user/deleteaccount`, 
@@ -55,9 +55,9 @@ function DeleteAccount() {
       
       handleCloseModal();
       
-      // Redirect after a delay
+   
       setTimeout(() => {
-        navigate("/login"); // Or wherever you want to redirect after deletion
+        navigate("/login"); 
       }, 2000);
       
     } catch (error) {
@@ -81,14 +81,14 @@ function DeleteAccount() {
   const validateForm = () => {
     let newErrors = {};
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
-    if (!formData.password.trim()) {
+    if (!formData?.password?.trim()) {
       newErrors.password = "New password is required";
     } else if (!passwordPattern.test(formData.password)) {
       newErrors.password =
         "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character";
     }
     
-    if (!formData.confirmPassword.trim()) {
+    if (!formData?.confirmPassword?.trim()) {
       newErrors.confirmPassword = "Confirm Password is required";
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";

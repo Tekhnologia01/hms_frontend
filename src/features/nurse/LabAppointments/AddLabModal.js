@@ -7,7 +7,7 @@ function AddLabModal({ show, handleClose, fetchLabs }) {
     const { userId } = useSelector(state => state?.auth?.user);
     const [newLab, setNewLab] = useState({ labName: "", description: "", price: "", image: null });
     const [loading, setLoading] = useState(false);
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ function AddLabModal({ show, handleClose, fetchLabs }) {
         try {
             setLoading(true);
 
-            if (newLab.labName && newLab.description && newLab.price && newLab.image) {
+            if (newLab?.labName && newLab?.description && newLab?.price && newLab?.image) {
                 const formData = new FormData();
                 formData.append("testName", newLab.labName);
                 formData.append("testDescription", newLab.description);
@@ -68,15 +68,15 @@ function AddLabModal({ show, handleClose, fetchLabs }) {
                 <Form onSubmit={onSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label>Lab Name</Form.Label>
-                        <Form.Control type="text" name="labName" value={newLab.labName} onChange={handleInputChange} />
+                        <Form.Control type="text" name="labName" value={newLab?.labName} onChange={handleInputChange} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Description</Form.Label>
-                        <Form.Control as="textarea" name="description" value={newLab.description} onChange={handleInputChange} />
+                        <Form.Control as="textarea" name="description" value={newLab?.description} onChange={handleInputChange} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Price</Form.Label>
-                        <Form.Control type="number" name="price" value={newLab.price} onChange={handleInputChange} />
+                        <Form.Control type="number" name="price" value={newLab?.price} onChange={handleInputChange} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Lab Image</Form.Label>

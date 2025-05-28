@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import AppointmentCard from "./AppointmentCard";
 import axios from "axios";
 import InputBox from "../../../components/common/form/inputbox";
@@ -6,8 +6,8 @@ import { useSelector } from "react-redux";
 
 function AppointmentDoctor() {
   const [doctors, setDoctors] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const [selectedDate, setSelectedDate] = useState(new Date()?.toISOString()?.split("T")[0]);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -48,17 +48,17 @@ function AppointmentDoctor() {
       </div>
       {doctors?.map((doctor, index) => (
         <AppointmentCard
-          key={doctor.Doctor_Id}
-          doctorId={doctor.Doctor_Id}
-          image={doctor.Doctor_photo}
-          doctorName={doctor.Doctor_Name}
-          specialist={doctor.specialization}
-          timing={doctor.Doctor_Time}
-          joinDate={doctor.joiningDate}
-          description={doctor.degree}
+          key={doctor?.Doctor_Id}
+          doctorId={doctor?.Doctor_Id}
+          image={doctor?.Doctor_photo}
+          doctorName={doctor?.Doctor_Name}
+          specialist={doctor?.specialization}
+          timing={doctor?.Doctor_Time}
+          joinDate={doctor?.joiningDate}
+          description={doctor?.degree}
           selectedDate={selectedDate}
-          onViewAppointments={doctor.onViewAppointments}
-          onViewDetails={doctor.onViewDetails}
+          onViewAppointments={doctor?.onViewAppointments}
+          onViewDetails={doctor?.onViewDetails}
         />
       ))}
     </div>

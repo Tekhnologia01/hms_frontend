@@ -41,7 +41,7 @@ function PatientAppointmentList() {
     setShowModal(false);
   };
 
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -116,13 +116,13 @@ function PatientAppointmentList() {
   }, [cardState, currentPage]);
 
   useEffect(() => {
-    if (cardState === "opd" && user.role === "Reception") {
+    if (cardState === "opd" && user?.role === "Reception") {
       getOPDPatients();
     }
-    else if (cardState === "opd" && user.role === "Admin") {
+    else if (cardState === "opd" && user?.role === "Admin") {
       getOPDPatients();
     }
-    else if (cardState === "opd" && user.role === "Doctor") {
+    else if (cardState === "opd" && user?.role === "Doctor") {
       getDoctorsOPDPatients();
     }
     else if (cardState === "ipd") {
@@ -144,7 +144,7 @@ function PatientAppointmentList() {
 
   useEffect(() => {
     getPatientsCount();
-  }, [user.role])
+  }, [user?.role])
 
 
 
@@ -202,7 +202,7 @@ function PatientAppointmentList() {
   ];
 
   const renderRow = (item, index) => (
-    <tr key={item.id} className="border-bottom text-center">
+    <tr key={item?.id} className="border-bottom text-center">
       <td className="px-2 text-start lh-1">
         <div className="d-flex align-items-center">
           <img
@@ -276,7 +276,7 @@ function PatientAppointmentList() {
 
 
   const renderIPDRow = (item, index) => (
-    <tr key={item.id} className="border-bottom text-center">
+    <tr key={item?.id} className="border-bottom text-center">
       <td className="px-2 text-start lh-1">
 
         <div className="d-flex align-items-center">
@@ -306,7 +306,7 @@ function PatientAppointmentList() {
       <td className="py-3 px-2">{item?.doctor_name}</td>
       <td className="py-3 px-2">{item?.department}</td>
       {
-        user.RoleId == 2 &&
+        user?.RoleId == 2 &&
 
 
         <td>
@@ -324,11 +324,14 @@ function PatientAppointmentList() {
               // handleAddChargesModal()
             }} />
 
-
-
+{/* 
           {user?.userId == item?.doctor_id && <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
             <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
-          </NavLink>}
+          </NavLink>} */}
+
+          <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
+            <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
+          </NavLink>
         </td>
       }
 
@@ -340,11 +343,11 @@ function PatientAppointmentList() {
   const patientUpdate = async (data) => {
     try {
       const patientData = {
-        patient_name: data.patient_name,
-        patient_phone_no: data.patient_phone_no,
-        patient_age: data.patient_age,
-        patient_address: data.patient_address,
-        patientId: patient.Patient_ID
+        patient_name: data?.patient_name,
+        patient_phone_no: data?.patient_phone_no,
+        patient_age: data?.patient_age,
+        patient_address: data?.patient_address,
+        patientId: patient?.Patient_ID
       };
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/patient/update`, patientData, config)
       toast.success(response?.data?.message);
@@ -378,7 +381,7 @@ function PatientAppointmentList() {
               style={{ verticalAlign: "middle" }}
             >
               {
-                (user.role === "Reception" && cardState === 'opd') && <CommanButton
+                (user?.role === "Reception" && cardState === 'opd') && <CommanButton
                   label="+ Book Appointment"
                   className="mb-3 ps-4 pe-4 p-2 fw-bold fs-6"
                   style={{ borderRadius: "5px" }}

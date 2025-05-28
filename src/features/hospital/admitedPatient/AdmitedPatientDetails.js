@@ -36,7 +36,7 @@ function AdmitedPatientDetails() {
     const handleDoctorVisitModal = () => setShowDoctorVisitModal(true);
     const handleDoctorVisitCloseModal = () => setShowDoctorVisitModal(false);
 
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,

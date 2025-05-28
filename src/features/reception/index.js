@@ -16,7 +16,7 @@ function ReceptionDashboard() {
     const [totalPages, setTotalPages] = useState()
     const [recepCount, setRecepCount] = useState(0)
 
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -83,7 +83,7 @@ function ReceptionDashboard() {
     }
 
     const fetchDoctor = async () => {
-        const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        const today = new Date()?.toISOString()?.split('T')[0]; // Get today's date in YYYY-MM-DD format
 
         try {
             const response = await axios.get(
@@ -128,7 +128,7 @@ function ReceptionDashboard() {
     ];
 
     const renderRow = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center">
+        <tr key={item?.id} className="border-bottom text-center">
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
 
@@ -161,7 +161,7 @@ function ReceptionDashboard() {
                             : confirmedStyle
                 }
             >
-                &#x2022; {item.appo_status}
+                &#x2022; {item?.appo_status}
             </span></td>
 
         </tr>

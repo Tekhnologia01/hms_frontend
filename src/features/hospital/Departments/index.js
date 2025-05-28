@@ -55,7 +55,7 @@ function Departments() {
   });
 
   useEffect(() => {
-    setColors(departments.map(() => generateRandomLightColor()));
+    setColors(departments?.map(() => generateRandomLightColor()));
   }, [departments]);
 
   const handleAddDepartment = async () => {
@@ -149,14 +149,14 @@ function Departments() {
         {isLoading && (
           <div className="w-full text-center fs-5 fw-semibold">Loading...</div>
         )}
-        {departments.map((dept) => (
+        {departments?.map((dept) => (
           <div
-            key={dept.department_id}
+            key={dept?.department_id}
             style={{
               backgroundColor:
                 colors[
-                departments.findIndex(
-                  (d) => d.department_id === dept.department_id
+                departments?.findIndex(
+                  (d) => d?.department_id === dept?.department_id
                 )
                 ],
               cursor: "pointer",

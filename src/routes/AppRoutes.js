@@ -90,7 +90,6 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/hospital/payment/opd" element={<OpdReport/>} />
 
 
-
         {/* Lab routes */}
         <Route path="/lab" element={<Nurse />} />
         <Route path="/lab/lab_appointments" element={<LabAppointments />} />
@@ -120,7 +119,6 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/reception/patient_list" element={<PatientAppointmentList />} />
         <Route path="/reception/add_patient" element={<AddPatient />} />
         <Route path="/reception/room" element={<RoomInfo/>} />
-
         <Route path="/reception/add_charges/ipd" element={<AddRecCharges />} />
         <Route path="/reception/add_charges/opd" element={<AddOpdCharges />} />
         <Route path="/reception/add_charges/opd/show/:appo_id" element={<Showopdcharges />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import CommanButton from "../../components/common/form/commonButtton";
 import PasswordInput from "../../components/common/form/password";
@@ -19,7 +19,7 @@ function ChangePassword() {
   };
 
 
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -56,8 +56,8 @@ if (!formData.newPassword.trim()) {
 
         const payload = {
           user_id: userId,
-          current_password: formData.currentPassword,
-          new_password: formData.newPassword
+          current_password: formData?.currentPassword,
+          new_password: formData?.newPassword
         }
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/user/changepassword`, payload, config);
 
@@ -88,8 +88,8 @@ if (!formData.newPassword.trim()) {
               onChange={handleChange}
               required
             />
-            {errors.currentPassword && (
-              <p className="text-danger">{errors.currentPassword}</p>
+            {errors?.currentPassword && (
+              <p className="text-danger">{errors?.currentPassword}</p>
             )}
           </div>
 
@@ -102,8 +102,8 @@ if (!formData.newPassword.trim()) {
               onChange={handleChange}
               required
             />
-            {errors.newPassword && (
-              <p className="text-danger">{errors.newPassword}</p>
+            {errors?.newPassword && (
+              <p className="text-danger">{errors?.newPassword}</p>
             )}
           </div>
 
@@ -116,8 +116,8 @@ if (!formData.newPassword.trim()) {
               onChange={handleChange}
               required
             />
-            {errors.confirmPassword && (
-              <p className="text-danger">{errors.confirmPassword}</p>
+            {errors?.confirmPassword && (
+              <p className="text-danger">{errors?.confirmPassword}</p>
             )}
           </div>
 

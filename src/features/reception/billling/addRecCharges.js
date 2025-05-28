@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
 import CommonTable from "../../../components/common/table/CommonTable";
 import NewCommonPagination from "../../../components/common/pagination/NewCommonPagination";
@@ -13,9 +12,6 @@ import { FaPlusSquare } from "react-icons/fa";
 import AddCharges from "../../commonfeature/AddCharges";
 import { CiMedicalClipboard } from "react-icons/ci";
 import { toast } from "react-toastify";
-
-
-
 
 function PatientAppointmentList() {
     const [showModal, setShowModal] = useState(false);
@@ -34,7 +30,7 @@ function PatientAppointmentList() {
         setShowModal(false);
     };
 
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -64,6 +60,7 @@ function PatientAppointmentList() {
         }
     }
 
+
     async function getIPDPatients() {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_admit_patients?page=${currentPage}&limit=${limitPerPage}`, config);
@@ -73,6 +70,7 @@ function PatientAppointmentList() {
             console.log("Error fetching departments:", err);
         }
     }
+
 
     async function getOPDPatients() {
         try {
@@ -94,6 +92,7 @@ function PatientAppointmentList() {
         }
     }
 
+
     useEffect(() => {
         if (cardState === "opd") {
             getOPDPatients();
@@ -105,10 +104,10 @@ function PatientAppointmentList() {
     }, [cardState, currentPage]);
 
     useEffect(() => {
-        if (cardState === "opd" && user.role === "Admin") {
+        if (cardState === "opd" && user?.role === "Admin") {
             getOPDPatients();
         }
-        else if (cardState === "opd" && user.role === "Doctor") {
+        else if (cardState === "opd" && user?.role === "Doctor") {
             getDoctorsOPDPatients();
         }
         else if (cardState === "ipd") {
@@ -130,7 +129,7 @@ function PatientAppointmentList() {
 
     useEffect(() => {
         getPatientsCount();
-    }, [user.role])
+    }, [user?.role])
 
     const ipdColumns = [
         { name: "Patient Name", accessor: "patientName", class: "py-3 px-5 text-left", width: "250px" },
@@ -140,11 +139,11 @@ function PatientAppointmentList() {
         { name: "Age", accessor: "age", class: "py-3 text-center px-1", width: "30px" },
         { name: "Doctor name", accessor: "doctorName", class: "py-3 text-center px-1", },
         { name: "Department", accessor: "department", class: "py-3 text-center px-1", },
-        ...(user.RoleId == 4 ? [{ name: "Action", accessor: "action", class: " text-center", }] : [])
+        ...(user?.RoleId == 4 ? [{ name: "Action", accessor: "action", class: " text-center", }] : [])
 
     ];
     const renderIPDRow = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center">
+        <tr key={item?.id} className="border-bottom text-center">
             <td className="px-2 text-start lh-1">
 
                 <div className="d-flex align-items-center">
@@ -183,7 +182,7 @@ function PatientAppointmentList() {
 
                     <FaPlusSquare style={{ height: "23px", width: "23px" }}
                         onClick={() => {
-                            navigate(`/doctor/patient_list/ipd/${item.admitted_patient_id}`)
+                            navigate(`/doctor/patient_list/ipd/${item?.admitted_patient_id}`)
                         }} />
                     {user?.userId == item?.doctor_id && <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
                         <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />

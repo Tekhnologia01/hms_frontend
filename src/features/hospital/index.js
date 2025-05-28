@@ -83,7 +83,7 @@ function HospitalDashboard() {
             );
             setPatient(response?.data?.data[0] || []);
             const pages = response?.data?.data[1]
-            const setTotal = pages.map((item) => item.total_records).toString()
+            const setTotal = pages?.map((item) => item.total_records).toString()
             setTotalRecords(setTotal || 0);
 
         } catch (error) {
@@ -113,7 +113,7 @@ function HospitalDashboard() {
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
                     <img
-                        src={`${process.env.REACT_APP_API_URL}/${item.user_photo}`}
+                        src={`${process.env.REACT_APP_API_URL}/${item?.user_photo}`}
                         alt={item.Name}
                         style={{
                             width: "40px",
@@ -124,12 +124,12 @@ function HospitalDashboard() {
                         className="ms-3"
                     />
                     <div className="d-flex flex-column ms-2" style={{ height: "40px", alignItems: "center", justifyContent: "center" }}>
-                        <p className="fw-semibold pt-3">{item.user_name}</p>
+                        <p className="fw-semibold pt-3">{item?.user_name}</p>
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item.user_email}</td>
-            <td className="py-3 px-2">{item.role_name}</td>
+            <td className="py-3 px-2">{item?.user_email}</td>
+            <td className="py-3 px-2">{item?.role_name}</td>
         </tr>
     );
 

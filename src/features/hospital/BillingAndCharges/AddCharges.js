@@ -20,7 +20,7 @@ function AddCharges() {
     const handleCloseModal = () => setShowModal(false);
     const userId = useSelector(state => state?.auth?.user?.userId);
     const [charges, setCharges] = useState(null);
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,

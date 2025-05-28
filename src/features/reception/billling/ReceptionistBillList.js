@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { IoReceiptOutline } from "react-icons/io5";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -60,12 +59,12 @@ function ReceptionistBillList() {
   ];
 
   const renderRow = (item, index) => (
-    <tr key={item.id} className="border-bottom text-center">
+    <tr key={item?.id} className="border-bottom text-center">
       <td className="px-2 text-start lh-1" style={{ width: "200px" }}>
         <div className="d-flex align-items-center">
           <img
-            src={item.patient_image ? `${process.env.REACT_APP_API_URL}/${item.patient_image}` : ""}
-            alt={item.Name}
+            src={item?.patient_image ? `${process.env.REACT_APP_API_URL}/${item.patient_image}` : ""}
+            alt={item?.Name}
             style={{
               width: "40px",
               height: "40px",
@@ -75,22 +74,22 @@ function ReceptionistBillList() {
             className="ms-3"
           />
           <div className="ms-2 pt-3">
-            <p className="fw-semibold">{item.patient_name}</p>
+            <p className="fw-semibold">{item?.patient_name}</p>
           </div>
         </div>
       </td>
-      <td className="py-3 px-4" style={{ width: "120px" }}>{item.uh_id}</td>
-      <td className="py-4 px-4" style={{ width: "100px" }}>{item.patient_sex ?? "-"}</td>
-      <td className="py-3 px-2" style={{ width: "80px" }}>{item.patient_age ?? "-"}</td>
-      <td className="py-3 px-2" style={{ width: "150px" }}>{item.disease ?? "-"}</td>
-      <td className="py-3 px-2" style={{ width: "180px" }}>{item.doctor_name ?? "-"}</td>
-      <td className="py-3 px-2" style={{ width: "160px" }}>{item.appo_biil_status ?? "-"}</td>
+      <td className="py-3 px-4" style={{ width: "120px" }}>{item?.uh_id}</td>
+      <td className="py-4 px-4" style={{ width: "100px" }}>{item?.patient_sex ?? "-"}</td>
+      <td className="py-3 px-2" style={{ width: "80px" }}>{item?.patient_age ?? "-"}</td>
+      <td className="py-3 px-2" style={{ width: "150px" }}>{item?.disease ?? "-"}</td>
+      <td className="py-3 px-2" style={{ width: "180px" }}>{item?.doctor_name ?? "-"}</td>
+      <td className="py-3 px-2" style={{ width: "160px" }}>{item?.appo_biil_status ?? "-"}</td>
       <td style={{ width: "80px" }}>
-        {item.appo_biil_status == "Pending" ? <NavLink to={`/reception/billing/opd/${item.Appo_id}`} className={"text-decoration-none text-black"}>
+        {item?.appo_biil_status == "Pending" ? <NavLink to={`/reception/billing/opd/${item?.Appo_id}`} className={"text-decoration-none text-black"}>
           <IoReceiptOutline style={{ height: "23px", width: "23px", cursor: "pointer" }} />
         </NavLink> :
           <a
-            href={`${process.env.REACT_APP_API_URL}/uploads/${item.bill_report}`}
+            href={`${process.env.REACT_APP_API_URL}/uploads/${item?.bill_report}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary text-decoration-underline"

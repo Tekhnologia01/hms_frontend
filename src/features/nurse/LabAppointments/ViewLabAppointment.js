@@ -33,7 +33,7 @@ function ViewLabAppointment({ type }) {
   const [appointmentData, setAppointmentData] = useState([]);
   const params = useParams();
 
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -41,8 +41,8 @@ function ViewLabAppointment({ type }) {
   }
   const initialState = {
     report_photo: "",
-    report_test_id: +params.IpdLabId,
-    report_appo_id: +params.appointmentId,
+    report_test_id: +params?.IpdLabId,
+    report_appo_id: +params?.appointmentId,
   }
 
   const [formData, setFormData] = useState(initialState);
@@ -88,8 +88,8 @@ function ViewLabAppointment({ type }) {
       }
 
       const formDataObj = new FormData();
-      formDataObj.append("report_photo", formData.report_photo);
-      formDataObj.append("report_labtest_id", +params.IpdLabId);
+      formDataObj.append("report_photo", formData?.report_photo);
+      formDataObj.append("report_labtest_id", +params?.IpdLabId);
 
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/report/opdupdate`, formDataObj, {
         headers: {
@@ -133,7 +133,7 @@ function ViewLabAppointment({ type }) {
   };
 
   const handleBoxClick = () => {
-    document.getElementById("report_photo").click();
+    document.getElementById("report_photo")?.click();
   };
 
   return (

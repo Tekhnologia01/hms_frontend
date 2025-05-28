@@ -1,6 +1,4 @@
-import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
-
 import { FaArrowLeft, FaFileUpload } from "react-icons/fa";
 import InputBox from "../../../components/common/form/inputbox";
 import { useNavigate } from "react-router-dom";

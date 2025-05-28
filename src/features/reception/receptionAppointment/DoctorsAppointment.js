@@ -6,7 +6,6 @@ import { Col, Row } from "react-bootstrap";
 import { FaArrowLeft, FaCalendarCheck } from "react-icons/fa";
 import { TbFileDescription } from "react-icons/tb";
 import { useEffect, useState } from "react";
-
 import CommanButton from "../../../components/common/form/commonButtton";
 import DateSlider from "../../../components/common/DateSlider";
 import { format } from "date-fns";
@@ -25,7 +24,7 @@ function DoctorsAppointment() {
     const limitPerPage = 10;
     const [currentDate, setCurrentDate] = useState(location.state ? new Date(location.state) : new Date());
     const [formattedDate, setFormattedDate] = useState(new Date(currentDate).toISOString().split("T")[0]);
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -80,7 +79,7 @@ function DoctorsAppointment() {
     ];
 
     const renderRow = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center">
+        <tr key={item?.id} className="border-bottom text-center">
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center">
                     <div className="ps-2">

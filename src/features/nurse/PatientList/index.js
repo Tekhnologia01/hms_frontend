@@ -43,14 +43,14 @@ function NursePatientList() {
     ];
 
     const renderRow = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center">
+        <tr key={item?.id} className="border-bottom text-center">
             <td className=" px-2 text-start lh-1">
                 <div className="d-flex align-items-center"
-                    onClick={() => navigate(`${item.uhId}`)}
+                    onClick={() => navigate(`${item?.uhId}`)}
                 >
                     <img
                         src={vijay}
-                        alt={item.patientName}
+                        alt={item?.patientName}
                         style={{
                             width: "40px",
                             height: "40px",
@@ -59,15 +59,15 @@ function NursePatientList() {
                         }}
                     />
                     <div className="d-flex flex-column ms-2" style={{ height: "30px" }}>
-                        <p className="fw-semibold">{item.patientName}</p>
+                        <p className="fw-semibold">{item?.patientName}</p>
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item.uhId}</td>
-            <td className="py-3 px-2">{item.registerDate}</td>
-            <td className="py-3 px-2">{item.sex}</td>
-            <td className="py-3 px-2">{item.age}</td>
-            <td className="py-3 px-2">{item.disease}</td>
+            <td className="py-3 px-2">{item?.uhId}</td>
+            <td className="py-3 px-2">{item?.registerDate}</td>
+            <td className="py-3 px-2">{item?.sex}</td>
+            <td className="py-3 px-2">{item?.age}</td>
+            <td className="py-3 px-2">{item?.disease}</td>
         </tr>
     );
 

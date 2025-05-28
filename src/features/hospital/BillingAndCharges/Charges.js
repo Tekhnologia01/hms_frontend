@@ -18,7 +18,7 @@ function Charges() {
   const [chargesData, setChargesData] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

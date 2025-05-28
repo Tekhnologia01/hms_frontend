@@ -19,7 +19,7 @@ function CourseDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pointToDelete, setPointToDelete] = useState(null);
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -101,8 +101,8 @@ function CourseDetails() {
       }, config);
 
       setTreatmentPoints(prev =>
-        prev.map(point =>
-          point.id === editingPoint ? { ...point, point_text: editText } : point
+        prev?.map(point =>
+          point?.id === editingPoint ? { ...point, point_text: editText } : point
         )
       );
       setEditingPoint(null);
@@ -284,7 +284,7 @@ function CourseDetails() {
               </div>
             ) : (
               <ListGroup as="ol" numbered className="shadow-sm">
-                {treatmentPoints.map((point) => (
+                {treatmentPoints?.map((point) => (
                   <ListGroup.Item
                     key={point.id}
                     className="py-3 pe-4"

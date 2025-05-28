@@ -18,7 +18,7 @@ function Department() {
   const { deptId } = params;
   const [currentPage, setCurrentPage] = useState(1);
   const [limitPerPage, setLimitPerPage] = useState(10);
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -103,7 +103,7 @@ function Department() {
   };
   const columns = columnDefinitions[selectedCard] || [];
   const renderdoctor = (item) => (
-    <tr key={item.id} className="border-bottom text-center">
+    <tr key={item?.id} className="border-bottom text-center">
       <td className="px-2 text-start lh-1">
         <div className="d-flex align-items-center">
           <img
@@ -173,7 +173,7 @@ function Department() {
       </div>
 
       <div className="d-flex align-items-center justify-content-center mt-3 gap-4 flex-wrap">
-        {cardData.map((item, index) => (
+        {cardData?.map((item, index) => (
           <div
             key={index}
             className={`d-flex flex-column align-items-center rounded-3 shadow-sm py-3 gap-2`}

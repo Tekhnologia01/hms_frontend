@@ -74,7 +74,7 @@ function AddUserForm({ user }) {
     }, [])
 
     const handleBoxClick = () => {
-        document.getElementById("id_proof_image").click();
+        document.getElementById("id_proof_image")?.click();
     };
 
     const initialState = {
@@ -196,7 +196,7 @@ function AddUserForm({ user }) {
             if (formData[key] !== "" && formData[key] !== undefined) {
                 if (key === "day_ids" && Array.isArray(formData[key])) {
                     // Extract only the `value` field from each object and join with commas
-                    const workingDaysFormatted = formData[key].map(day => day.value).join(",");
+                    const workingDaysFormatted = formData[key]?.map(day => day.value).join(",");
                     formDataObj.append(key, workingDaysFormatted);
                 } else {
                     formDataObj.append(key, formData[key]);
@@ -204,7 +204,7 @@ function AddUserForm({ user }) {
             }
         });
 
-        formDataObj.append("role_id", role_id);
+        formDataObj?.append("role_id", role_id);
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/${user?.toLowerCase()}/add`, formDataObj, {
@@ -348,7 +348,7 @@ function AddUserForm({ user }) {
                                     >
                                         <option value="">Select Blood Group</option>
                                         {
-                                            bloodGroups.length > 0 ? bloodGroups.map(blood => (
+                                            bloodGroups?.length > 0 ? bloodGroups?.map(blood => (
                                                 <option key={blood.blood_id} value={blood.blood_id}>{blood.blood_group_name}</option>
                                             )) : null
                                         }
@@ -405,7 +405,7 @@ function AddUserForm({ user }) {
                                     >
                                         <option value="">Select Department</option>
                                         {
-                                            departments.map((dept) => {
+                                            departments?.map((dept) => {
                                                 return <option key={dept.department_id} value={dept?.department_id}>{dept?.department_name}</option>
                                             })
                                         }
@@ -547,7 +547,7 @@ function AddUserForm({ user }) {
 
                                     <Form.Select value={formData.year_of_graduation} name="year_of_graduation" onChange={handleInputChange}>
                                         <option value="">Choose Graduation Year</option>
-                                        {years.map((year) => (
+                                        {years?.map((year) => (
                                             <option key={year} value={year}>{year}</option>
                                         ))}
                                     </Form.Select>
@@ -620,7 +620,7 @@ function AddUserForm({ user }) {
                                         <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>Select Post Graduation Year </Form.Label>
                                         <Form.Select value={formData.post_year_of_graduation} name="post_year_of_graduation" onChange={handleInputChange}>
                                             <option value="">Choose Post Graduation Year</option>
-                                            {years.map((year) => (
+                                            {years?.map((year) => (
                                                 <option key={year} value={year}>{year}</option>
                                             ))}
                                         </Form.Select>
@@ -755,7 +755,7 @@ function AddUserForm({ user }) {
                                     >
                                         <option value="">Select Shift</option>
                                         {
-                                            shifts.map((shift) => {
+                                            shifts?.map((shift) => {
                                                 return <option key={shift?.shift_id} value={shift?.shift_id}>{shift?.shift_name}</option>
                                             })
                                         }

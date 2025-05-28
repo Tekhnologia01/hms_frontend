@@ -20,7 +20,7 @@ function BillDetails() {
   const [showBill, setShowBill] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -30,7 +30,7 @@ function BillDetails() {
   const fetchDetails = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/appointment/getbBillDetails?appointment_id=${params.appointmentId}`,
+        `${process.env.REACT_APP_API_URL}/appointment/getbBillDetails?appointment_id=${params?.appointmentId}`,
         config
       );
       setDetails(response?.data?.data);
@@ -57,8 +57,8 @@ function BillDetails() {
   const handlePayment = async () => {
     // if (paymentMode === "Cash") {
       try {
-        const labChargesTotal = details?.LabchargesList?.reduce((sum, item) => sum + parseFloat(item.amount), 0) || 0;
-        const otherChargesTotal = details?.chargesList?.reduce((sum, item) => sum + parseFloat(item.amount), 0) || 0;
+        const labChargesTotal = details?.LabchargesList?.reduce((sum, item) => sum + parseFloat(item?.amount), 0) || 0;
+        const otherChargesTotal = details?.chargesList?.reduce((sum, item) => sum + parseFloat(item?.amount), 0) || 0;
         const consultationFee = parseFloat(details?.consultancy_fee) || 0;
         const totalAmount = labChargesTotal + otherChargesTotal + consultationFee;
 
@@ -96,7 +96,7 @@ function BillDetails() {
           }
         );
 
-        if (response.data?.status) {
+        if (response?.data?.status) {
           fetchDetails();
           setShowPaymentModal(true);
         } else {
@@ -114,7 +114,7 @@ function BillDetails() {
     ...(details?.chargesList || []),
   ];
 
-  const otherChargesTotal = details?.chargesList?.reduce((sum, item) => sum + parseFloat(item.quantity * item.amount), 0) || 0;
+  const otherChargesTotal = details?.chargesList?.reduce((sum, item) => sum + parseFloat(item?.quantity * item?.amount), 0) || 0;
   const consultationFee = parseFloat(details?.consultancy_fee) || 0;
   const totalAmount = otherChargesTotal + consultationFee;
 
@@ -184,7 +184,7 @@ function BillDetails() {
                     </th>
                   </tr>
                 </thead>
-                {allCharges.length > 0 || details?.consultancy_fee ? (
+                {allCharges?.length > 0 || details?.consultancy_fee ? (
                   <tbody>
                     <tr>
                       <td className="text-center p-md-3 p-2">1</td>
@@ -194,7 +194,7 @@ function BillDetails() {
                       <td className="text-center p-md-3 p-2">-</td>
                       <td className="text-center p-md-3 p-2">{details?.consultancy_fee}</td>
                     </tr>
-                    {allCharges.map((charge, index) => (
+                    {allCharges?.map((charge, index) => (
                       <tr key={index}>
                         <td className="text-center p-md-3 p-2">{index + 2}</td>
                         <td className="p-md-3 p-2" style={{ fontWeight: 500 }}>
@@ -210,7 +210,7 @@ function BillDetails() {
                       <td colSpan={3} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>
                         Grand Total
                       </td>
-                      <td className="text-center p-md-3 p-2">{totalAmount.toFixed(2)}</td>
+                      <td className="text-center p-md-3 p-2">{totalAmount?.toFixed(2)}</td>
                     </tr>
                   </tbody>
                 ) : (
@@ -274,7 +274,7 @@ function BillDetails() {
         data={{
           ...details,
           allCharges: allCharges,
-          bill_total_amount: totalAmount.toFixed(2),
+          bill_total_amount: totalAmount?.toFixed(2),
         }}
       />
 

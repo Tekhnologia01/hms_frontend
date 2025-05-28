@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import InputBox from "../../../components/common/form/inputbox";
 import { TbFileDescription } from "react-icons/tb";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { Card, Col, Pagination, Row } from "react-bootstrap";
@@ -68,7 +67,7 @@ function LabAppointments() {
                 }
 
                 {
-                    (!loading && labs.length === 0) && <div className="w-100 text-center pt-4 pb-2">No labs available</div>
+                    (!loading && labs?.length === 0) && <div className="w-100 text-center pt-4 pb-2">No labs available</div>
                 }
 
                 {labs.map((lab) => (
@@ -76,7 +75,7 @@ function LabAppointments() {
                         <Row className="m-0 p-2">
                             <Col lg={2} className="d-flex align-items-center justify-content-center py-2">
                                 <div className="text-center" style={{ height: "100px", width: "100px", borderRadius: "10px" }}>
-                                    <img src={`${process.env.REACT_APP_API_URL}/${lab.test_photo}`} alt={lab.test_name} style={{ height: "100%", width: "100%", objectFit: "cover" }} />
+                                    <img src={`${process.env.REACT_APP_API_URL}/${lab?.test_photo}`} alt={lab?.test_name} style={{ height: "100%", width: "100%", objectFit: "cover" }} />
                                 </div>
                             </Col>
 
@@ -85,7 +84,7 @@ function LabAppointments() {
                                     <div className="row m-0">
                                         <div className="col">
                                             <span className="fw-bold" style={{ fontSize: "20px", color: "#101828" }}>
-                                                {lab.test_name}
+                                                {lab?.test_name}
                                             </span>
                                         </div>
                                     </div>
@@ -94,7 +93,7 @@ function LabAppointments() {
                                         <div className="col gy-2 mt-1">
                                             <TbFileDescription style={{ height: "20px", width: "20px" }} />
                                             <span className="ps-2" style={{ fontSize: "15px", color: "#667085" }}>
-                                                {lab.test_description}
+                                                {lab?.test_description}
                                             </span>
                                         </div>
                                     </div>
@@ -107,7 +106,7 @@ function LabAppointments() {
                                         label="View Appointments >"
                                         className="my-3 ps-4 pe-4 p-2 fs-6 fw-semibold"
                                         onClick={() => {
-                                            navigate(`${lab.test_id}`)
+                                            navigate(`${lab?.test_id}`)
                                         }}
                                         style={{ borderRadius: "5px", width: "100%" }}
                                     />

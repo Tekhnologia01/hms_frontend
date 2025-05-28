@@ -1,7 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { IoReceiptOutline } from "react-icons/io5";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
 import NewCommonPagination from "../../../../components/pagination/NewCommonPagination";
@@ -14,18 +12,17 @@ function IPDBillList() {
   const [doctors, setDoctors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const limitPerPage = 10;
-  const token = useSelector((state) => state.auth.currentUserToken);
+  const token = useSelector((state) => state?.auth?.currentUserToken);
   const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   const [selectedDate, setSelectedDate] = useState(() => {
-    const today = new Date().toISOString().split("T")[0]; // Format to YYYY-MM-DD
+    const today = new Date()?.toISOString()?.split("T")[0]; // Format to YYYY-MM-DD
     return today;
   });
-  const [showBill, setShowBill] = useState(false);
-  const [billData, setBillData] = useState();
+
 
   const fetchDetails = async () => {
     try {
@@ -40,10 +37,7 @@ function IPDBillList() {
     }
   };
 
-  const handelViewBill = (item, index) => {
-    setBillData(item);
-    setShowBill(true);
-  }
+
 
   useEffect(() => {
     // fetchDetails();

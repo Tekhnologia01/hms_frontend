@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 function LabAppointmentDetail({ appointmenttype }) {
     const navigate = useNavigate();
     const params = useParams();
-    const token = useSelector((state) => state.auth.currentUserToken);
+    const token = useSelector((state) => state?.auth?.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ function LabAppointmentDetail({ appointmenttype }) {
     ];
 
     const renderRow = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center cursor-pointer">
+        <tr key={item?.id} className="border-bottom text-center cursor-pointer">
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center"
                     onClick={() => navigate(`${item?.appo_id}`)}
@@ -58,19 +58,19 @@ function LabAppointmentDetail({ appointmenttype }) {
                     />
                     <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
                         <p>{item.patient_name}</p>
-                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>{item.uh_id}</p>
+                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>{item?.uh_id}</p>
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item.patient_age}</td>
-            <td className="py-3 px-2">{item.patient_sex}</td>
-            <td className="py-3 px-2">{item.lab_test_status}</td>
+            <td className="py-3 px-2">{item?.patient_age}</td>
+            <td className="py-3 px-2">{item?.patient_sex}</td>
+            <td className="py-3 px-2">{item?.lab_test_status}</td>
             <td>
                 {item.lab_test_status == "Completed" ?
                     <>
                         <FiEye style={{ "margin-top": "-8px", height: "20px", width: "20px" }}
                             onClick={() => window.open(
-                                `${process.env.REACT_APP_API_URL}/${item.report_photo}`,
+                                `${process.env.REACT_APP_API_URL}/${item?.report_photo}`,
                                 "_blank",
                                 "noopener,noreferrer"
                             )}
@@ -83,7 +83,7 @@ function LabAppointmentDetail({ appointmenttype }) {
     );
 
     const renderRowIpd = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center cursor-pointer "
+        <tr key={item?.id} className="border-bottom text-center cursor-pointer "
         >
             <td className="px-2 text-start lh-1">
                 <div className="d-flex align-items-center"
@@ -100,20 +100,20 @@ function LabAppointmentDetail({ appointmenttype }) {
                         }}
                     />
                     <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                        <p>{item.patient_name}</p>
-                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>{item.uh_id}</p>
+                        <p>{item?.patient_name}</p>
+                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>{item?.uh_id}</p>
                     </div>
                 </div>
             </td>
-            <td className="py-3 px-2">{item.patient_age}</td>
-            <td className="py-3 px-2">{item.patient_sex}</td>
-            <td className="py-3 px-2">{item.status}</td>
+            <td className="py-3 px-2">{item?.patient_age}</td>
+            <td className="py-3 px-2">{item?.patient_sex}</td>
+            <td className="py-3 px-2">{item?.status}</td>
             <td>
                 {item.status == "Completed" ?
                     <>
                         <FiEye style={{ "margin-top": "-8px", height: "20px", width: "20px" }}
                             onClick={() => window.open(
-                                `${process.env.REACT_APP_API_URL}/${item.report_photo}`,
+                                `${process.env.REACT_APP_API_URL}/${item?.report_photo}`,
                                 "_blank",
                                 "noopener,noreferrer"
                             )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import InputBox from "../../../components/common/form/inputbox";
 import { FaArrowLeft, FaFileUpload } from "react-icons/fa";
@@ -80,8 +80,8 @@ function ViewIpdLabAppointment({ type }) {
             }
 
             const formDataObj = new FormData();
-            formDataObj.append("report_photo", formData.report_photo);
-            formDataObj.append("report_labtest_id", +params.IpdLabId);
+            formDataObj.append("report_photo", formData?.report_photo);
+            formDataObj.append("report_labtest_id", +params?.IpdLabId);
 
             const response = await axios.put(`${process.env.REACT_APP_API_URL}/report/ipdupdate`, formDataObj, {
                 headers: {

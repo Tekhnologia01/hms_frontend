@@ -51,8 +51,8 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
   // Update formData when rowData changes
   useEffect(() => {
     if (rowData) {
-      const selectedRoom = roomType.find(
-        (type) => type.room_type === rowData.class_name
+      const selectedRoom = roomType?.find(
+        (type) => type?.room_type === rowData.class_name
       );
       setFormData({
         billing_and_charges_no: rowData.billing_and_charges_no || "",
@@ -137,8 +137,8 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
       return;
     }
 
-    const selectedRoom = roomType.find(
-      (type) => type.room_type_id === parseInt(formData.class_name)
+    const selectedRoom = roomType?.find(
+      (type) => type?.room_type_id === parseInt(formData.class_name)
     );
     const submitData = {
       ...formData,
@@ -177,7 +177,7 @@ const EditClassModel = ({ show, handleClose, handleCallback, rowData }) => {
           name="class_name"
           defaultValue="Room Type"
           value={formData.class_name}
-          options={roomType.map((type) => ({
+          options={roomType?.map((type) => ({
             label: type.room_type,
             option: type.room_type_id,
           }))}

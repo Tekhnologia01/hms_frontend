@@ -342,7 +342,7 @@ function AddUsers() {
                 <span className="ps-3"></span>
                 <RiDeleteBinLine
                     style={{ height: "25px", width: "25px", cursor: "pointer" }}
-                    onClick={() => handleDelete(item.User_ID)}
+                    onClick={() => handleDelete(item?.User_ID)}
                 />
             </td>
         </tr>
@@ -418,7 +418,7 @@ function AddUsers() {
                     { state: "add_labassistant", label: "LabAssistant", countKey: "totalLabAssistance" },
                     { state: "add_receptionist", label: "Receptionist", countKey: "totalReceptionist" },
                     { state: "add_accountant", label: "Accountant", countKey: "totalAccountant" }
-                ].map(({ state, label, countKey }) => (
+                ]?.map(({ state, label, countKey }) => (
                     <div
                         key={state}
                         style={{

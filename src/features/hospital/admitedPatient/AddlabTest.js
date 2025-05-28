@@ -81,7 +81,7 @@ function AddLabTest() {
             const newData = {
                 ...formData,
                 labAdmitedId: +admitedId,
-                labTestIds: formData.labTestIds.map((test) => test.value),
+                labTestIds: formData?.labTestIds?.map((test) => test.value),
             };
             await axios.post(`${process.env.REACT_APP_API_URL}/lab/addipdlabtest`, newData, config);
             getAppointmentDetails();
@@ -129,10 +129,10 @@ function AddLabTest() {
                     <Col lg={4}>
                         <Form.Label className="fw-semibold">Select Test</Form.Label>
                         <MultiSelectWithDropdown
-                            selectedDays={formData.labTestIds}
-                            options={tests.map((test) => ({
-                                value: test.test_id,
-                                label: test.test_name,
+                            selectedDays={formData?.labTestIds}
+                            options={tests?.map((test) => ({
+                                value: test?.test_id,
+                                label: test?.test_name,
                             }))}
                             onDayChange={handleTestChange}
                         />
