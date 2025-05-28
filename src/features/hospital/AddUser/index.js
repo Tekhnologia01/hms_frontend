@@ -438,7 +438,7 @@ function AddUsers() {
                     <div className="text-center">Loading...</div>
                 ) : (
                     <>
-                        {users.data?.length > 0 ? (
+                        {users?.data?.length > 0 ? (
                             <>
                                 <CommonTable
                                     minimumWidth="700px"

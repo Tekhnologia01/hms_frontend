@@ -65,7 +65,7 @@ function PaymentHistory() {
     fontSize: "1rem",
     color: "#475467",
   };
-  const totalItems = patients.length;
+  const totalItems = patients?.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -134,11 +134,11 @@ function PaymentHistory() {
                         </div>
                       </div>
                     </td>
-                    <td style={bodystyle}>{patient.id}</td>
-                    <td style={bodystyle}>{patient.date}</td>
-                    <td style={bodystyle}>{patient.sex}</td>
-                    <td style={bodystyle}>{patient.age}</td>
-                    <td style={bodystyle}>{patient.amount}</td>
+                    <td style={bodystyle}>{patient?.id}</td>
+                    <td style={bodystyle}>{patient?.date}</td>
+                    <td style={bodystyle}>{patient?.sex}</td>
+                    <td style={bodystyle}>{patient?.age}</td>
+                    <td style={bodystyle}>{patient?.amount}</td>
                   </tr>
                 ))}
               </tbody>

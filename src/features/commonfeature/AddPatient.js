@@ -50,7 +50,7 @@ function AddPatient() {
     const validationErrors = validatePatientForm(formData);
     setErrors(validationErrors); // Store errors in state
 
-    if (Object.keys(validationErrors).length > 0) {
+    if (Object.keys(validationErrors)?.length > 0) {
       return;
     }
 

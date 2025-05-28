@@ -369,8 +369,8 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                         <Text>{data?.course_details}</Text>
                         {data?.treatment_point?.length > 0 && (
                             <View style={{ marginTop: 8 }}>
-                                {data.treatment_point.map((treatment, index) => (
-                                    <Text key={treatment.treatment_id} style={styles.bulletPoint}>
+                                {data?.treatment_point?.map((treatment, index) => (
+                                    <Text key={treatment?.treatment_id} style={styles.bulletPoint}>
                                         • {treatment.treatment_point}
                                     </Text>
                                 ))}

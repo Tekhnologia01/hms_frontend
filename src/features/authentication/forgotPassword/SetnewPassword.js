@@ -47,7 +47,7 @@ function SetnewPassword() {
 
     setErrors(newErrors);
 
-    return Object.keys(newErrors).length === 0; // return true if no errors
+    return Object.keys(newErrors)?.length === 0; // return true if no errors
   };
 
   const handleFormSubmit = async () => {

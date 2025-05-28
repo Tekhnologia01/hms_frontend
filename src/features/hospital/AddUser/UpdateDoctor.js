@@ -64,7 +64,7 @@ const UpdateDoctor = ({ show = false, handleClose, user, patientUpdate, status }
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors)?.length === 0;
   };
 
   const handleSubmit = async () => {

@@ -86,8 +86,8 @@ const SelectBox = ({
               />
             </div>
             <div className="dropdown-options">
-              {filteredOptions.length > 0 ? (
-                filteredOptions.map((option, index) => (
+              {filteredOptions?.length > 0 ? (
+                filteredOptions?.map((option, index) => (
                   <div
                     key={index}
                     className="dropdown-option"

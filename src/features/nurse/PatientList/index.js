@@ -78,7 +78,7 @@ function NursePatientList() {
             </div>
 
             {
-                patients.length > 0 &&
+                patients?.length > 0 &&
                 <NewCommonPagination currentPage={currentPage} limitPerPage={limitPerPage} totalRecords={totalRecords} setCurrentPage={setCurrentPage} />
             }
         </>

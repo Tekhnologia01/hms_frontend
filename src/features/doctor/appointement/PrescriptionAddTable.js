@@ -32,15 +32,15 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         if (isIPD) {
             setRows([
                 ...rows,
-                { srNo: rows.length + 1, medicine_name: "", medicine_type: "", frequency: "", dosage: "", quantity: "", days: "", common_note: "", created_by: userId, },
+                { srNo: rows?.length + 1, medicine_name: "", medicine_type: "", frequency: "", dosage: "", quantity: "", days: "", common_note: "", created_by: userId, },
             ]);
-            setEditableRowIndex(rows.length);
+            setEditableRowIndex(rows?.length);
         } else {
             setRows([
                 ...rows,
-                { srNo: rows.length + 1, appointment_id: appointmentId, medicine_name: "", medicine_type: "", frequency: "", dosage: "", quantity: "", days: "", common_note: "", created_by: userId, },
+                { srNo: rows?.length + 1, appointment_id: appointmentId, medicine_name: "", medicine_type: "", frequency: "", dosage: "", quantity: "", days: "", common_note: "", created_by: userId, },
             ]);
-            setEditableRowIndex(rows.length + 1);
+            setEditableRowIndex(rows?.length + 1);
         }
     };
 
@@ -48,7 +48,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
         const newRows = [...rows];
         newRows[index][field] = value;
         if (field === "frequency" || field === "days") {
-            newRows[index].quantity = newRows[index].frequency * newRows[index].days;
+            newRows[index].quantity = newRows[index]?.frequency * newRows[index].days;
         }
         setRows(newRows);
     };
@@ -59,7 +59,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
     };
 
     const handleKeyPress = (e, index, row) => {
-        if (e.key === 'Enter' && index === rows.length - 1) {
+        if (e.key === 'Enter' && index === rows?.length - 1) {
             e.preventDefault();
             handleEditPrescription(index, row)
             addRow();
@@ -67,7 +67,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
     }
 
     const fetchMedicines = useCallback(async () => {
-        if (medicineList.length === 0) {
+        if (medicineList?.length === 0) {
             try {
                 const response = await axios.get(
                     `${process.env.REACT_APP_API_URL}/prescription/getmedicine`,
@@ -78,7 +78,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                 setMedicineList([]);
             }
         }
-    }, [medicineList.length, config]);
+    }, [medicineList?.length, config]);
 
     const handleEditPrescription = async (index, row) => {
         if (isIPD && ipd_id) {

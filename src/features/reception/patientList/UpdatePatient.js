@@ -39,7 +39,7 @@ const UpdatePatient = ({ show = false, handleClose, patient,patientUpdate }) => 
     if (!formData.patient_address.trim()) newErrors.patient_address = "Address is required";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors)?.length === 0;
   };
 
   // Handle form submission

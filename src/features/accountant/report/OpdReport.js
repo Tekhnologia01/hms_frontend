@@ -122,7 +122,7 @@ function OpdReport() {
                 <NewCommonPagination
                   currentPage={currentPage}
                   limitPerPage={limitPerPage}
-                  totalRecords={reportData?.pagination?.TotalRecords || reportData.length}
+                  totalRecords={reportData?.pagination?.TotalRecords || reportData?.length}
                   setCurrentPage={setCurrentPage}
 
                 />

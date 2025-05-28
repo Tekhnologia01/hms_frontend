@@ -20,15 +20,15 @@ function PatientInfoModal({ show, handleClose, patient }) {
             <p><strong>Department:</strong> {patient.department ?? "-"}</p>
             <p>
               <strong>Total Paid Amount:</strong>{" "}
-              {patient.deposits && patient.deposits.length > 0
-                ? patient.deposits.reduce((sum, deposit) => sum + (deposit.amount || 0), 0)
+              {patient?.deposits && patient?.deposits?.length > 0
+                ? patient?.deposits?.reduce((sum, deposit) => sum + (deposit.amount || 0), 0)
                 : "-"}
             </p>
-            {patient.deposits && patient.deposits.length > 0 && (
+            {patient?.deposits && patient?.deposits?.length > 0 && (
               <div>
                 <strong>Deposit Details:</strong>
                 <ul>
-                  {patient.deposits.map((deposit, index) => (
+                  {patient?.deposits?.map((deposit, index) => (
                     <li key={index}>
                       Date: {deposit.date ?? "-"}, Amount: {deposit.amount || 0}, Deposit ID: {deposit.deposite_id ?? "-"}
                     </li>

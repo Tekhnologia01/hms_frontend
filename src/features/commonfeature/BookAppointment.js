@@ -114,7 +114,7 @@ const BookAppointment = ({ show, handleClose }) => {
   const handleSubmit = async () => {
     const validationErrors = validateAppointmentForm(formData);
     setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) {
+    if (Object.keys(validationErrors)?.length > 0) {
       toast.error('Please fill all required fields correctly');
       return;
     }

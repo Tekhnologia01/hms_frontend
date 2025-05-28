@@ -91,7 +91,7 @@ const Showopdcharges = ({ patientName, consultationFee }) => {
       newErrors.quantity = "Please enter a valid quantity";
     }
 
-    if (Object.keys(newErrors).length > 0) {
+    if (Object.keys(newErrors)?.length > 0) {
       setErrors(newErrors);
       return;
     }

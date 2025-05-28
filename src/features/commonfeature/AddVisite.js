@@ -73,7 +73,7 @@ const AddVisit = ({ show = false, handleClose, admited, patientUpdate }) => {
         if (!formData.visit_date) newErrors.visit_date = "Visit date is required";
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return Object.keys(newErrors)?.length === 0;
     };
 
     // Handle form submission

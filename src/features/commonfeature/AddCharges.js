@@ -75,7 +75,7 @@ const AddCharges = ({ show = false, handleClose, admited, patientUpdate }) => {
         if (!formData.treatment_date) newErrors.treatment_date = "Treatment date is required";
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return Object.keys(newErrors)?.length === 0;
     };
 
     // Handle form submission

@@ -233,7 +233,7 @@ function AdmitedPatientDetails() {
                             </div>
                         </div>
 
-                        {charge.length > 0 ?
+                        {charge?.length > 0 ?
                             <div>
                                 <CommonTable
                                     minimumWidth={"100%"}
@@ -283,7 +283,7 @@ function AdmitedPatientDetails() {
                                 />
                             </div>
                         </div>
-                        {doctorVisit.length > 0 ?
+                        {doctorVisit?.length > 0 ?
                             <div>
                                 <CommonTable
                                     minimumWidth={"100%"}

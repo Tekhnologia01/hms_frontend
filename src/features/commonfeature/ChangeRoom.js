@@ -131,7 +131,7 @@ const ChangeRoom = ({ show = false, handleClose, admited, patientUpdate }) => {
     if (!formData.discharge_date) newErrors.discharge_date = "Discharge date is required";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors)?.length === 0;
   };
 
   const handleSubmit = async () => {

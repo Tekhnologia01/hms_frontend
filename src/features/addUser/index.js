@@ -236,7 +236,7 @@ function AddUserForm({ user }) {
     };
 
     const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 40 }, (_, i) => currentYear - i);
+    const years = Array?.from({ length: 40 }, (_, i) => currentYear - i);
 
     const handleDayChange = (selectedOptions) => {
         setFormData({
