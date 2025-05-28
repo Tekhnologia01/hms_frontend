@@ -170,8 +170,8 @@ function Account() {
                             <div className="d-flex align-items-center gap-3">
                                 <img
                                     src={
-                                        formik.values.photo && previewImage === null
-                                            ? `${process.env.REACT_APP_API_URL}/${formik.values.photo}`
+                                        formik?.values?.photo && previewImage === null
+                                            ? `${process.env.REACT_APP_API_URL}/${formik?.values?.photo}`
                                             : previewImage || defaultProfile
                                     }
                                     alt="Profile"

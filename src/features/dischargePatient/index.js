@@ -32,7 +32,6 @@ const DischargePatient = () => {
 
     const [patientdetails, setPatientDetails] = useState({})
     const { id } = useParams()
-
     const [dischargeDetails, setDischargeDetails] = useState({
         diagnosisDetails: "",
         chiefComplaints: "",
@@ -113,11 +112,12 @@ const DischargePatient = () => {
         }
     }
 
-    const formatDateForInput = (dateString) => {
-        if (!dateString) return '';
-        const [month, day, year] = dateString.split('/');
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    };
+const formatDateForInput = (dateString) => {
+    if (!dateString) return '';
+    const [day, month, year] = dateString.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+};
+
 
     const fetchCourseData = useCallback(async () => {
         try {
@@ -221,11 +221,17 @@ const DischargePatient = () => {
                     follow_up_date_time: response?.data?.data?.follow_up_date_time,
                     icd_code: response?.data?.data?.icd_code,
                 });
+
             }
         } catch (error) {
 
         }
     }
+
+
+
+
+
 
     useEffect(() => {
         getDischargeDetails();
