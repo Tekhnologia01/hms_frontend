@@ -82,7 +82,7 @@ const DischargePatient = () => {
         temperature: Yup.number()
             .required("Temperature is required"),
 
-        icd_code: Yup.number().required("Icd code required"),
+        icd_code: Yup.string().required("Icd code required"),
 
         pulse: Yup.number()
             .required("Pulse is required")
