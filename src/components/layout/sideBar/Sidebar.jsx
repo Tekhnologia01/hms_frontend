@@ -23,8 +23,6 @@ import { FaTimes, FaBars } from "react-icons/fa"; // Import the icons
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 
 
-
-
 function Sidebar({ isVisible, isCompact, role }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -67,8 +65,6 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/hospital/settings", label: "Settings", icon: <IoSettingsOutline /> },
       { path: "/hospital/logout", label: "Logout", icon: <MdOutlineLogin /> },
     ],
-
-
 
     Doctor: [
       { path: "/doctor", label: "Dashboard", icon: <CgLoadbarSound /> },

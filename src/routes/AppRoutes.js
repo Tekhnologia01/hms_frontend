@@ -122,7 +122,7 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/reception/room" element={<RoomInfo/>} />
 
         <Route path="/reception/add_charges/ipd" element={<AddRecCharges />} />
-        {/* <Route path="/reception/add_charges/opd" element={<AddOpdCharges />} /> */}
+        <Route path="/reception/add_charges/opd" element={<AddOpdCharges />} />
         <Route path="/reception/add_charges/opd/show/:appo_id" element={<Showopdcharges />} />
 
         <Route path="/reception/billing/opd" element={<ReceptionistBillList/>} />
@@ -136,7 +136,6 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/receptionist/bill/ipd/deposite/:admitedId" element={<DepositeReceipt />} />
         <Route path="/reception/discharge_summery" element={<DischargeSummery/>} />
 
-        
         {/* Doctor routes */}
         <Route path="/doctor" element={<DoctorDashboard />} />
         <Route path="/doctor/appointments" element={<DoctorAppointment />} />
@@ -151,8 +150,7 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/doctor/settings" element={<Setting />} />
         {/* doctor/patient_list */}
 
-        
-
+      
        {/* Accountant routes */}
        <Route path="/accountant" element={<AccountantDashboard />} />
         <Route path="/accountant/discharge_summery" element={<DischargeSummery />} />
@@ -165,10 +163,8 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/accountant/add_patient" element={<AddPatient />} />
         <Route path="/accountant/report" element={<Report/>} />
         {/* <Route path="/accountant/billing_history" element={<BillingHistory />} /> */}
-
         <Route path="/accountant/add_charges/opd" element={<AddOpdCharges/>} />
         <Route path="/accountant/add_charges/opd/show/:appo_id" element={<Showopdcharges />} />
-
         <Route path="/accountant/account" element={<Account />} />
         <Route path="/accountant/settings" element={<Setting />} />
         <Route path="/accountant/billing/ipd" element={<Charges />} />
