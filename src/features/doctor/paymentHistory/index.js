@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import { Table, Pagination, Row, Col } from "react-bootstrap";
 import { FaArrowDown, FaArrowLeft } from "react-icons/fa";
 import vijay from "../../../assets/images/avatars/vijay1.jpg";
-import { useNavigate } from "react-router-dom";
 
 function PaymentHistory() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const navigate = useNavigate();
-
-  // Example data for the table
   const patients = [
     {
       id: 1,
@@ -30,7 +26,6 @@ function PaymentHistory() {
       age: 29,
       amount: 1000,
     },
-    // Add more patient data as needed
   ];
 
   const headingstyle = {
@@ -70,7 +65,6 @@ function PaymentHistory() {
     fontSize: "1rem",
     color: "#475467",
   };
-  // Calculate pagination data
   const totalItems = patients.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -90,14 +84,13 @@ function PaymentHistory() {
           <div>
             <div className="px-4 py-3 fs-5 fw-semibold">Payment History</div>
           </div>
-          {/* Scrollable Container */}
           <div style={{ overflowX: "auto" }}>
             <Table
               responsive="sm"
               className="bordered"
               style={{
-                tableLayout: "fixed", // Ensures fixed column width
-                minWidth: "900px", // Set your desired minimum width
+                tableLayout: "fixed",
+                minWidth: "900px",
               }}
             >
               <thead style={{ backgroundColor: "red", color: "white" }}>
@@ -119,13 +112,13 @@ function PaymentHistory() {
                 </tr>
               </thead>
               <tbody>
-                {currentPatients.map((patient) => (
-                  <tr key={patient.id}>
+                {currentPatients?.map((patient) => (
+                  <tr key={patient?.id}>
                     <td style={{ bodystyle, width: "350px" }}>
                       <div className="d-flex align-items-center ps-2">
                         <img
                           src={vijay}
-                          alt={patient.name}
+                          alt={patient?.name}
                           style={{
                             width: "50px",
                             height: "50px",
@@ -151,7 +144,6 @@ function PaymentHistory() {
               </tbody>
             </Table>
           </div>
-          {/* Pagination */}
           <Pagination className="justify-content-center">
             {[...Array(totalPages)].map((_, index) => (
               <Pagination.Item

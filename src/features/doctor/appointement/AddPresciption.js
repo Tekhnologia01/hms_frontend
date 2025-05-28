@@ -8,7 +8,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-
 const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
     const closeIconStyle = {
         position: "absolute",
@@ -17,12 +16,10 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
         fontSize: "20px",
         cursor: "pointer",
         color: "#999",
-        zIndex: 10, // Ensure it appears above content
+        zIndex: 10,
     };
 
     const userId = useSelector(state => state?.auth?.user?.userId);
-
-
     const params = useParams();
 
     const [formData, setFormData] = useState({
@@ -37,7 +34,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
     });
 
     useEffect(() => {
-
         setFormData({
             appointment_id: "",
             medicine_name: "",
@@ -52,7 +48,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         setFormData({
             ...formData,
             [name]: value
@@ -96,14 +91,12 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
         >
             <div className="pe-5 ps-5 pt-2 ">
                 <FaTimes style={closeIconStyle} onClick={handleClose} />
-
                 <div className="fw-bold  fs-5">Add Prescription</div>
             </div>
 
             <hr></hr>
 
             <div className="pe-5 ps-5 pb-5 pt-3">
-
                 <Row className="m-0">
                     <Col lg={6}>
                         <InputBox
@@ -115,7 +108,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
                             name="medicine_name"
                         />
                     </Col>
-
                     <Col lg={6}>
                         <InputBox
                             placeholder="Dosage"
@@ -127,7 +119,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
                         />
                     </Col>
                 </Row>
-
                 <Row className="pt-lg-4 m-0">
                     <Col lg={6}>
                         <InputBox
@@ -139,7 +130,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
                             name="duration"
                         />
                     </Col>
-
                     <Col lg={6}>
                         <InputBox
                             placeholder="Food Intake"
@@ -151,7 +141,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
                         />
                     </Col>
                 </Row>
-
                 <Row className="pt-lg-4 m-0">
                     <Col lg={6}>
                         <InputBox
@@ -164,7 +153,6 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
                             name="quantity"
                         />
                     </Col>
-
                     <Col lg={6}>
                         <div className="">
                             <Note
@@ -179,15 +167,13 @@ const AddPrescription = ({ show, handleClose, handlePrescriptionSubmit }) => {
                         </div>
                     </Col>
                 </Row>
-
-
                 <div className="d-flex justify-content-end pt-lg-4">
                     <CommanButton
                         label="Add"
                         variant="#7B3F0080"
                         className=" ps-3 pe-3 p-2  fw-semibold   "
                         style={{ borderRadius: "5px" }}
-                        onClick={handleSubmit} // Close modal when clicking the button
+                        onClick={handleSubmit}
                     />
                 </div>
             </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DoctorAppointmentCard from "./DoctorAppointmentCard";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Form } from "react-bootstrap";
@@ -20,8 +19,6 @@ function DoctorAppointment() {
     const today = new Date().getDay();
     return today === 0 ? 7 : today;
   });
-
-  const navigate = useNavigate();
 
   const getDays = async () => {
     try {

@@ -24,7 +24,6 @@ const DischargePatient = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    // const { admitedId } = useParams();
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -65,10 +64,8 @@ const DischargePatient = () => {
         diagnosisDetails: Yup.string().required("Diagnosis is required"),
         chiefComplaints: Yup.string().required("Chief Complaints are required"),
 
-        // Date and Time validations
         discharge_date: Yup.date()
             .required("Discharge date is required"),
-        // .min(new Date(), "Discharge date cannot be in the past"),
 
         discharge_time: Yup.string()
             .required("Discharge time is required")
@@ -135,7 +132,7 @@ const DischargePatient = () => {
     }, [id]);
 
     const saveCourseData = async () => {
-        if (!courseDetails.trim()) {
+        if (!courseDetails?.trim()) {
             setSaveStatus({ variant: 'danger', message: 'Please enter course details' });
             return;
         }
@@ -145,7 +142,7 @@ const DischargePatient = () => {
             setSaveStatus(null);
 
             let response;
-            if (courseDetails && courseDetails.length > 0) {
+            if (courseDetails && courseDetails?.length > 0) {
                 response = await axios.put(
                     `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${id}`,
                     { course_details: courseDetails, admited_id: id },
@@ -297,7 +294,6 @@ const DischargePatient = () => {
                 error?.response?.data?.error
                     ? error?.response?.data?.error
                     : "Failed to save discharge details"
-
             );
         }
     };
@@ -569,7 +565,6 @@ const DischargePatient = () => {
                                                         style={{ height: "45.5px" }}
                                                         name="discharge_date"
                                                         type="date"
-                                                    // min={new Date().toISOString().split("T")[0]}
                                                     />
                                                     <ErrorMessage name="discharge_date" component="div" className="text-danger" />
                                                 </Form.Group>

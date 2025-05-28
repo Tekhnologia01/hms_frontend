@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
             position: 'absolute',
             top: '50%',
             left: '28%',
-            transform: 'translate(-50%, -50%)', // This properly centers the image
+            transform: 'translate(-50%, -50%)',
             opacity: 0.1,
             width: '60%',
             height: 'auto',
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
         width: 120,
         height: 80,
         margin: '0 auto',
-        // marginBottom: 5
     },
     headerName: {
         fontSize: 18,

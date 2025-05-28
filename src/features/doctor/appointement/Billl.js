@@ -25,7 +25,6 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
     },
   }
 
-
   useEffect(() => {
     const fetchCharges = async () => {
       try {
@@ -55,10 +54,10 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
       return;
     }
 
-    const selectedChargeData = chargesData.find((charge) => charge.fees_id === selectedCharge);
+    const selectedChargeData = chargesData?.find((charge) => charge.fees_id === selectedCharge);
 
     if (selectedChargeData) {
-      const isAlreadyAdded = chargesList.some((item) => item.chargeId === selectedCharge);
+      const isAlreadyAdded = chargesList?.some((item) => item.chargeId === selectedCharge);
 
       if (!isAlreadyAdded) {
         const newCharge = {
@@ -130,7 +129,6 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
             <InputBox label="Patient Name" placeholder="Enter name" isRequired value={patientName} name="patientName" disabled />
           </Col>
         </Row>
-
         <Row className="m-0 pt-2">
           <Col lg={6}>
             <label className="fw-semibold pt-2 pb-2">
@@ -144,12 +142,10 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
             />
             {errors.selectedCharge && <p className="text-danger">{errors.selectedCharge}</p>}
           </Col>
-
           <Col lg={5} className="pt-2">
             <InputBox label="Quantity" isRequired value={formData.quantity} name="quantity" onChange={handleInputChange} />
             {errors.quantity && <p className="text-danger">{errors.quantity}</p>}
           </Col>
-
           <Col lg={1} className="pt-5">
             <FaPlus
               style={{
@@ -189,7 +185,7 @@ const Bill = ({ show, handleClose, patientName, callbackFun, consultationFee }) 
                 </td>
               </tr>
               {consultationFee ? (
-                chargesDataTable.map((charge, index) => (
+                chargesDataTable?.map((charge, index) => (
                   <tr key={charge.chargeId}>
                     <td>{index + 1}</td>
                     <td>{charge.billingType}</td>

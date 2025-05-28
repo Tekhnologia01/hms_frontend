@@ -18,7 +18,7 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
       },
     }
     const getAllDetails = async () => {
-        if (!ipd_id) return; // Add this check
+        if (!ipd_id) return;
         
         setLoading(true);
         try {
@@ -45,11 +45,11 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
     }
 
     useEffect(() => {
-        if (show && ipd_id) { // Only fetch when modal is shown and ipd_id exists
+        if (show && ipd_id) {
             getAllDetails();
             fetchPrescription()
         }
-    }, [show, ipd_id]); // Add show to dependencies
+    }, [show, ipd_id]);
 
 
     return (

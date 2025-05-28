@@ -19,7 +19,7 @@ function DoctorAppointmentCard({
           xl={2} lg={2} md={2} sm={3} xs={12}
           className="d-flex flex-column border-md-end align-items-center justify-content-center py-2"
         >
-          <span className="fw-semibold">{appointmentData.Appointment_Date}</span>
+          <span className="fw-semibold">{appointmentData?.Appointment_Date}</span>
         </Col>
 
         <Col xl={8} lg={8} md={7} sm={9} xs={12} className="py-2">

@@ -19,9 +19,8 @@ const ExaminationForm = ({ formData, setFormData }) => {
             const selectedSigns = prevState.signs ? prevState.signs.split(", ") : [];
 
             if (checked) {
-                selectedSigns.push(value); // Add checked value
+                selectedSigns.push(value);
             } else {
-                // Remove unchecked value
                 const index = selectedSigns.indexOf(value);
                 if (index > -1) {
                     selectedSigns.splice(index, 1);
