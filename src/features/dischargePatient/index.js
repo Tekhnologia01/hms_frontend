@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Col, Form, Row, Button, Spinner, Modal } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
@@ -12,9 +12,9 @@ import AddPrescriptionTable from "../doctor/appointement/PrescriptionAddTable";
 import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../../utils/epochToDate";
 import ViewDischargeSheet from "./ViewDischargeSheet";
 import { toast } from "react-toastify";
-import { FaSave, FaBook } from 'react-icons/fa';
-import { useCallback } from "react";
-import CourseDetails from "../hospital/admitedPatient/CourseDetails";
+import { FaSave } from 'react-icons/fa';
+// import { useCallback } from "react";
+// import CourseDetails from "../hospital/admitedPatient/CourseDetails";
 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
@@ -23,6 +23,8 @@ const DischargePatient = () => {
     const [saveStatus, setSaveStatus] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [initialCourseDetails, setInitialCourseDetails] = useState(''); // <-- add this
+
 
     const config = {
         headers: {
@@ -124,6 +126,7 @@ const DischargePatient = () => {
             setIsLoading(true);
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${id}`, config);
             setCourseDetails(response?.data?.data?.course_details || '');
+            setInitialCourseDetails(response?.data?.data?.course_details);
         } catch (error) {
             setSaveStatus({ variant: 'danger', message: error.message || 'Failed to load course' });
         } finally {
@@ -142,18 +145,22 @@ const DischargePatient = () => {
             setSaveStatus(null);
 
             let response;
-            if (courseDetails && courseDetails?.length > 0) {
-                response = await axios.put(
-                    `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${id}`,
-                    { course_details: courseDetails, admited_id: id },
-                    config
-                );
-            } else {
+            if (!initialCourseDetails || initialCourseDetails?.length === 0) {
                 response = await axios.post(
                     `${process.env.REACT_APP_API_URL}/treatment/addcourse`,
                     { course_details: courseDetails, admited_id: id },
                     config
                 );
+                setInitialCourseDetails(courseDetails);
+                fetchCourseData()
+            } else {
+                response = await axios.put(
+                    `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${id}`,
+                    { course_details: courseDetails, admited_id: id },
+                    config
+                );
+                setInitialCourseDetails(courseDetails);
+                fetchCourseData();
             }
 
             setSaveStatus({
@@ -624,7 +631,7 @@ const DischargePatient = () => {
                                                 className="d-flex align-items-center"
                                                 style={{
                                                     backgroundColor: "#1D949A",
-                                                   
+
                                                 }}
                                             >
                                                 {isSaving ? (

@@ -148,7 +148,7 @@ function CourseDetails() {
       setSaveStatus(null);
 
       let response;
-      if (!initialCourseDetails || initialCourseDetails.length === 0) {
+      if (!initialCourseDetails || initialCourseDetails?.length === 0) {
         // No course details exist yet, so add
         response = await axios.post(
           `${process.env.REACT_APP_API_URL}/treatment/addcourse`,
