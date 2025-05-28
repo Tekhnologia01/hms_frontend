@@ -145,8 +145,6 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/accountant", label: "Dashboard", icon: <CgLoadbarSound /> },
       { path: "/accountant/bill", label: "Billing", icon: <FaReceipt /> },
       { path: "/accountant/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
-
-
       {
         label: "Add Charges",
         icon: <MdOutlineAdd />,
@@ -173,6 +171,11 @@ function Sidebar({ isVisible, isCompact, role }) {
       { path: "/accountant/settings", label: "Settings", icon: <IoSettingsOutline /> },
       { path: "/logout", label: "Logout", icon: <MdOutlineLogin /> },
     ],
+
+
+
+
+
   };
 
   useEffect(() => {

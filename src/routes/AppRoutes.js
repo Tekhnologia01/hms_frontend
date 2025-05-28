@@ -158,13 +158,17 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/accountant/discharge_summery" element={<DischargeSummery />} />
         <Route path="/accountant/add_charges" element={<AddAccCharges />} />
         <Route path="/accountant/add_charges/ipd" element={<AddAccCharges />} />
-        <Route path="/accountant/add_charges/opd" element={<AddAccCharges />} />
+        {/* <Route path="/accountant/add_charges/opd" element={<AddAccCharges />} /> */}
         <Route path="/accountant/bill" element={<AdmitedDepatientBillDetals />} />
         <Route path="/accountant/bill/ipd/deposite/:admitedId" element={<DepositeReceipt />} />
         <Route path="/accountant/bill/ipd/:admitedId" element={<IpdBill />} />
         <Route path="/accountant/add_patient" element={<AddPatient />} />
         <Route path="/accountant/report" element={<Report/>} />
         {/* <Route path="/accountant/billing_history" element={<BillingHistory />} /> */}
+
+        <Route path="/accountant/add_charges/opd" element={<AddOpdCharges/>} />
+        <Route path="/accountant/add_charges/opd/show/:appo_id" element={<Showopdcharges />} />
+
         <Route path="/accountant/account" element={<Account />} />
         <Route path="/accountant/settings" element={<Setting />} />
         <Route path="/accountant/billing/ipd" element={<Charges />} />
