@@ -54,6 +54,10 @@ export const validateAdmitForm = (data) => {
     errors.uh_id = "Patient is required";
   }
 
+  if (!data.mrd_no.trim()) {
+    errors.mrd_no = "MRD No. is required";
+  }
+
   if (!data.department_id) {
     errors.department_id = "Department is required";
   }
@@ -86,7 +90,7 @@ export const validateAdmitForm = (data) => {
     errors.relative_name = "Name is required";
   }
 
-  if(!data.relative_address.trim()) {
+  if (!data.relative_address.trim()) {
     errors.relative_address = "Address is required";
   }
 
@@ -96,7 +100,7 @@ export const validateAdmitForm = (data) => {
     errors.relative_mobile = "Invalid phone number (10 digits required)";
   }
 
-  if (!data.relative_age){
+  if (!data.relative_age) {
     errors.relative_age = "Age is required";
   }
 

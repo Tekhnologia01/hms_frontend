@@ -37,11 +37,6 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
 
         return { dateStr, timeStr };
     };
-
-
-
-    
-
     const { dateStr: currentDate, timeStr: currentTime } = getCurrentDateTime();
 
     const initialState = {
@@ -419,6 +414,7 @@ const AdmitPatient = ({ show, handleClose, appointmentData }) => {
                         <Form.Group controlId="mrd_no">
                             <Form.Label className="fw-semibold">MRD No. </Form.Label>
                             <Form.Control type="text" style={{ height: "45.5px" }} placeholder="Enter MRD" name="mrd_no" value={formData.mrd_no} onChange={handleInputChange} />
+                            {errors.mrd_no && <p className="text-danger">{errors.mrd_no}</p>}
                         </Form.Group>
                     </Col>
 

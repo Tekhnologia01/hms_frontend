@@ -8,6 +8,7 @@ import ViewDischargeSheet from "../../dischargePatient/ViewDischargeSheet";
 import { Tooltip } from 'react-bootstrap';
 import { useSelector } from "react-redux";
 import { CiReceipt } from "react-icons/ci";
+
 function DischargeSummery() {
     const [doctors, setDoctors] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -20,10 +21,8 @@ function DischargeSummery() {
             Authorization: `Bearer ${token}`,
         },
     }
-    // Function to fetch discharged patients based on selected date
     const fetchDoctors = async () => {
         try {
-            // Convert selected date to Unix timestamp (seconds)
             const dateTimestamp = Math.floor(new Date(selectedDate).getTime() / 1000);
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/todaydischarge?date=${dateTimestamp}`, config);
 
@@ -33,20 +32,17 @@ function DischargeSummery() {
         }
     };
 
-    // Fetch data when component mounts or when currentPage/selectedDate changes
     useEffect(() => {
         fetchDoctors();
     }, [currentPage, selectedDate]);
 
-    // Handle date change from date picker
     const handleDateChange = (e) => {
         setSelectedDate(e.target.value);
-        setCurrentPage(1); // Reset to first page when date changes
+        setCurrentPage(1);
     };
 
     const columns = [
         { name: "Patient Name", accessor: "Name", class: "py-3 px-4 text-left" },
-        // { name: "Sex", accessor: "patient_sex", class: "text-center px-1" },
         { name: "Admit Date", accessor: "admitted_date", class: "text-center px-1" },
         { name: "Discharge D", accessor: "actions", class: "py-3 text-center px-1" },
         { name: "Bill Status", accessor: "department", class: "py-3 text-center px-1" },
@@ -63,12 +59,11 @@ function DischargeSummery() {
     const renderRow = (item, index) => {
         return (
             <tr key={item.id || index} className="border-bottom text-center">
-                {/* Patient Information */}
                 <td className="px-2 text-start">
                     <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
                         <img
                             src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
-                            alt={item.uh_id}
+                            alt={item.Name}
                             style={{
                                 width: "40px",
                                 height: "40px",
@@ -78,7 +73,7 @@ function DischargeSummery() {
                             className="ms-lg-3 mb-2 mb-lg-0"
                         />
                         <div className="d-flex flex-column ms-lg-2 text-center">
-                            <p className="fw-semibold mb-0">{item.Name}</p>
+                            <p className="fw-semibold mb-0 mt-2">{item.Name}</p>
                             <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
                                 {item.uh_id}
                             </p>
@@ -86,7 +81,6 @@ function DischargeSummery() {
                     </div>
                 </td>
 
-                {/* Admitted Date */}
                 <td className="py-3 px-2">
                     {item.admitted_date
                         ? new Date(item.admitted_date * 1000).toLocaleDateString()
@@ -96,7 +90,6 @@ function DischargeSummery() {
                 <td className="py-3 px-2">{item.discharge_date
                     ? new Date(item.discharge_date * 1000).toLocaleDateString()
                     : "-"}</td>
-                {/* Department */}
 
                 <td className="py-3 px-2">{item.bill_status == 1 ? "Done" : "Not Done"}</td>
 
@@ -113,7 +106,6 @@ function DischargeSummery() {
                     )}
                 </td>
 
-                {/* <td className="py-3 px-2">{item.discharge_status == 2 ? "Done" : "Not Done"}</td> */}
                 <td className="py-3 px-2  gap-2">
                     {item.bill_report ? (
                         <CiReceipt
