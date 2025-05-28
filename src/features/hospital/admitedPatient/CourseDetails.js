@@ -11,6 +11,7 @@ function CourseDetails() {
   const { user } = useSelector(state => state?.auth)
   const { admitedId } = useParams();
   const [courseDetails, setCourseDetails] = useState('');
+  const [initialCourseDetails, setInitialCourseDetails] = useState(''); // <-- add this
   const [treatmentPoints, setTreatmentPoints] = useState([]);
   const [editingPoint, setEditingPoint] = useState(null);
   const [editText, setEditText] = useState('');
@@ -30,7 +31,9 @@ function CourseDetails() {
     try {
       setIsLoading(true);
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/treatment/getcourse?admited_id=${admitedId}`, config);
-      setCourseDetails(response?.data?.data?.course_details || '');
+      const details = response?.data?.data?.course_details || '';
+      setCourseDetails(details);
+      setInitialCourseDetails(details); // <-- store initial value
     } catch (error) {
       setSaveStatus({ variant: 'danger', message: error.message || 'Failed to load course' });
     } finally {
@@ -145,18 +148,22 @@ function CourseDetails() {
       setSaveStatus(null);
 
       let response;
-      if (courseDetails && courseDetails?.length > 0) {
-        response = await axios.put(
-          `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${admitedId}`,
-          { course_details: courseDetails, admited_id: admitedId },
-          config
-        );
-      } else {
+      if (!initialCourseDetails || initialCourseDetails.length === 0) {
+        // No course details exist yet, so add
         response = await axios.post(
           `${process.env.REACT_APP_API_URL}/treatment/addcourse`,
           { course_details: courseDetails, admited_id: admitedId },
           config
         );
+        setInitialCourseDetails(courseDetails); // update initial after add
+      } else {
+        // Course details exist, so update
+        response = await axios.put(
+          `${process.env.REACT_APP_API_URL}/treatment/updatecourse?admited_id=${admitedId}`,
+          { course_details: courseDetails, admited_id: admitedId },
+          config
+        );
+        setInitialCourseDetails(courseDetails); // update initial after update
       }
 
       setSaveStatus({

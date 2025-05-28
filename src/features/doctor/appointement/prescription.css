@@ -105,17 +105,33 @@
 }
 
 /* Ensure table cells don't overflow */
-.prescription_tbl td {
-  position: relative;
-  vertical-align: middle;
-}
+/* .prescription_tbl td {
+    position: relative;
+    vertical-align: middle;
+  } */
 
 @media (max-width: 991px) {
   .prescription_tbl {
     min-width: 700px;
   }
+  .prescription-scroll-x {
+    overflow-x: auto;
+    width: 100%;
+  }
 }
 
+@media (max-width: 600px) {
+  .prescription_tbl {
+    min-width: 600px;
+    font-size: 13px;
+  }
+  .prescription-scroll-x {
+    overflow-x: auto;
+    width: 100%;
+  }
+}
+
+/* Always allow horizontal scroll for the scroll container */
 .prescription-scroll-x {
   overflow-x: auto;
   width: 100%;
