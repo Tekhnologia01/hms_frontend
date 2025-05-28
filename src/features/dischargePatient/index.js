@@ -14,7 +14,7 @@ import ViewDischargeSheet from "./ViewDischargeSheet";
 import { toast } from "react-toastify";
 import { FaSave, FaBook } from 'react-icons/fa';
 import { useCallback } from "react";
-import CourseDetails from "../hospital/admitedPatient/CourseDetails";
+// import CourseDetails from "../hospital/admitedPatient/CourseDetails";
 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
@@ -141,6 +141,10 @@ const formatDateForInput = (dateString) => {
             setIsSaving(true);
             setSaveStatus(null);
 
+
+
+
+            console.log("first____________________")
             let response;
             if (courseDetails && courseDetails?.length > 0) {
                 response = await axios.put(
@@ -618,14 +622,14 @@ const formatDateForInput = (dateString) => {
                                     </Col>
                                 </Row>
 
-                                <Row className="mb-4 mt-4">
+                                {/* <Row className="mb-4 mt-4">
                                     <Col>
                                         <div className="d-flex justify-content-between align-items-center mb-3">
                                             <h2 className="fw-bold fs-5 col-md-6 mt-2 px-0">
                                                 Course Details
                                             </h2>
                                             <Button
-                                                onClick={saveCourseData}
+                                                onClick={()=>{saveCourseData()}}
                                                 disabled={isSaving}
                                                 className="d-flex align-items-center"
                                                 style={{
@@ -658,7 +662,7 @@ const formatDateForInput = (dateString) => {
                                             />
                                         </Form.Group>
                                     </Col >
-                                </Row >
+                                </Row > */}
 
                                 {/* <CourseDetails /> */}
 
