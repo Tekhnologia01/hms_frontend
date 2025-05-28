@@ -166,14 +166,14 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
             if (!prevRowValues) return;
 
             setRows(prevRows => {
-                const updatedRows = [...prevRows]; 
-                updatedRows[index] = { ...prevRowValues }; 
+                const updatedRows = [...prevRows];
+                updatedRows[index] = { ...prevRowValues };
                 return updatedRows;
             });
         } else {
-            setRows(rows.filter((_, rowIndex) => rowIndex !== index)); 
+            setRows(rows.filter((_, rowIndex) => rowIndex !== index));
         }
-        setEditableRowIndex(-1); 
+        setEditableRowIndex(-1);
         setPrevRowValues(undefined);
     };
 
@@ -227,7 +227,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
 
             <div className="mt-2">
                 <div className="border rounded-2">
-                    <div >
+                    <div style={{ overflowX: "auto", width: "100%" }}>
                         {rows && (
                             <table className="bordered w-100 prescription_tbl" style={{ tableLayout: "fixed", minWidth: "800px" }}>
                                 <thead>
