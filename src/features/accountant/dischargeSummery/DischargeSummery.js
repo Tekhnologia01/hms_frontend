@@ -50,7 +50,7 @@ function DischargeSummery() {
         { name: "Admit Date", accessor: "admitted_date", class: "text-center px-1" },
         { name: "Discharge D", accessor: "actions", class: "py-3 text-center px-1" },
         { name: "Bill Status", accessor: "department", class: "py-3 text-center px-1" },
-        { name: "Discharge Summery", accessor: "actions", class: "py-3 text-center px-1" },
+        { name: "Discharge Summary", accessor: "actions", class: "py-3 text-center px-1" },
         { name: "Bill Reciept", accessor: "actions", class: "py-3 text-center px-1" },
 
     ];

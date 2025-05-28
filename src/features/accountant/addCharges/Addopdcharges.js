@@ -39,10 +39,6 @@ function ReceptionistBillList() {
         }
     };
 
-    // const handleRowClick = (user) => {
-    //     navigate(`show/${user?.Appo_id}`, { state: user?.patient_name })
-    // }
-
     const handleRowClick = (appointment) => {
         navigate(`show/${appointment.Appo_id}`, {
             state: {

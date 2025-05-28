@@ -129,7 +129,7 @@ function Sidebar({ isVisible, isCompact, role }) {
           { path: "/reception/billing/opd", label: "OPD Billing", icon: <RiBillLine /> },
         ],
       },
-      { path: "/reception/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
+      { path: "/reception/discharge_summery", label: "Discharge Summary", icon: <TbUsers /> },
       { path: "/reception/account", label: "Account", icon: <TbUser /> },
       { path: "/reception/settings", label: "Settings", icon: <IoSettingsOutline /> },
       { path: "/logout", label: "Logout", icon: <MdOutlineLogin /> },
@@ -144,7 +144,7 @@ function Sidebar({ isVisible, isCompact, role }) {
     Accountant: [
       { path: "/accountant", label: "Dashboard", icon: <CgLoadbarSound /> },
       { path: "/accountant/bill", label: "Billing", icon: <FaReceipt /> },
-      { path: "/accountant/discharge_summery", label: "Discharge Summery", icon: <TbUsers /> },
+      { path: "/accountant/discharge_summery", label: "Discharge Summary", icon: <TbUsers /> },
 
 
       {
