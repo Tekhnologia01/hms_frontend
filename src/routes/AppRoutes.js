@@ -122,7 +122,7 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/reception/room" element={<RoomInfo/>} />
 
         <Route path="/reception/add_charges/ipd" element={<AddRecCharges />} />
-        <Route path="/reception/add_charges/opd" element={<AddOpdCharges />} />
+        {/* <Route path="/reception/add_charges/opd" element={<AddOpdCharges />} /> */}
         <Route path="/reception/add_charges/opd/show/:appo_id" element={<Showopdcharges />} />
 
         <Route path="/reception/billing/opd" element={<ReceptionistBillList/>} />
