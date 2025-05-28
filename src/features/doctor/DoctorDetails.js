@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,14 +11,14 @@ function DoctorDetails() {
   const [doctor, setDoctor] = useState([]);
   const token = useSelector((state) => state.auth.currentUserToken);
   const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
 
   async function getProfile() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${params?.doctorId}`,config);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/details?user_id=${params?.doctorId}`, config);
       setDoctor(response?.data?.data);
     } catch (err) {
       console.log("Error fetching departments:", err);
@@ -40,7 +39,6 @@ function DoctorDetails() {
         <FaArrowLeft />
         <span className="pt-1 px-2">Doctor Appointment/View Doctor Details/{doctor?.name}</span>
       </div>
-      {/* Reduced padding */}
       <Row className="g-4 m-0">
         <Col md={4}>
           <div>
@@ -73,7 +71,6 @@ function DoctorDetails() {
         <Col md={8}>
           <div>
             <div className="fw-semibold fs-4 mb-2">Biography</div>
-
             <div className="fw-semibold fs-6 mt-3">Education</div>
             <div className="text-muted ms-1" style={{ fontSize: "1rem" }}>
               {doctor?.degree}

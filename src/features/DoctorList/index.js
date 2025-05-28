@@ -2,16 +2,12 @@ import { useEffect, useState } from "react";
 import vijay from "../../assets/images/avatars/vijay1.jpg";
 import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 import CommonTable from "../../components/common/table/CommonTable";
 import NewCommonPagination from "../../components/common/pagination/NewCommonPagination";
 import axios from "axios";
-import { formatDate } from "../../utils/formatDate";
 import { useSelector } from "react-redux";
 
 function HospitalDoctorList() {
-  const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const limitPerPage = 10;
@@ -43,7 +39,6 @@ function HospitalDoctorList() {
       ? [{ name: "Actions", accessor: "actions", class: "py-3 text-center px-1" }]
       : []),
   ];
-
 
   const renderRow = (item, index) => (
     <tr key={item.id} className="border-bottom text-center">
@@ -77,7 +72,6 @@ function HospitalDoctorList() {
         </td>}
     </tr>
   );
-
 
   return (
     <>

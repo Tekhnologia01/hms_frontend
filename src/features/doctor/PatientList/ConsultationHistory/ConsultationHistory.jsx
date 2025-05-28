@@ -47,7 +47,7 @@ function ConsultationHistory() {
                     <h3>History</h3>
                     <div className="history-map">
                         {
-                            history.map(
+                            history?.map(
                                 (y) => <div key={y.year} className="year-container">
                                     <p className="year">{y.year}</p>
                                     <div className="history-cards">

@@ -21,7 +21,6 @@ function PatientList() {
       },
     }
 
-
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -71,7 +70,6 @@ function PatientList() {
     </tr>
   );
 
-
   return (
     <>
       <div className="py-4 px-3">
@@ -88,7 +86,7 @@ function PatientList() {
         </div>
 
         {
-          (patients?.data?.length === 0 || patients.length === 0) ?
+          (patients?.data?.length === 0 || patients?.length === 0) ?
             <div className="fw-semibold text-center pt-4">
               No patients found
             </div> :

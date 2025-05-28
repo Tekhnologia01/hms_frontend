@@ -83,11 +83,11 @@ function DoctorDashboard() {
             {
                 label: "Active Doctors",
                 data: appointementcount?.count,
-                backgroundColor: "#1D949A", // Bar color
-                borderColor: "#1D949A", // Border color
-                barPercentage: 1.0, // Maximize bar width relative to category
-                categoryPercentage: 1.0, // Remove extra category spacing
-                maxBarThickness: 40, // Limit the maximum thickness of each bar
+                backgroundColor: "#1D949A",
+                borderColor: "#1D949A",
+                barPercentage: 1.0,
+                categoryPercentage: 1.0,
+                maxBarThickness: 40,
                 borderRadius: {
                     topLeft: 5,
                     topRight: 5,
@@ -149,7 +149,6 @@ function DoctorDashboard() {
         <>
             <div className="graph-container d-flex flex-md-row flex-column gap-3 p-4 m-0 mt-2 justify-content-center align-items-center">
                 <div style={{
-                    // maxWidth: "550px",
                     width: screenWidth > 768 ? "60%" : "100%",
                     height: "100%",
                     border: "1px solid #F2F4F7",
@@ -163,7 +162,6 @@ function DoctorDashboard() {
                     </div>
                 </div>
                 <div style={{
-                    // maxWidth: "400px", 
                     width: screenWidth > 768 ? "40%" : "100%",
                     height: "100%", border: "1px solid #F2F4F7",
                     borderRadius: "10px",
@@ -185,7 +183,7 @@ function DoctorDashboard() {
                             </div>
                             <Table className="bordered">
                                 <tbody>
-                                    {admitedPatient.map((patient) => (
+                                    {admitedPatient?.map((patient) => (
                                         <tr key={patient.uhId}>
                                             <td style={{ bodystyle }}>
                                                 <div className="d-flex align-items-center">

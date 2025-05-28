@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appointmentData, isIPD }) => {
     const inputRefs = useRef([]);
-    const [editableRowIndex, setEditableRowIndex] = useState(); // Default to last row being editable
+    const [editableRowIndex, setEditableRowIndex] = useState();
     const [prevRowValues, setPrevRowValues] = useState();
     const [showPrescription, setShowPrescription] = useState(false);
     const [medicineList, setMedicineList] = useState([]);
@@ -54,8 +54,8 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
     };
 
     const handleEditRow = (index, row) => {
-        setEditableRowIndex(index); // Set the clicked row as editable
-        setPrevRowValues({ ...row }); // Store a deep copy of the previous row values
+        setEditableRowIndex(index);
+        setPrevRowValues({ ...row });
     };
 
     const handleKeyPress = (e, index, row) => {
@@ -91,7 +91,6 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         setEditableRowIndex(-1);
                     } else {
                         toast.success("Prescription updated successfully");
-                        // Update the row in local state
                         setRows(prevRows => {
                             const updatedRows = [...prevRows];
                             updatedRows[index] = { ...row };
@@ -107,7 +106,6 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         setEditableRowIndex(-1);
                     } else {
                         toast.success("Prescription added successfully");
-                        // Set the returned prescription (with id) in the row
                         if (response.data?.data) {
                             setRows(prevRows => {
                                 const updatedRows = [...prevRows];
@@ -129,7 +127,6 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         toast.error("Failed to update prescription");
                     } else {
                         toast.success("Prescription updated successfully");
-                        // Update the row in local state
                         setRows(prevRows => {
                             const updatedRows = [...prevRows];
                             updatedRows[index] = { ...row };
@@ -139,14 +136,14 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                     }
                 } else {
                     const response = await axios.post(`${process.env.REACT_APP_API_URL}/prescription/add?appointment_id=${appointmentId}&&created_by=${userId}`, row, config);
-                    if (!response.data?.status) {
+                    if (!response?.data?.status) {
                         toast.error("Failed to add prescription");
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         setEditableRowIndex(-1);
                     } else {
                         toast.success("Prescription added successfully");
                         // Set the returned prescription (with id) in the row
-                        if (response.data?.data) {
+                        if (response?.data?.data) {
                             setRows(prevRows => {
                                 const updatedRows = [...prevRows];
                                 updatedRows[index] = { ...response.data.data };
@@ -161,23 +158,23 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
             }
         }
 
-        setPrevRowValues(undefined); // Reset the previous row values
+        setPrevRowValues(undefined);
     }
 
     const cancelEditRow = (index) => {
         if (prevRowValues?.Prescription_Id) {
-            if (!prevRowValues) return; // Prevent errors if there's no previous value
+            if (!prevRowValues) return;
 
             setRows(prevRows => {
-                const updatedRows = [...prevRows]; // Create a shallow copy of the rows array
-                updatedRows[index] = { ...prevRowValues }; // Restore previous values for the row
+                const updatedRows = [...prevRows]; 
+                updatedRows[index] = { ...prevRowValues }; 
                 return updatedRows;
             });
         } else {
-            setRows(rows.filter((_, rowIndex) => rowIndex !== index)); // Remove the row from the rows array
+            setRows(rows.filter((_, rowIndex) => rowIndex !== index)); 
         }
-        setEditableRowIndex(-1); // Reset the editable row index
-        setPrevRowValues(undefined); // Reset the previous row values
+        setEditableRowIndex(-1); 
+        setPrevRowValues(undefined);
     };
 
     const handleDeleteRow = async (index, row) => {
@@ -185,7 +182,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
             if (isIPD && ipd_id) {
                 if (row?.Prescription_Id) {
                     const response = await axios.delete(`${process.env.REACT_APP_API_URL}/prescription/delete_ipd?prescription_id=${row?.Prescription_Id}`, config);
-                    if (response.status) {
+                    if (response?.status) {
                         setRows(rows.filter((_, rowIndex) => rowIndex !== index));
                         toast.success("Prescription deleted successfully");
                     }
@@ -326,7 +323,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                                                     value={row.medicine_type}
                                                     onChange={(e) => handleChange(index, "medicine_type", e.target.value)}
                                                     disabled={index !== editableRowIndex}
-                                                    style={{width:"90%", marginLeft:"10px" }}
+                                                    style={{ width: "90%", marginLeft: "10px" }}
                                                 >
                                                     <option value="">Select</option>
                                                     <option value="Tablet">Tablet</option>

@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     tableCol: {
-        width: "10%", // Divide equally among 8 columns
+        width: "10%",
         padding: 6,
         textAlign: "center",
     },
@@ -81,22 +81,22 @@ const styles = StyleSheet.create({
     signatureSection: {
         marginTop: 30,
         marginLeft: 350,
-        flexDirection: 'column', // Vertical alignment
-        alignItems: 'flex-end', // Right-align elements
+        flexDirection: 'column',
+        alignItems: 'flex-end',
     },
     signatureLine: {
         borderTop: "1px solid #000",
         width: 150,
-        marginVertical: 5, // Space above and below the line
+        marginVertical: 5,
     },
     doctorName: {
-        fontSize: 14, // Slightly larger for emphasis
-        fontWeight: "bold", // Bold for prominence
-        marginBottom: 5, // Space before the signature line
+        fontSize: 14,
+        fontWeight: "bold",
+        marginBottom: 5,
     },
     signatureText: {
         fontSize: 12,
-        marginTop: 5, // Space after the signature line
+        marginTop: 5,
         marginRight: 50
     },
 });
@@ -105,11 +105,6 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-
-                {/* <View style={styles.custom_header1}>
-
-                </View> */}
-
                 <View style={styles.custom_header} >
                     <View>
                         <Text style={{ marginBottom: 7 }}><Text style={{ fontWeight: "bold" }}>Patient Name:</Text> {patientDetails?.Patient_Name}</Text>
@@ -121,13 +116,10 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
                     </View>
                 </View>
 
-
-                {/* <View style={{ width: '100%', borderTop: '1px solid #475467', marginTop: 8 }} /> */}
                 <View style={{ marginBottom: 10, marginTop: 10 }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold" }}>Prescription</Text>
                 </View>
 
-                {/* Table Header */}
                 <View style={styles.table}>
                     <View style={[styles.tableRow, { backgroundColor: "#F9FAFB" }]}>
                         <Text style={[styles.tableCol, { fontWeight: "bold" }]}>No</Text>
@@ -140,7 +132,6 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
                         <Text style={[styles.remarksCol, { fontWeight: "bold" }]}>Remarks</Text>
                     </View>
 
-                    {/* Table Rows */}
                     {prescriptionData?.map((prescription, index) => (
                         <View style={styles.tableRow} key={prescription.Prescription_Id}>
                             <Text style={[styles.tableCol, { fontSize: '12px' }]}>{index + 1}</Text>
@@ -155,9 +146,7 @@ const PrescriptionPDF = ({ prescriptionData, patientDetails }) => {
                     ))}
                 </View>
 
-                {/* Doctor's Name and Signature Section */}
                 <View style={styles.signatureSection}>
-                    {/* <Text style={styles.doctorName}>Dr. {patientDetails?.Doctor_Name}</Text> */}
                     <View style={styles.signatureLine}></View>
                     <Text style={styles.signatureText}>Signature</Text>
                 </View>

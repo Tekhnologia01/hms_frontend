@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer";
 import Airavat from "../../../assets/images/Airavat.png";
@@ -17,7 +16,6 @@ Font.register({
     ],
 });
 
-// Define styles for the PDF document
 const styles = StyleSheet.create({
     page: {
         fontFamily: 'Times New Roman',
@@ -80,27 +78,26 @@ const styles = StyleSheet.create({
     },
     signatureSection: {
         marginTop: 30,
-        marginLeft: 'auto', // Align to the right without hardcoding a large margin
-        marginRight: 30, // Add some right margin for padding
+        marginLeft: 'auto', 
+        marginRight: 30,
         flexDirection: 'column',
         alignItems: 'flex-end',
-        width: 150, // Match the signature line width
+        width: 150,
     },
     signatureLine: {
-        borderTopWidth: 1, // Explicitly set border width
-        borderTopColor: '#000', // Explicitly set border color
-        borderTopStyle: 'solid', // Explicitly set border style
-        width: 150, // Fixed width for the line
-        marginVertical: 5, // Space above and below the line
+        borderTopWidth: 1,
+        borderTopColor: '#000',
+        borderTopStyle: 'solid',
+        width: 150, 
+        marginVertical: 5,
     },
     signatureText: {
         fontSize: 12,
         textAlign: 'right', 
-        marginRight:50// Align text to the right
+        marginRight:50,
     },
 });
 
-// PDF Component
 const BillPDF = ({ billData }) => {
     return (
         <Document>

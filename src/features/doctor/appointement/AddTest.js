@@ -24,7 +24,7 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
     fontSize: "20px",
     cursor: "pointer",
     color: "#999",
-    zIndex: 10, // Ensure it appears above content
+    zIndex: 10,
   };
 
   const getCurrentDate = () => {
@@ -46,7 +46,6 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData({
       ...formData,
       [name]: value,
@@ -54,7 +53,6 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
   }
 
   const handleTestChange = (selectedOptions) => {
-
     setFormData({
       ...formData,
       labTestIds: [...selectedOptions],
@@ -66,14 +64,13 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/lab/gettest`, config);
       setTests(response?.data?.data);
     } catch (error) {
-
     }
   }
 
   const handleSave = (e) => {
     e.preventDefault();
 
-    if (formData.labTestIds.length > 0 && formData?.recommendationDate !== "" && formData?.testReason !== "") {
+    if (formData?.labTestIds.length > 0 && formData?.recommendationDate !== "" && formData?.testReason !== "") {
       handleTestSave(formData);
       handleClose();
       toast.success("Test added successfully");
@@ -100,7 +97,6 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
     >
       <div className="pe-5 ps-5 pt-2 ">
         <FaTimes style={closeIconStyle} onClick={handleClose} />
-
         <div className="fw-bold  fs-5">Add Test</div>
       </div>
 
@@ -109,15 +105,13 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
       <div className="pe-5 ps-5 pb-5 pt-3">
 
         <Row className="mt-3 m-0">
-         
           <Col lg={6}>
             <Form.Label className="fw-semibold">Select Test</Form.Label>
             <MultiSelectWithDropdown
-
               selectedDays={formData?.labTestIds}
               options={tests?.map(test => ({
-                value: test.test_id,
-                label: test.test_name
+                value: test?.test_id,
+                label: test?.test_name
               }))}
               onDayChange={handleTestChange}
               style={{ padding: "8px" }}
@@ -129,18 +123,16 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
                 className=""
                 type="date"
                 label={"Recommendation Date"}
-                value={formData.recommendationDate}
+                value={formData?.recommendationDate}
                 name="recommendationDate"
                 onChange={handleChange}
               />
             </Form.Group>
-
           </Col>
         </Row>
-
         <div className="pt-2">
           <Note
-            value={formData.testReason}
+            value={formData?.testReason}
             name="testReason"
             onChange={handleChange}
             placeholder="Reason here..."
@@ -148,7 +140,6 @@ const AddTest = ({ show, handleClose, handleTestSave }) => {
             label="Test Reason"
           />
         </div>
-
         <div className="d-flex justify-content-end pt-lg-4">
           <CommanButton
             label="Add Test"

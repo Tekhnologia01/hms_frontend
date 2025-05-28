@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Form, Table } from "react-bootstrap";
 import Note from "../../../components/common/form/textarea";
-import { FaArrowLeft, FaFileUpload } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import CommanButton from "../../../components/common/form/commonButtton";
 import AddTest from "./AddTest";
 import Bill from "./Billl";
@@ -31,13 +31,13 @@ function ViewPatient() {
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  const [showModalPrescription, setShowModalPrescription] = useState(false);
-  const handleShowModalPrescription = () => setShowModalPrescription(true);
-  const handleCloseModalPrescription = () => setShowModalPrescription(false);
+  // const [showModalPrescription, setShowModalPrescription] = useState(false);
+  // const handleShowModalPrescription = () => setShowModalPrescription(true);
+  // const handleCloseModalPrescription = () => setShowModalPrescription(false);
 
   const handleShowModalAdmit = () => setShowAdmitModal(true);
   const handleCloseModalAdmit = () => { setShowAdmitModal(false) };
-  const [isUpdate, setIsUpdate] = useState(false);
+  // const [isUpdate, setIsUpdate] = useState(false);
   const [testData, setTestData] = useState([]);
   const [appointmentData, setAppointmentData] = useState([]);
   const [prescriptionData, setPrescriptionData] = useState();
@@ -93,7 +93,7 @@ function ViewPatient() {
   }
 
   const handleDeleteTest = async (item, value) => {
-    let filteredData = testData.find((test) => {
+    let filteredData = testData?.find((test) => {
       return test.TestId === item;
     });
     if (value === 'Test') {
@@ -111,7 +111,7 @@ function ViewPatient() {
 
   const completeAppointment = async () => {
     try {
-      if (prescriptionData.length > 0) {
+      if (prescriptionData?.length > 0) {
         if (!examinationData?.chief_complaints) {
           toast.error("Please fill all fields");
         } else {
@@ -235,7 +235,6 @@ function ViewPatient() {
 
   const handleBill = async (formData) => {
     const totalBill = formData.chargesList.reduce((sum, item) => sum + item.total, 0) + appointmentData.consultancy_fee;
-    // Generate PDF Blob
     const billData = {
       appointment_id: params.appointmentId,
       patient_name: appointmentData.patient_name,
@@ -250,16 +249,14 @@ function ViewPatient() {
         type: "application/pdf",
       });
 
-      // Prepare FormData for upload
       const formDataToUpload = new FormData();
       formDataToUpload.append("pdf", pdfFile);
       formDataToUpload.append("appointment_id", params.appointmentId);
       formDataToUpload.append("total_amount", totalBill);
       formDataToUpload.append("user_id", user?.userId);
-      // window.open(URL.createObjectURL(pdfBlob), "_blank");
 
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/bill/createbill`, { appointment_id: params.appointmentId, total_amount: totalBill, chargesList: formData?.chargesList, user_id: user?.userId }, config);
-      if (response.data?.status) {
+      if (response?.data?.status) {
         toast.success("End Appointment")
         handleCloseModalbill();
 
@@ -302,7 +299,6 @@ function ViewPatient() {
     setExaminationData((prevState) => {
       let selectedConditions = prevState.past_medical_history ? prevState.past_medical_history.split(", ") : [];
 
-      // Remove previous "Other" input from the list
       selectedConditions = selectedConditions.filter(item => !item.startsWith("Other:"));
 
       if (value.trim()) {
@@ -529,7 +525,6 @@ function ViewPatient() {
                   <Form.Control
                     type="text"
                     name="other"
-                    // value={formData.other}
                     onChange={handleOtherChange}
                     placeholder="Enter other past illnesses"
                     disabled={user?.RoleId !== 2}

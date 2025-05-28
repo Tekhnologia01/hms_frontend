@@ -148,7 +148,7 @@ const AddBed = ({ show, handleClose, handleBedSubmit, bed, openStatus, handleupd
                                         value={values.roomId}
                                         options={[
                                             { label: "Select Room", option: "" },
-                                            ...rooms.map((room) => ({
+                                            ...rooms?.map((room) => ({
                                                 label: room.room_name,
                                                 option: room.room_id,
                                             })),

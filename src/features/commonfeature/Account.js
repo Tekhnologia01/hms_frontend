@@ -282,8 +282,8 @@ function Account() {
                                         disabled={!isEditable}
                                     >
                                         <option value="">Select Blood Group</option>
-                                        {bloodGroups.length > 0
-                                            ? bloodGroups.map((blood) => (
+                                        {bloodGroups?.length > 0
+                                            ? bloodGroups?.map((blood) => (
                                                 <option
                                                     key={blood.blood_id}
                                                     value={blood.blood_id}
@@ -348,7 +348,6 @@ function Account() {
                         className="mb-3 ps-4 pe-4 p-2 fw-semibold fs-6"
                         style={{ borderRadius: "7px" }}
                         type={isEditable ? "submit" : "button"}
-                        // onClick={!isEditable ? () => setIsEditable(true) : undefined}
                         loading={isLoading}
                         disabled={isLoading || !isEditable}
                     />
