@@ -21,7 +21,7 @@ const DefaultLayout = () => {
     const handleResize = () => {
       if (window.innerWidth < 450) {
         setSidebarVisible(false);
-        setSidebarCompact(false);
+        setSidebarCompact(true);
       } else if (window.innerWidth >= 450 && window.innerWidth <= 768) {
         setSidebarVisible(false);
         setSidebarCompact(true);

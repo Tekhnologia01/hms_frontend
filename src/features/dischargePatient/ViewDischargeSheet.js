@@ -74,6 +74,7 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
                             }
                             fileName={`${details[0]?.patient_name}_Discharge.pdf`}
                             className="btn btn-primary"
+                            // style={{backgroundColor:"#7B3F0080"}}
                         >
                             {({ loading }) =>
                                 loading ? "Preparing document..." : "Download PDF"
