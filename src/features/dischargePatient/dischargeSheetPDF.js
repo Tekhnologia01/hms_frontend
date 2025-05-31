@@ -27,19 +27,19 @@ const styles = StyleSheet.create({
         fontFamily: 'Times New Roman',
         padding: 40,
         fontSize: 11,
-        lineHeight: 1.4,
+        lineHeight: 1.1,
         color: '#333',
         position: 'relative',
     },
-        watermark: {
-            position: 'absolute',
-            top: '50%',
-            left: '28%',
-            transform: 'translate(-50%, -50%)',
-            opacity: 0.1,
-            width: '60%',
-            height: 'auto',
-        },
+    watermark: {
+        position: 'absolute',
+        top: '50%',
+        left: '28%',
+        transform: 'translate(-50%, -50%)',
+        opacity: 0.1,
+        width: '60%',
+        height: 'auto',
+    },
     content: {
         position: 'relative',
         zIndex: 1,
@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     leftColumn: {
-        width: '55%',  // Adjusted width
+        width: '55%',
     },
     rightColumn: {
-        width: '40%',  // Adjusted width
-        alignItems: 'flex-end',  // This will align text to the right
-        textAlign: 'right'  // For text alignment within the column
+        width: '40%',
+        alignItems: 'flex-end',
+        textAlign: 'right'
     },
     divider: {
         width: '100%',
@@ -107,104 +107,15 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 15
     },
-    table: {
-        display: "table",
-        width: "100%",
-        borderCollapse: "collapse",
-        marginTop: 8,
-        marginBottom: 12
-    },
-    tableRow: {
-        flexDirection: "row",
-        borderBottom: "1px solid #EAECF0",
-    },
-    tableHeader: {
-        backgroundColor: "#F9FAFB",
-        fontSize: 10,
-        fontWeight: "bold",
-        padding: 5,
-        textAlign: "center",
-        color: '#2c3e50',
-        border: '1px solid #e0e0e0'
-    },
-    tableCol: {
-        width: "10%",
-        padding: 5,
-        textAlign: "center",
-        fontSize: 10,
-        borderRight: '1px solid #e0e0e0'
-    },
-    medicineNameCol: {
-        width: "17%",
-        fontWeight: "bold",
-        padding: 5,
-        textAlign: "center",
-        fontSize: 10,
-        borderRight: '1px solid #e0e0e0'
-    },
-    remarksCol: {
-        width: "20%",
-        padding: 5,
-        textAlign: "center",
-        fontSize: 10,
-        borderRight: '1px solid #e0e0e0'
-    },
-    bulletPoint: {
-        fontSize: 10,
-        marginLeft: 10,
-        marginBottom: 3
-    },
-    signatureSection: {
-        display: "flex",
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 30,
-        marginBottom: 15
-    },
-    signatureLine: {
-        borderTop: '1px solid #333',
-        width: 150,
-        marginTop: 25,
-        paddingTop: 3,
-        fontSize: 10
-    },
-    footer: {
-        position: 'absolute',
-        bottom: 30,
-        left: 40,
-        right: 40,
-        fontSize: 10,
-        color: '#666',
-        textAlign: 'center',
-        borderTop: '1px solid #eaeaea',
-        paddingTop: 10
-    },
-    highlightBox: {
-        backgroundColor: '#f8f9fa',
-        border: '1px solid #e0e0e0',
-        borderRadius: 3,
-        padding: 8,
-        marginTop: 8,
-        marginBottom: 12
-    },
-    twoColumn: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 8
-    },
-    column: {
-        width: '48%'
-    },
     noCol: {
-        width: '7%',  // Reduced from 10% to accommodate all columns
+        width: '7%',
         padding: 4,
         textAlign: "center",
     },
     medicineNameCol: {
         width: "20%",
         padding: 4,
-        textAlign: "left",  // Changed to left align for better readability
+        textAlign: "left",
     },
     doseCol: {
         width: "10%",
@@ -236,7 +147,6 @@ const styles = StyleSheet.create({
         padding: 4,
         textAlign: "left",
     },
-
     tableHeader: {
         backgroundColor: "#F9FAFB",
         fontSize: 10,
@@ -252,17 +162,60 @@ const styles = StyleSheet.create({
     tableRow: {
         flexDirection: "row",
     },
-    footerContainer: {
+    table: {
+        width: "100%",
+        marginTop: 8,
+        marginBottom: 12
+    },
+    bulletPoint: {
+        fontSize: 10,
+        marginLeft: 10,
+        marginBottom: 3
+    },
+    signatureSection: {
+        display: "flex",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 30,
+        marginBottom: 15
+    },
+    signatureLine: {
+        borderTop: '1px solid #333',
+        width: 150,
+        marginTop: 25,
+        paddingTop: 3,
+        fontSize: 10
+    },
+    footer: {
         position: 'absolute',
-        bottom: 300,
+        bottom: 30,
         left: 40,
         right: 40,
+        fontSize: 10,
+        color: '#666',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         borderTop: '1px solid #eaeaea',
         paddingTop: 10
+    },
+    highlightBox: {
+        backgroundColor: '#f8f9fa',
+        border: '1px solid #e0e0e0',
+        borderRadius: 3,
+        padding: 8,
+        marginTop: 8,
+        marginBottom: 12
+    },
+    twoColumn: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 8
+    },
+    column: {
+        width: '48%'
     },
     hospitalInfo: {
         fontSize: 10
@@ -278,27 +231,33 @@ const DischargeSheetPDF = ({ data, prescription }) => {
     const dischargeDate = formatEpochToDate(data?.discharge_date_time);
     const followUpDate = formatEpochToDate(data?.follow_up_date_time);
 
+    const rowsPerPage = 20;
+
+    const prescriptionChunks = [];
+    if (prescription?.length > 0) {
+        for (let i = 0; i < prescription.length; i += rowsPerPage) {
+            prescriptionChunks.push(prescription.slice(i, i + rowsPerPage));
+        }
+    } else {
+        prescriptionChunks.push([]);
+    }
+
     return (
         <Document>
-            <Page size="A4" style={styles.page}>
 
-                <Image
-                    src={Airavat}
-                    style={styles.watermark}
-                />
+            {/* First Page */}
+            <Page size="A4" style={styles.page} wrap>
+                <Image src={Airavat} style={styles.watermark} />
 
                 <View style={styles.headerContainer}>
-                    <Image
-                        src={Airavat}
-                        style={styles.logo}
-                    />
+                    <Image src={Airavat} style={styles.logo} />
                 </View>
 
                 <View>
                     <Text style={styles.reg}>Reg No : MH/THA/NA073</Text>
                 </View>
 
-                <View style={styles.custom_header}>
+                <View style={styles.custom_header} wrap>
                     <View style={styles.leftColumn}>
                         <Text style={styles.margin_t}><Text style={styles.header}>NAME: </Text>{data?.patient_name}</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>AGE: </Text>{data?.patient_age} YEARS</Text>
@@ -315,28 +274,28 @@ const DischargeSheetPDF = ({ data, prescription }) => {
 
                 <View style={styles.divider}></View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap>
                     <Text style={styles.subHeader}>Diagnosis</Text>
                     <View>
                         <Text>{data?.diagnosis}</Text>
                     </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap>
                     <Text style={styles.subHeader}>Chief Complaints</Text>
                     <Text>{data?.chief_complaints}</Text>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap>
                     <Text style={styles.subHeader}>Physical Examination</Text>
-                    <View style={styles.section}>
+                    <View style={styles.section} wrap>
                         <Text style={styles.header}>Signs</Text>
                         {data?.signs?.split(',')?.map((item, index) => (
                             <Text key={index} style={styles.bulletPoint}>• {item}</Text>
                         ))}
                     </View>
 
-                    <View style={styles.twoColumn}>
+                    <View style={styles.twoColumn} wrap>
                         <View>
                             <Text style={styles.margin_t}><Text style={styles.header}>Temperature: </Text>{data?.temprature}</Text>
                             <Text style={styles.margin_t}><Text style={styles.header}>Pulse: </Text>{data?.pulse}</Text>
@@ -347,28 +306,28 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                         </View>
                     </View>
 
-                    <View style={styles.section}>
+                    <View style={styles.section} wrap>
                         <Text style={styles.margin_t}><Text style={styles.header}>Cardiovascular System (CVS): </Text>{data?.cvs}</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>Respiratory System (RS): </Text>{data?.rs}</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>Per Abdomen (PA): </Text>{data?.pa}</Text>
                         <Text style={styles.margin_t}><Text style={styles.header}>Central Nervous System (CNS): </Text>{data?.cns}</Text>
                     </View>
 
-                    <View style={styles.section}>
+                    <View style={styles.section} wrap>
                         <Text style={styles.header}>Local Examination</Text>
                         <Text>{data?.local_examination}</Text>
                     </View>
 
-                    <View style={styles.section}>
+                    <View style={styles.section} wrap>
                         <Text style={styles.header}>Past History</Text>
                         <Text>{data?.past_history || "None provided"}</Text>
                     </View>
 
-                    <View style={styles.section}>
+                    <View style={styles.section} >
                         <Text style={styles.subHeader}>Course in hospital</Text>
                         <Text>{data?.course_details}</Text>
                         {data?.treatment_point?.length > 0 && (
-                            <View style={{ marginTop: 8 }}>
+                            <View style={{ marginTop: 8 }} >
                                 {data?.treatment_point?.map((treatment, index) => (
                                     <Text key={treatment?.treatment_id} style={styles.bulletPoint}>
                                         • {treatment.treatment_point}
@@ -380,24 +339,36 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                 </View>
             </Page>
 
-            <Page size="A4" style={styles.page}>
+            {/* Second Page - Advice and Prescription */}
+            <Page size="A4" style={styles.page} wrap>
+                <Image src={Airavat} style={styles.watermark} />
 
-                <Image
-                    src={Airavat}
-                    style={styles.watermark}
-                />
-
-                <View style={styles.section}>
+                <View style={styles.section} wrap>
                     <Text style={styles.subHeader}>Advice on Discharge</Text>
                     <View>
                         <Text>{data?.discharge_advice}</Text>
                     </View>
                 </View>
 
-                {prescription?.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.subHeader}>Prescription</Text>
-                        <View style={styles.table}>
+                <View style={styles.section} wrap>
+                    <Text style={styles.subHeader}>Further Follow-up</Text>
+                    <View>
+                        <Text>ALL INVESTIGATION REPORTS AND IMAGES OF RADIOLOGICAL INVESTIGATIONS HAVE BEEN HANDED OVER TO THE PATIENT/PATIENT ATTENDANT.</Text>
+                    </View>
+                </View>
+
+                <View style={styles.section} wrap>
+                    <Text style={[styles.subHeader, { borderBottom: 'none' }]}>Follow-up Date:
+                        <Text style={{ fontWeight: "normal" }}> {followUpDate}</Text>
+                    </Text>
+                </View>
+
+                {prescriptionChunks?.map((chunk, chunkIndex) => (
+                    <View key={`chunk-${chunkIndex}`} style={styles.section} wrap>
+                        <Text style={styles.subHeader}>
+                            {chunkIndex === 0 ? 'Prescription' : 'Prescription (continued)'}
+                        </Text>
+                        <View style={styles.table} wrap>
                             <View style={[styles.tableRow, { backgroundColor: "#F9FAFB" }]}>
                                 <Text style={[styles.tableHeader, styles.noCol]}>No</Text>
                                 <Text style={[styles.tableHeader, styles.medicineNameCol]}>Medicine Name</Text>
@@ -409,9 +380,9 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                                 <Text style={[styles.tableHeader, styles.remarksCol]}>Remarks</Text>
                             </View>
 
-                            {prescription?.map((prescription, index) => (
+                            {chunk?.map((prescription, index) => (
                                 <View style={styles.tableRow} key={prescription.Prescription_Id}>
-                                    <Text style={[styles.tableCol, styles.noCol]}>{index + 1}</Text>
+                                    <Text style={[styles.tableCol, styles.noCol]}>{chunkIndex * 15 + index + 1}</Text>
                                     <Text style={[styles.tableCol, styles.medicineNameCol]}>{prescription?.medicine_name}</Text>
                                     <Text style={[styles.tableCol, styles.doseCol]}>{prescription?.dosage}</Text>
                                     <Text style={[styles.tableCol, styles.typeCol]}>{prescription?.medicine_type}</Text>
@@ -423,22 +394,9 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                             ))}
                         </View>
                     </View>
-                )}
+                ))}
 
-                <View style={styles.section}>
-                    <Text style={styles.subHeader}>Further Follow-up</Text>
-                    <View>
-                        <Text>ALL INVESTIGATION REPORTS AND IMAGES OF RADIOLOGICAL INVESTIGATIONS HAVE BEEN HANDED OVER TO THE PATIENT/PATIENT ATTENDANT.</Text>
-                    </View>
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={[styles.subHeader, { borderBottom: 'none' }]}>Follow-up Date:
-                        <Text style={{ fontWeight: "normal" }}> {followUpDate}</Text>
-                    </Text>
-                </View>
-
-                <View style={styles.signatureSection}>
+                <View style={styles.signatureSection} wrap>
                     <View>
                         <Text>Prepared by: {data?.doctor_name}</Text>
                     </View>
@@ -447,11 +405,11 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                     </View>
                 </View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap>
                     <Text>Summary issued date / time: {data?.discharge_date}, {data?.discharge_time}</Text>
                 </View>
 
-                <View style={styles.footerContainer}>
+                <View style={styles.footer} wrap>
                     <View style={styles.hospitalInfo}>
                         <Text style={[styles.header, styles.margin_t]}>
                             Airavat-{data?.department}-Team
@@ -464,11 +422,43 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                         <Text>(Patient / Relative signature)</Text>
                     </View>
                 </View>
-
-                <View style={styles.footer}>
-                    <Text>I have understood the instructions given about the medication dosage and post-discharge care.</Text>
-                </View>
             </Page>
+
+            {/* <Page size="A4" style={styles.page} wrap>
+                {prescriptionChunks?.map((chunk, chunkIndex) => (
+                    <View key={`chunk-${chunkIndex}`} style={styles.section} wrap>
+                        <Text style={styles.subHeader}>
+                            {chunkIndex === 0 ? 'Prescription' : 'Prescription (continued)'}
+                        </Text>
+                        <View style={styles.table} wrap>
+                            <View style={[styles.tableRow, { backgroundColor: "#F9FAFB" }]}>
+                                <Text style={[styles.tableHeader, styles.noCol]}>No</Text>
+                                <Text style={[styles.tableHeader, styles.medicineNameCol]}>Medicine Name</Text>
+                                <Text style={[styles.tableHeader, styles.doseCol]}>Dose</Text>
+                                <Text style={[styles.tableHeader, styles.typeCol]}>Type</Text>
+                                <Text style={[styles.tableHeader, styles.frequencyCol]}>Frequency</Text>
+                                <Text style={[styles.tableHeader, styles.daysCol]}>Days</Text>
+                                <Text style={[styles.tableHeader, styles.quantityCol]}>Quantity</Text>
+                                <Text style={[styles.tableHeader, styles.remarksCol]}>Remarks</Text>
+                            </View>
+
+                            {chunk?.map((prescription, index) => (
+                                <View style={styles.tableRow} key={prescription.Prescription_Id}>
+                                    <Text style={[styles.tableCol, styles.noCol]}>{chunkIndex * 15 + index + 1}</Text>
+                                    <Text style={[styles.tableCol, styles.medicineNameCol]}>{prescription?.medicine_name}</Text>
+                                    <Text style={[styles.tableCol, styles.doseCol]}>{prescription?.dosage}</Text>
+                                    <Text style={[styles.tableCol, styles.typeCol]}>{prescription?.medicine_type}</Text>
+                                    <Text style={[styles.tableCol, styles.frequencyCol]}>{prescription?.frequency}</Text>
+                                    <Text style={[styles.tableCol, styles.daysCol]}>{prescription?.days}</Text>
+                                    <Text style={[styles.tableCol, styles.quantityCol]}>{prescription?.quantity}</Text>
+                                    <Text style={[styles.tableCol, styles.remarksCol]}>{prescription?.common_note}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                ))}
+            </Page> */}
+
         </Document>
     );
 };
