@@ -230,7 +230,7 @@ const AddPrescriptionTable = ({ appointmentId, ipd_id, rows, setRows, role, appo
                         style={{ color: "#1d949a", cursor: 'pointer' }}
                         onClick={addRow}
                     >+ Add Prescription</span>}
-                    <button className="border-0 bg-transparent" onClick={() => {
+                    <button type="button" className="border-0 bg-transparent" onClick={() => {
                         setShowPrescription(true)
                     }}>
                         <FaFilePrescription fontSize={"20px"} color="1D949A" />

@@ -661,9 +661,6 @@ const DischargePatient = () => {
                                     </Col >
                                 </Row >
  
-                                {/* <CourseDetails /> */}
- 
- 
                                 <Row className="">
                                     <Col >
                                         {<AddPrescriptionTable isIPD={true} ipd_id={location.state} rows={prescriptionData} setRows={setPrescriptionData} role={user?.RoleId} appointmentData={patientdetails} />}
