@@ -8,23 +8,23 @@ const formatEpochToDate = (epoch) => {
     return date.toLocaleDateString('en-GB');
 };
 
+// Simplify font registration
 Font.register({
-    family: 'Times New Roman',
+    family: 'Helvetica',
     fonts: [
-        {
-            src: '/fonts/Times New Roman.ttf',
-            fontWeight: 'normal',
-        },
-        {
-            src: '/fonts/Times New Roman Bold.ttf',
-            fontWeight: 'bold',
-        },
+        { src: '/fonts/Helvetica.ttf' },
+        { src: '/fonts/Helvetica-Bold.ttf', fontWeight: 'bold' }
     ],
 });
 
+const toBase64 = (file) => {
+
+    return "data:image/png;base64,...";
+};
+
 const styles = StyleSheet.create({
     page: {
-        fontFamily: 'Times New Roman',
+        fontFamily: 'Helvetica',
         padding: 40,
         fontSize: 11,
         lineHeight: 1.1,
@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
         top: '50%',
         left: '28%',
         transform: 'translate(-50%, -50%)',
-        opacity: 0.1,
-        width: '60%',
+        opacity: 0.05,  // Reduced from 0.1
+        width: '50%',   // Reduced from 60%
         height: 'auto',
     },
     content: {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         border: '1px solid #e0e0e0'
     },
     tableCol: {
-        fontSize: 10,
+        fontSize: 9,
         borderRight: '1px solid #e0e0e0',
         borderBottom: '1px solid #EAECF0',
     },
@@ -227,9 +227,9 @@ const styles = StyleSheet.create({
 });
 
 const DischargeSheetPDF = ({ data, prescription }) => {
-    const admittedDate = formatEpochToDate(data?.admitted_date);
-    const dischargeDate = formatEpochToDate(data?.discharge_date_time);
-    const followUpDate = formatEpochToDate(data?.follow_up_date_time);
+    const admittedDate = data?.admitted_date ? formatEpochToDate(data?.admitted_date) : '';
+    const dischargeDate = data?.discharge_date_time ? formatEpochToDate(data?.discharge_date_time) : '';
+    const followUpDate = data?.follow_up_date_time ? formatEpochToDate(data?.follow_up_date_time) : '';
 
     const rowsPerPage = 20;
 
@@ -247,10 +247,10 @@ const DischargeSheetPDF = ({ data, prescription }) => {
 
             {/* First Page */}
             <Page size="A4" style={styles.page} wrap>
-                <Image src={Airavat} style={styles.watermark} />
+                <Image src={toBase64(Airavat)} style={styles.watermark} cache={false} />
 
                 <View style={styles.headerContainer}>
-                    <Image src={Airavat} style={styles.logo} />
+                    <Image src={toBase64(Airavat)} style={styles.logo} />
                 </View>
 
                 <View>
@@ -330,7 +330,7 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                             <View style={{ marginTop: 8 }} >
                                 {data?.treatment_point?.map((treatment, index) => (
                                     <Text key={treatment?.treatment_id} style={styles.bulletPoint}>
-                                        • {treatment.treatment_point}
+                                        • {treatment?.treatment_point}
                                     </Text>
                                 ))}
                             </View>
@@ -341,7 +341,7 @@ const DischargeSheetPDF = ({ data, prescription }) => {
 
             {/* Second Page - Advice and Prescription */}
             <Page size="A4" style={styles.page} wrap>
-                <Image src={Airavat} style={styles.watermark} />
+                <Image src={toBase64(Airavat)} style={styles.watermark} />
 
                 <View style={styles.section} wrap>
                     <Text style={styles.subHeader}>Advice on Discharge</Text>
@@ -381,7 +381,7 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                             </View>
 
                             {chunk?.map((prescription, index) => (
-                                <View style={styles.tableRow} key={prescription.Prescription_Id}>
+                                <View style={styles.tableRow} key={prescription?.Prescription_Id}>
                                     <Text style={[styles.tableCol, styles.noCol]}>{chunkIndex * 15 + index + 1}</Text>
                                     <Text style={[styles.tableCol, styles.medicineNameCol]}>{prescription?.medicine_name}</Text>
                                     <Text style={[styles.tableCol, styles.doseCol]}>{prescription?.dosage}</Text>
