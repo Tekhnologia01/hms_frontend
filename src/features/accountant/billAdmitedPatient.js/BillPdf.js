@@ -162,6 +162,69 @@ const BillPDF = ({ billData, discount }) => {
     return combined;
   };
 
+  const combineOtherCharges = (charges = []) => {
+    if (!charges?.length) return [];
+
+    const grouped = charges.reduce((acc, charge) => {
+      const key = `${charge.charge_name}-${charge.amount}`;
+      if (!acc[key]) {
+        acc[key] = {
+          ...charge,
+          quantity: 0,
+          dates: new Set()
+        };
+      }
+      acc[key].quantity += charge.quantity || 1;
+      acc[key].dates.add(charge.charge_date);
+      return acc;
+    }, {});
+
+    return Object.values(grouped).map(item => ({
+      ...item,
+      charge_date: Array.from(item.dates).sort().map(date =>
+        formatDate(date)
+      ).join(', '),
+      combined: true
+    }));
+  };
+
+  const combineDoctorVisits = (visits = []) => {
+    if (!visits?.length) return [];
+
+    const grouped = visits.reduce((acc, visit) => {
+      const key = `${visit.doctor_name}-${visit.amount}`;
+      if (!acc[key]) {
+        acc[key] = {
+          ...visit,
+          quantity: 0,
+          dates: new Set()
+        };
+      }
+      acc[key].quantity += 1;
+      acc[key].dates.add(visit.visit_date);
+      return acc;
+    }, {});
+
+    return Object.values(grouped).map(item => ({
+      ...item,
+      visit_date: Array.from(item.dates).sort().map(date =>
+        formatDate(date)
+      ).join(', '),
+      combined: true
+    }));
+  };
+
+  const getRowNumber = (index, section) => {
+    let base = 1;
+    if (section === 'otherCharges') {
+      base += combineRoomEntries(billData.room1)?.length || 0;
+    } else if (section === 'doctorVisits') {
+      base += (combineRoomEntries(billData.room1)?.length || 0) +
+        (combineOtherCharges(billData.othercharges)?.length || 0);
+    }
+    return base + index;
+  };
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -220,11 +283,13 @@ const BillPDF = ({ billData, discount }) => {
             <Text style={styles.tableHeader}>Amount</Text>
           </View>
 
-          {/* Room Charges */}
+          {/* Combined Room Charges */}
           {combineRoomEntries(billData.room1)?.map((room, index) => (
             <View style={styles.tableRow} key={`room-${index}`}>
               <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + 1}</Text>
-              <Text style={styles.tableCellLeft}>Room Charge {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`}</Text>
+              <Text style={styles.tableCellLeft}>
+                Room Charge {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`}
+              </Text>
               <Text style={styles.tableCell}>
                 {formatDate(room.start_date)}
                 {room.days > 1 ? ` - ${formatDate(room.end_date)}` : ""}
@@ -234,39 +299,39 @@ const BillPDF = ({ billData, discount }) => {
             </View>
           ))}
 
-          {/* Other Charges */}
-          {billData.othercharges?.map((charge, index) => (
+          {/* Combined Other Charges */}
+          {combineOtherCharges(billData.othercharges)?.map((charge, index) => (
             <View style={styles.tableRow} key={`charge-${index}`}>
-              <Text style={[styles.tableCell, { flex: 0.5 }]}>{index + (billData?.room1?.length || 0) + 1}</Text>
-              <Text style={styles.tableCellLeft}>{charge?.charge_name}</Text>
-              <Text style={styles.tableCell}>{formatDate(charge?.charge_date)}</Text>
-              <Text style={styles.tableCell}>{charge.quantity || 1}</Text>
-              <Text style={styles.tableCell}>{charge.amount * (charge.quantity || 1)}</Text>
+              <Text style={[styles.tableCell, { flex: 0.5 }]}>{getRowNumber(index, 'otherCharges')}</Text>
+              <Text style={styles.tableCellLeft}>{charge.charge_name}</Text>
+              <Text style={styles.tableCell}>{charge.charge_date}</Text>
+              <Text style={styles.tableCell}>{charge.quantity}</Text>
+              <Text style={styles.tableCell}>{charge.amount * charge.quantity}</Text>
             </View>
           ))}
 
-          {/* Doctor Visits */}
-          {billData?.doctorvisiting?.map((visit, index) => (
+          {/* Combined Doctor Visits */}
+          {combineDoctorVisits(billData.doctorvisiting)?.map((visit, index) => (
             <View style={styles.tableRow} key={`visit-${index}`}>
-              <Text style={[styles.tableCell, { flex: 0.5 }]}>
-                {index + (billData?.room1?.length || 0) + (billData?.othercharges?.length || 0) + 1}
-              </Text>
+              <Text style={[styles.tableCell, { flex: 0.5 }]}>{getRowNumber(index, 'doctorVisits')}</Text>
               <Text style={styles.tableCellLeft}>Doctor Visit - {visit.doctor_name}</Text>
-              <Text style={styles.tableCell}>{formatDate(visit.visit_date)}</Text>
-              <Text style={styles.tableCell}>1</Text>
-              <Text style={styles.tableCell}>{visit.amount}</Text>
+              <Text style={styles.tableCell}>{visit.visit_date}</Text>
+              <Text style={styles.tableCell}>{visit.quantity}</Text>
+              <Text style={styles.tableCell}>{visit.amount * visit.quantity}</Text>
             </View>
           ))}
 
-
-          <View style={styles.totalRow}>
-            <Text style={[styles.tableCellLeft, { flex: 4, textAlign: 'right', borderRightWidth: 0 }]}>
-              Discount
-            </Text>
-            <Text style={[styles.tableCell, { fontWeight: 'bold', borderRightWidth: 0 }]}>
-              {discount}
-            </Text>
-          </View>
+          {/* Discount Row */}
+          {discount > 0 && (
+            <View style={styles.totalRow}>
+              <Text style={[styles.tableCellLeft, { flex: 4, textAlign: 'right', borderRightWidth: 0 }]}>
+                Discount
+              </Text>
+              <Text style={[styles.tableCell, { fontWeight: 'bold', borderRightWidth: 0 }]}>
+                {discount}
+              </Text>
+            </View>
+          )}
 
           {/* Total Row */}
           <View style={styles.totalRow}>
@@ -277,14 +342,12 @@ const BillPDF = ({ billData, discount }) => {
               {totalAmount - discount}
             </Text>
           </View>
-
-
         </View>
 
-        {/* Payment Mode with smaller font */}
-        <Text style={styles.subtitle}>Payment Mode : <Text style={styles.text}>{billData.payment_method || 'Cash'}</Text> </Text>
+        {/* Payment Mode */}
+        <Text style={styles.subtitle}>Payment Mode: <Text style={styles.text}>{billData.payment_method || 'Cash'}</Text></Text>
 
-        {/* Signature Section with reduced size */}
+        {/* Signature Section */}
         <View style={styles.signatureRow}>
           <View style={styles.signatureBox}>
             <View style={styles.signatureLine} />

@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import axios from "axios";
 import { Button, Card, Col, Container, Form, Modal, Row, Table } from "react-bootstrap";
 import CommanButton from "../../../components/common/form/commonButtton";
 import Airavat from "../../../assets/images/Airavat.png";
@@ -9,6 +8,8 @@ import { pdf } from "@react-pdf/renderer";
 import { useState, useEffect } from "react";
 import BillPDF from "./BillPdf";
 import { toast } from "react-toastify";
+import DetailedBillPDF from "./DetaliedBillPdf";
+import axios from "axios";
 
 function IpdBill() {
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ function IpdBill() {
     const [discountAmount, setDiscountAmount] = useState(0);
     const { user } = useSelector((state) => state?.auth);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [billingCharges, setBillingCharges] = useState([]);
     const [pdfUrl, setPdfUrl] = useState(null);
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
@@ -38,8 +40,41 @@ function IpdBill() {
         }
     };
 
+    const fetchBillingCharges = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/bill/GetAllBillingAndCharges`,
+                config
+            );
+            setBillingCharges(response?.data?.data[0] || []);
+        } catch (error) {
+            console.error('Error fetching billing charges:', error);
+        }
+    };
+
+    const getRoomChargeDetails = (roomType) => {
+        const chargeDetails = billingCharges?.find(
+            charge => charge?.room_type === roomType
+
+        );
+
+        if (!chargeDetails) {
+            console.log("NO rooms FOund")
+            return null;
+        }
+        return [
+            { name: 'Bed', amount: chargeDetails.bed },
+            { name: 'Nursing', amount: chargeDetails.nursing },
+            { name: 'Doctor', amount: chargeDetails.doctor },
+            { name: 'RMO', amount: chargeDetails.rmo },
+            { name: 'BMW', amount: chargeDetails.bmw },
+            // Add other charge types as needed
+        ].filter(item => item.amount > 0); // Only show items with actual charges
+    };
+
     useEffect(() => {
         fetchReceipt();
+        fetchBillingCharges();
     }, []);
 
     const calculateRoomDays = (startDate, endDate) => {
@@ -76,14 +111,10 @@ function IpdBill() {
                 discountAmount: discountAmount
             };
 
-            // Generate PDF blob
             const pdfBlob = await pdf(<BillPDF billData={billDataForPDF} discount={discountAmount} />).toBlob();
-
-            // Create object URL for preview
             const pdfPreviewUrl = URL.createObjectURL(pdfBlob);
             setPdfUrl(pdfPreviewUrl);
 
-            // Prepare file for upload
             const fileName = `IPD-Bill-${details.ipd_id}.pdf`;
             const pdfFile = new File([pdfBlob], fileName, { type: "application/pdf" });
 
@@ -113,13 +144,12 @@ function IpdBill() {
                     bill_report: response.data.filePath,
                     payment_status: "Paid"
                 }));
-                fetchReceipt()
+                fetchReceipt();
                 setShowPaymentModal(true);
-                toast.success("Bill generated and uploaded successfully!")
+                toast.success("Bill generated and uploaded successfully!");
             }
         } catch (e) {
-            toast.error("Error generating bill")
-
+            toast.error("Error generating bill");
         }
     };
 
@@ -127,21 +157,39 @@ function IpdBill() {
         if (pdfUrl) {
             window.open(pdfUrl, "_blank");
         } else if (details?.bill_report) {
-            const pdfUrl = `${process.env.REACT_APP_API_URL}/uploads/${details.bill_report}`;
+            const pdfUrl = `${process.env.REACT_APP_API_URL}/Uploads/${details.bill_report}`;
             window.open(pdfUrl, "_blank");
         } else {
-            toast.error("Please save the bill first")
+            toast.error("Please save the bill first");
         }
     };
 
-    const totalAmount = calculateTotal();
-    const totalDeposit = details?.deposits?.reduce((sum, index) => sum + index.amount, 0) || 0;
-    const isAmountEqual = totalAmount == totalDeposit;
-    const isBillNotPaid = details?.bill_status == 0;
-    const isDischared = details?.discharge_status == 1;
+    const handleDetailedBill = async () => {
+        try {
+            const totalAmount = calculateTotal();
+            const billDataForPDF = {
+                ...details,
+                calculatedTotal: totalAmount,
+                receipt_number: `IPD-${details.ipd_id}`,
+                bill_date: new Date().toISOString(),
+                payment_method: paymentMode,
+                discountAmount: discountAmount,
+                generated_by: user?.name || 'System'
+            };
 
-    const shouldEnableButton = isAmountEqual && isBillNotPaid && isDischared;
+            const pdfBlob = await pdf(<DetailedBillPDF billData={billDataForPDF} discount={discountAmount} roomChargeDetails={getRoomChargeDetails} />).toBlob();
+            const pdfPreviewUrl = URL.createObjectURL(pdfBlob);
 
+            // Open the PDF in a new tab
+            window.open(pdfPreviewUrl, "_blank");
+
+        } catch (error) {
+            toast.error("Error generating detailed bill");
+            console.error(error);
+        }
+    };
+
+    // Combine room entries
     const combineRoomEntries = (rooms = []) => {
         if (!rooms?.length) return [];
         const combined = [];
@@ -164,10 +212,68 @@ function IpdBill() {
         return combined;
     };
 
+    // Combine othercharges entries into a single row per charge_name and amount
+    const combineOtherCharges = (charges = []) => {
+        if (!charges?.length) return [];
+        const chargeMap = {};
+
+        charges.forEach(charge => {
+            const key = `${charge.charge_name}_${charge.amount}`;
+            if (chargeMap[key]) {
+                chargeMap[key].quantity = (chargeMap[key].quantity || 1) + (charge.quantity || 1);
+                chargeMap[key].start_date = Math.min(chargeMap[key].start_date, charge.charge_date);
+                chargeMap[key].end_date = Math.max(chargeMap[key].end_date, charge.charge_date);
+            } else {
+                chargeMap[key] = {
+                    charge_name: charge.charge_name,
+                    amount: charge.amount,
+                    quantity: charge.quantity || 1,
+                    start_date: charge.charge_date,
+                    end_date: charge.charge_date
+                };
+            }
+        });
+
+        return Object.values(chargeMap);
+    };
+
+    // Combine doctorvisiting entries into a single row per doctor_name and amount
+    const combineDoctorVisits = (visits = []) => {
+        if (!visits?.length) return [];
+        const visitMap = {};
+
+        visits.forEach(visit => {
+            const key = `${visit.doctor_name}_${visit.amount}`;
+            if (visitMap[key]) {
+                visitMap[key].quantity = (visitMap[key].quantity || 1) + 1;
+                visitMap[key].start_date = Math.min(visitMap[key].start_date, visit.visit_date);
+                visitMap[key].end_date = Math.max(visitMap[key].end_date, visit.visit_date);
+            } else {
+                visitMap[key] = {
+                    doctor_name: visit.doctor_name,
+                    amount: visit.amount,
+                    quantity: 1,
+                    start_date: visit.visit_date,
+                    end_date: visit.visit_date
+                };
+            }
+        });
+
+        return Object.values(visitMap);
+    };
+
+    const totalAmount = calculateTotal();
+    const totalDeposit = details?.deposits?.reduce((sum, index) => sum + index.amount, 0) || 0;
+    const isAmountEqual = totalAmount == totalDeposit;
+    const isBillNotPaid = details?.bill_status == 0;
+    const isDischared = details?.discharge_status == 1;
+
+    const shouldEnableButton = isAmountEqual && isBillNotPaid && isDischared;
+
     return (
         <div className="mx-lg-4 m-3 pb-3">
             <div className="pt-1">
-                <div className="fw-semibold pb-lg-3" style={{ color: "#1D949A", fontSize: "18px", cursor:"pointer", width:"fit-content" }} onClick={() => navigate(-1)}>
+                <div className="fw-semibold pb-lg-3" style={{ color: "#1D949A", fontSize: "18px", cursor: "pointer", width: "fit-content" }} onClick={() => navigate(-1)}>
                     <FaArrowLeft />
                     <span className="pt-1 px-2">Billing / IPD Bills / Bill Details</span>
                 </div>
@@ -194,7 +300,7 @@ function IpdBill() {
                                 </Col>
                             </Row>
                             <hr color="#475467" className="mx-3" />
-                            <h4 className="m-4">Billing Details</h4> 
+                            <h4 className="m-4">Billing Details</h4>
                             <Table bordered style={{ borderColor: '#EAECF0' }}>
                                 <thead>
                                     <tr>
@@ -206,11 +312,11 @@ function IpdBill() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/* Combine room entries before rendering */}
+                                    {/* Render combined room entries */}
                                     {combineRoomEntries(details.room1)?.map((room, index) => (
                                         <tr key={`room-${index}`}>
                                             <td className="text-center">{index + 1}</td>
-                                            <td className="text-center">Room Charges {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`} </td>
+                                            <td className="text-center">Room Charges {room?.room_type_name ? `For ${room?.room_type_name}` : `(Type ${room?.room_type})`}</td>
                                             <td className="text-center">
                                                 {new Date(room.start_date * 1000).toLocaleDateString()}
                                                 {room.days > 1 ? ` - ${new Date(room.end_date * 1000).toLocaleDateString()}` : ""}
@@ -219,22 +325,30 @@ function IpdBill() {
                                             <td className="text-center">{room.total * room.days}</td>
                                         </tr>
                                     ))}
-                                    {details.othercharges?.map((charge, index) => (
+                                    {/* Render combined othercharges */}
+                                    {combineOtherCharges(details.othercharges)?.map((charge, index) => (
                                         <tr key={`charge-${index}`}>
                                             <td className="text-center">{index + combineRoomEntries(details.room1)?.length + 1}</td>
                                             <td className="text-center">{charge.charge_name}</td>
-                                            <td className="text-center">{new Date(charge.charge_date * 1000).toLocaleDateString()}</td>
-                                            <td className="text-center">{charge.quantity || 1}</td>
-                                            <td className="text-center">{charge.amount * (charge.quantity || 1)}</td>
+                                            <td className="text-center">
+                                                {new Date(charge.start_date * 1000).toLocaleDateString()}
+                                                {charge.start_date !== charge.end_date ? ` - ${new Date(charge.end_date * 1000).toLocaleDateString()}` : ""}
+                                            </td>
+                                            <td className="text-center">{charge.quantity}</td>
+                                            <td className="text-center">{charge.amount * charge.quantity}</td>
                                         </tr>
                                     ))}
-                                    {details.doctorvisiting?.map((visit, index) => (
-                                        <tr key={`visit-${index}`} >
-                                            <td className="text-center">{index + combineRoomEntries(details.room1)?.length + (details.othercharges?.length || 0) + 1}</td>
+                                    {/* Render combined doctorvisiting */}
+                                    {combineDoctorVisits(details.doctorvisiting)?.map((visit, index) => (
+                                        <tr key={`visit-${index}`}>
+                                            <td className="text-center">{index + combineRoomEntries(details.room1)?.length + (combineOtherCharges(details.othercharges)?.length || 0) + 1}</td>
                                             <td className="text-center">Doctor Visit - {visit.doctor_name}</td>
-                                            <td className="text-center">{new Date(visit.visit_date * 1000).toLocaleDateString()}</td>
-                                            <td className="text-center">1</td>
-                                            <td className="text-center">{visit.amount}</td>
+                                            <td className="text-center">
+                                                {new Date(visit.start_date * 1000).toLocaleDateString()}
+                                                {visit.start_date !== visit.end_date ? ` - ${new Date(visit.end_date * 1000).toLocaleDateString()}` : ""}
+                                            </td>
+                                            <td className="text-center">{visit.quantity}</td>
+                                            <td className="text-center">{visit.amount * visit.quantity}</td>
                                         </tr>
                                     ))}
                                     {discountAmount > 0 && (
@@ -243,14 +357,12 @@ function IpdBill() {
                                             <td className="text-center">{discountAmount}</td>
                                         </tr>
                                     )}
-
                                     {totalDeposit > 0 && (
                                         <tr>
                                             <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Paid Amount</td>
                                             <td className="text-center">{totalDeposit}</td>
                                         </tr>
                                     )}
-
                                     <tr>
                                         <td colSpan={4} className="text-end p-md-3 p-2" style={{ fontWeight: 500 }}>Balance Amount</td>
                                         <td className="text-center">{totalAmount - totalDeposit}</td>
@@ -266,13 +378,10 @@ function IpdBill() {
 
                     <Card style={{ border: '1px solid #EAECF0' }} className="mt-3 mt-lg-5">
                         <Card.Body>
-
                             <Form>
                                 <div className="row m-0 ">
-
                                     <div className="col-md-6">
                                         <h4 className="my-4">Payment Mode</h4>
-
                                         <Form.Check
                                             type="radio"
                                             label="Cash"
@@ -291,10 +400,7 @@ function IpdBill() {
                                             checked={paymentMode === "Online Mode"}
                                             onChange={(e) => setPaymentMode(e.target.value)}
                                         />
-
                                     </div>
-
-
                                     <div className="col-md-6">
                                         <Form.Group className="mt-3">
                                             <Form.Label>Discount Amount (₹)</Form.Label>
@@ -307,13 +413,20 @@ function IpdBill() {
                                             />
                                         </Form.Group>
                                     </div>
-
                                 </div>
                             </Form>
                         </Card.Body>
                     </Card>
 
                     <div className="d-flex justify-content-end mt-4">
+                        <Button
+                            variant="outline-secondary"
+                            className="me-3"
+                            onClick={handleDetailedBill}
+                            disabled={details?.bill_status == 0}
+                        >
+                            Detailed Bill
+                        </Button>
                         <Button
                             variant="outline-secondary"
                             className="me-3"
@@ -354,6 +467,3 @@ function IpdBill() {
 }
 
 export default IpdBill;
-
-// Note: combineRoomEntries only combines consecutive entries of the same room type/rate.
-// If the same room type appears again later, it will be a new row with its own date range.

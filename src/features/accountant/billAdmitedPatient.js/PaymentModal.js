@@ -28,6 +28,19 @@ const InputBox = ({ label, placeholder, isRequired, type = "text", value, onChan
 
 function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
 
+  const totalDeposits = patient?.deposits?.reduce((sum, deposit) => sum + (deposit.amount || 0), 0) || 0;
+
+  // Calculate other charges
+  const otherCharges = patient?.othercharges?.reduce((sum, charge) => sum + (charge.amount || 0), 0) || 0;
+
+
+  const doctorCharge = patient?.doctorvisiting?.reduce((sum, visit) => sum + (visit.amount || 0), 0) || 0;
+
+  // Calculate total amount including other charges
+  const totalAmount = patient?.total_amount + otherCharges + doctorCharge;
+
+  // Calculate remaining amount
+  const remainingAmount = totalAmount - totalDeposits;
 
   const [formData, setFormData] = useState({
     name: patient?.Name || "",
@@ -43,7 +56,6 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
   }
 
   useEffect(() => {
-    // Get current date in YYYY-MM-DD format (HTML date input format)
     const today = new Date().toISOString().split('T')[0];
 
     setFormData({
@@ -72,6 +84,8 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
     if (!formData.mode) newErrors.mode = "Payment mode is required";
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
       newErrors.amount = "A valid amount greater than 0 is required";
+    } else if (parseFloat(formData.amount) > remainingAmount) {
+      newErrors.amount = `Amount cannot exceed remaining balance of ${remainingAmount}`;
     }
     if (!formData.date) newErrors.date = "Payment date is required";
     setErrors(newErrors);
@@ -146,6 +160,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
                 value={formData.amount}
                 onChange={handleInputChange}
                 name="amount"
+                max={remainingAmount}
               />
               {errors.amount && <p className="text-danger">{errors.amount}</p>}
             </Col>
@@ -181,7 +196,7 @@ function PaymentModal({ show, handleClose, patient, onPaymentAdded }) {
             <CommanButton
               label="Submit Payment"
               className="mb-3 ps-4 pe-4 p-2 fw-bold fs-6 "
-              style={{marginRight:"10px"}}
+              style={{ marginRight: "10px" }}
               type="submit"
               disabled={loading}
             />
