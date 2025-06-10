@@ -54,6 +54,7 @@ import OpdReport from "../features/accountant/report/OpdReport";
 import Payment from "../features/accountant/paymentHistory/index"
 import AddOpdCharges from "../features/accountant/addCharges/Addopdcharges";
 import Showopdcharges from "../features/accountant/addCharges/Showopdcharges";
+import DischargePatientDoctor from "../features/dischargePatient/DischargePatientDoctor";
 
 function AppRoutes({ getDefaultRoute }) {
   return (
@@ -143,6 +144,8 @@ function AppRoutes({ getDefaultRoute }) {
         <Route path="/doctor/patient_list/:patientId" element={<PatientDetails />} />
         <Route path="/doctor/add_patient" element={<AddPatient />} />
         <Route path="/doctor/discharge_patient/:id" element={<DischargePatient />} />
+        <Route path="/doctor/discharge_patientdotor/:id" element={<DischargePatientDoctor />} />
+
         <Route path="/doctor/payment_history" element={<PaymentHistory />} />
         <Route path="/doctor/account" element={<Account />} />
         <Route path="/doctor/settings" element={<Setting />} />

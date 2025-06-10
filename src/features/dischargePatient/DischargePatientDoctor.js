@@ -9,12 +9,11 @@ import CommanButton from "../../components/common/form/commonButtton";
 import Note from "../../components/common/form/textarea";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AddPrescriptionTable from "../doctor/appointement/PrescriptionAddTable";
-import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../../utils/epochToDate";
 import ViewDischargeSheet from "./ViewDischargeSheet";
 import { toast } from "react-toastify";
 import { FaSave } from 'react-icons/fa';
 
-const DischargePatient = () => {
+const DischargePatientDoctor = () => {
     const [prescriptionData, setPrescriptionData] = useState();
     const token = useSelector((state) => state.auth.currentUserToken);
     const [courseDetails, setCourseDetails] = useState('');
@@ -35,8 +34,6 @@ const DischargePatient = () => {
     const [dischargeDetails, setDischargeDetails] = useState({
         diagnosisDetails: "",
         chiefComplaints: "",
-        discharge_date: "",
-        discharge_time: "",
         signs: "",
         temperature: "",
         pulse: "",
@@ -49,8 +46,6 @@ const DischargePatient = () => {
         local_examination: "",
         past_history: "",
         discharge_advice: "",
-        discharge_date_time: "",
-        follow_up_date_time: "",
         icd_code: "",
     });
     const [showDischargeSheet, setShowDischargeSheet] = useState(false);
@@ -62,21 +57,6 @@ const DischargePatient = () => {
     const validationSchema = Yup.object({
         diagnosisDetails: Yup.string().required("Diagnosis is required"),
         chiefComplaints: Yup.string().required("Chief Complaints are required"),
-
-        discharge_date: Yup.date()
-            .required("Discharge date is required"),
-
-        discharge_time: Yup.string()
-            .required("Discharge time is required")
-            .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
-
-        follow_up_date: Yup.date()
-            .required("Follow Up date is required")
-            .min(Yup.ref('discharge_date'), "Follow-up must be after discharge"),
-
-        follow_up_time: Yup.string()
-            .required("Follow Up time is required")
-            .matches(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
 
         temperature: Yup.number()
             .required("Temperature is required"),
@@ -114,9 +94,9 @@ const DischargePatient = () => {
     const formatDateForInput = (dateString) => {
         if (!dateString) return '';
         const [month, day, year] = dateString.split('/');
-        console.log( `${year}-${day.padStart(2, '0')}-${month.padStart(2, '0')}`)
-        return `${year}-${day.padStart(2, '0')}-${month.padStart(2, '0')}`;
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     };
+
 
     const fetchCourseData = useCallback(async () => {
         try {
@@ -198,24 +178,12 @@ const DischargePatient = () => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_discahrge_details?ipd_id=${location.state}`, config);
 
             if (response?.data?.status) {
-                const dateTime = convertEpochToDateTime(response?.data?.data?.discharge_date_time);
-                const followUpDateTime = convertEpochToDateTime(response?.data?.data?.follow_up_date_time);
-
-
-
-
-
-                console.log("dateTimeqqqqqqqqqqqqqqqqqqqqqqqqq",response?.data?.data?.discharge_date_time)
-                console.log("dateTime",dateTime)
+       
 
                 setDischargeDetails({
                     discharge_details_id: response?.data?.data?.discharge_details_id,
                     diagnosisDetails: response?.data?.data?.diagnosis,
                     chiefComplaints: response?.data?.data?.chief_complaints,
-                    discharge_date: formatDateForInput(dateTime?.date) || '',
-                    discharge_time: epochToTime(response?.data?.data?.discharge_date_time) || '',
-                    follow_up_date: formatDateForInput(followUpDateTime?.date) || '',
-                    follow_up_time: epochToTime(response?.data?.data?.follow_up_date_time) || '',
                     signs: response?.data?.data?.signs,
                     temperature: response?.data?.data?.temprature,
                     pulse: response?.data?.data?.pulse,
@@ -228,8 +196,6 @@ const DischargePatient = () => {
                     local_examination: response?.data?.data?.local_examination,
                     past_history: response?.data?.data?.past_history,
                     discharge_advice: response?.data?.data?.discharge_advice,
-                    discharge_date_time: response?.data?.data?.discharge_date_time,
-                    follow_up_date_time: response?.data?.data?.follow_up_date_time,
                     icd_code: response?.data?.data?.icd_code,
                 });
             }
@@ -263,8 +229,6 @@ const DischargePatient = () => {
                 "local_examination": values?.local_examination,
                 "past_history": values?.past_history,
                 "discharge_advice": values?.discharge_advice,
-                "discharge_date": convertDateTimeToEpoch(values?.discharge_date, values?.discharge_time),
-                "follow_up_date": convertDateTimeToEpoch(values?.follow_up_date, values?.follow_up_time),
                 "icd_code": values?.icd_code,
             };
 
@@ -294,7 +258,7 @@ const DischargePatient = () => {
                         : "Discharge details saved successfully"
                 );
                 getDischargeDetails();
-                setShowDischargeSheet(true);
+                // setShowDischargeSheet(true);
             } else {
 
                 toast.error("Failed to save discharge details")
@@ -564,63 +528,7 @@ const DischargePatient = () => {
                                         </Form.Group>
                                     </Col>
 
-                                    <Col md={6}>
-                                        <Row className="gy-4">
-                                            <Form.Label className="fw-semibold">Select Discharge Date & Time <span className="text-danger fw-bold">*</span></Form.Label>
-                                            <Col md={6}>
-                                                <Form.Group controlId="discharge_date">
-                                                    <Field
-                                                        as={Form.Control}
-                                                        style={{ height: "45.5px" }}
-                                                        name="discharge_date"
-                                                        type="date"
-                                                    />
-                                                    <ErrorMessage name="discharge_date" component="div" className="text-danger" />
-                                                </Form.Group>
-                                            </Col>
-
-                                            <Col md={6}>
-                                                <Form.Group>
-                                                    <Field
-                                                        as={Form.Control}
-                                                        name="discharge_time"
-                                                        type="time"
-                                                        style={{ height: "45.5px" }}
-                                                    />
-                                                    <ErrorMessage name="discharge_time" component="div" className="text-danger" />
-                                                </Form.Group>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col md={6}>
-                                        <Row className="gy-4">
-                                            <Form.Label className="fw-semibold">Select Follow Up Date & Time <span className="text-danger fw-bold">*</span></Form.Label>
-                                            <Col md={6}>
-                                                <Form.Group controlId="follow_up_date">
-                                                    <Field
-                                                        as={Form.Control}
-                                                        style={{ height: "45.5px" }}
-                                                        name="follow_up_date"
-                                                        type="date"
-                                                        min={new Date().toISOString().split("T")[0]}
-                                                    />
-                                                    <ErrorMessage name="follow_up_date" component="div" className="text-danger" />
-                                                </Form.Group>
-                                            </Col>
-
-                                            <Col md={6}>
-                                                <Form.Group>
-                                                    <Field
-                                                        as={Form.Control}
-                                                        name="follow_up_time"
-                                                        type="time"
-                                                        style={{ height: "45.5px" }}
-                                                    />
-                                                    <ErrorMessage name="follow_up_time" component="div" className="text-danger" />
-                                                </Form.Group>
-                                            </Col>
-                                        </Row>
-                                    </Col>
+                        
                                 </Row>
 
                                 <Row className="mb-4 mt-4">
@@ -673,7 +581,7 @@ const DischargePatient = () => {
 
                                 <div className="d-flex justify-content-end pt-lg-4">
                                     <CommanButton
-                                        label={isEditMode ? "Update Discharge" : "Discharge"}
+                                        label={isEditMode ? "Update Data" : "Save"}
                                         variant="#7B3F0080"
                                         className="mb-3 ps-3 pe-3 p-2 fw-semibold"
                                         style={{ borderRadius: "5px" }}
@@ -698,4 +606,8 @@ const DischargePatient = () => {
     );
 };
 
-export default DischargePatient;
+export default DischargePatientDoctor;
+
+
+
+

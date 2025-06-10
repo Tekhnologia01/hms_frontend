@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import { Button, Card, Col, Container, Form, Modal, Row, Table } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, ListGroup, Modal, Row, Table } from "react-bootstrap";
 import CommanButton from "../../../components/common/form/commonButtton";
 import Airavat from "../../../assets/images/Airavat.png";
 import { useSelector } from "react-redux";
@@ -59,7 +59,6 @@ function IpdBill() {
         );
 
         if (!chargeDetails) {
-            console.log("NO rooms FOund")
             return null;
         }
         return [

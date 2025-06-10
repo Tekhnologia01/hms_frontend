@@ -324,14 +324,14 @@ function PatientAppointmentList() {
               // handleAddChargesModal()
             }} />
 
-{/* 
-          {user?.userId == item?.doctor_id && <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
-            <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
-          </NavLink>} */}
 
-          <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
+          {user?.userId == item?.doctor_id ? <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
             <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
-          </NavLink>
+          </NavLink>:<NavLink to={`/doctor/discharge_patientdotor/${item?.admitted_patient_id}`} state={item?.ipd_id}>
+            <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
+          </NavLink>}
+
+  
         </td>
       }
 
