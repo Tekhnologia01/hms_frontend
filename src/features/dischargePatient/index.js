@@ -201,13 +201,6 @@ const DischargePatient = () => {
                 const dateTime = convertEpochToDateTime(response?.data?.data?.discharge_date_time);
                 const followUpDateTime = convertEpochToDateTime(response?.data?.data?.follow_up_date_time);
 
-
-
-
-
-                console.log("dateTimeqqqqqqqqqqqqqqqqqqqqqqqqq",response?.data?.data?.discharge_date_time)
-                console.log("dateTime",dateTime)
-
                 setDischargeDetails({
                     discharge_details_id: response?.data?.data?.discharge_details_id,
                     diagnosisDetails: response?.data?.data?.diagnosis,
