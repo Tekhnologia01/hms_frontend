@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Container, Form, Button, ListGroup, InputGroup, Row, Col, Spinner, Modal } from 'react-bootstrap';
-import { FaPlus, FaEdit, FaTrash, FaSave, FaBook } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaSave } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';

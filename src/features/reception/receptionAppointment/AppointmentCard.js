@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { CiStethoscope } from "react-icons/ci";
@@ -11,13 +11,52 @@ function AppointmentCard({ image, doctorName, specialist, timing, joinDate, desc
 
   const navigate = useNavigate();
 
+  const initials = doctorName?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+  const imageUrl = image ? `${process.env.REACT_APP_API_URL}/${image}` : null;
+  const [imageError, setImageError] = useState(false);
+  const showFallback = !imageUrl || imageError;
+
   return (
-    <Card className="mb-lg-3 mb-3" style={{borderRadius:'8px'}}>
+    <Card className="mb-lg-3 mb-3" style={{ borderRadius: '8px' }}>
       <Row className="m-0 p-2">
         <Col lg={1} className="d-flex align-items-center justify-content-center pt-2">
-          <div className="text-center bg-info" style={{ height: "100px", width: "100px" }}>
-            <img src={`${process.env.REACT_APP_API_URL}/${image}`} alt={doctorName} style={{ height: "100%", width: "100%", objectFit: "cover" }} />
+          {/* <div className="text-center bg-info" style={{ height: "100px", width: "100px" }}>
+            <img src={`${process.env.REACT_APP_API_URL}/${image}`}
+              alt={doctorName}
+              style={{ height: "100%", width: "100%", objectFit: "cover" }}
+            />
+          </div> */}
+          <div className="text-center bg-info rounded" style={{ height: "100px", width: "100px", justifyContent: "center", display: "flex", alignItems: "center", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)" }}>
+            {/* <div style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              border: "1px solid #ccc",
+              marginLeft: "0.75rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+              overflow: "hidden"
+            }}> */}
+            {showFallback ? (
+              <span style={{ fontWeight: "bold", fontSize: "20px" }}>{initials}</span>
+            ) : (
+              <img
+                className="rounded"
+                src={imageUrl}
+                alt={initials}
+                onError={() => setImageError(true)}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            )}
           </div>
+
+          {/* </div> */}
         </Col>
 
         <Col lg={8}>
@@ -67,12 +106,12 @@ function AppointmentCard({ image, doctorName, specialist, timing, joinDate, desc
         <Col lg={3}>
           <div className="d-flex justify-content-center">
             <NavLink to={`${doctorId}`} className={"w-100"} state={selectedDate}>
-            <CommanButton
-              label="View Appointments >"
-              className="my-3 ps-4 pe-4 p-2 fs-6 fw-semibold"
-              style={{ borderRadius: "5px", width: "100%" }}
+              <CommanButton
+                label="View Appointments >"
+                className="my-3 ps-4 pe-4 p-2 fs-6 fw-semibold"
+                style={{ borderRadius: "5px", width: "100%" }}
               // onClick={() => navigate(`${doctorId}`)}
-            />
+              />
             </NavLink>
           </div>
           <div className="d-flex justify-content-center pb-4">
@@ -80,7 +119,7 @@ function AppointmentCard({ image, doctorName, specialist, timing, joinDate, desc
               label="View Doctor Details >"
               className="my-1 ps-4 pe-4 fs-6 fw-semibold p-2 bg-white text-black"
               style={{ borderRadius: "5px", width: "100%" }}
-              onClick={() => {navigate(`doctor/${doctorId}`)}}
+              onClick={() => { navigate(`doctor/${doctorId}`) }}
             />
           </div>
         </Col>

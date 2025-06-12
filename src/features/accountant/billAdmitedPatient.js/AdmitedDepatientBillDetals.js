@@ -33,6 +33,12 @@ function AdmitedDepatientBillDetals() {
     },
   }
 
+  const [imageErrors, setImageErrors] = useState({});
+
+  const handleImageError = (id) => {
+    setImageErrors((prev) => ({ ...prev, [id]: true }));
+  };
+
   const handleStatus = async (id) => {
     try {
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/accountant/changestatus?admited_id=${id}`, {}, {
@@ -56,24 +62,20 @@ function AdmitedDepatientBillDetals() {
     }
   };
 
-
   useEffect(() => {
     fetchDoctors();
   }, [currentPage]);
 
-
-
-
   const columns = [
-    { name: "Patient Name", accessor: "Name", class: "py-3 px-4 text-left" },
-    { name: "Sex", accessor: "joining_date", class: "text-center px-1" },
-    { name: "Admit Date", accessor: "joining_date", class: "text-center px-1" },
-    { name: "Department", accessor: "degree", class: "py-3 text-center px-1" },
-    { name: "Paid Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
-    { name: "R.Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
-    { name: "Total Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
-    { name: "Receipt", accessor: "consultancy_fee", class: "py-3 text-center px-1" },
-    { name: "Actions", accessor: "actions", class: "py-3 text-center px-1" },
+    { name: "Patient Name", accessor: "Name", class: "py-1 px-1 text-center", style: { minWidth: "240px", width: "260px" } },
+    { name: "Sex", accessor: "joining_date", class: "text-center px-1", style: { minWidth: "60px", width: "70px" } },
+    { name: "Admit Date", accessor: "joining_date", class: "text-center px-1", style: { minWidth: "90px", width: "100px" } },
+    { name: "Department", accessor: "degree", class: "py-3 text-center px-1", style: { minWidth: "90px", width: "100px" } },
+    { name: "Paid Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1", style: { minWidth: "90px", width: "100px" } },
+    { name: "R.Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1", style: { minWidth: "90px", width: "100px" } },
+    { name: "Total Amount", accessor: "consultancy_fee", class: "py-3 text-center px-1", style: { minWidth: "90px", width: "100px" } },
+    { name: "Receipt", accessor: "consultancy_fee", class: "py-3 text-center px-1", style: { minWidth: "70px", width: "80px" } },
+    { name: "Actions", accessor: "actions", class: "py-3 text-center px-1", style: { minWidth: "90px", width: "100px" } },
   ];
 
   const handleShowInfoModal = (patient) => {
@@ -105,8 +107,12 @@ function AdmitedDepatientBillDetals() {
     setShow(false)
   }
 
-
   const renderRow = (item, index) => {
+
+    const initials = item?.Name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+    const imageUrl = item?.Photo ? `${process.env.REACT_APP_API_URL}/${item?.Photo}` : null;
+    const showFallback = !imageUrl || imageErrors[item?.admitted_patient_id];
+
     // Calculate total deposits
     const totalDeposits = item.deposits?.reduce((sum, deposit) => sum + (deposit.amount || 0), 0) || 0;
 
@@ -126,7 +132,7 @@ function AdmitedDepatientBillDetals() {
       <>
         <tr key={item.id || index} className="border-bottom text-center">
           {/* Patient Information */}
-          <td className="px-2 text-start">
+          {/* <td className="px-2 text-start">
             <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
               <img
                 src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
@@ -144,6 +150,58 @@ function AdmitedDepatientBillDetals() {
                 <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
                   {item.uh_id}
                 </p>
+              </div>
+            </div>
+          </td> */}
+          <td className="px-2 text-start lh-1" >
+            <div className="d-flex align-items-center justify-content-left" style={{ minWidth: "200px", width: "200px" }}>
+              <div style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                border: "1px solid #ccc",
+                marginLeft: "0.25rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+                overflow: "hidden",
+                flexShrink: 0 
+              }}>
+                {showFallback ? (
+                  <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+                ) : (
+                  <img
+                    src={imageUrl}
+                    alt={initials}
+                    onError={() => handleImageError(item?.admitted_patient_id)}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      minWidth: "40px",
+                      minHeight: "40px",
+                      maxWidth: "40px",
+                      maxHeight: "40px"
+                    }}
+                  />
+                )}
+              </div>
+              <div className="ms-2" style={{ minWidth: 0, maxWidth: "220px" }}>
+                <p
+                  className="fw-semibold mb-0"
+                  style={{
+                    marginBottom: "2px",
+                    maxWidth: "180px",
+                    wordBreak: "break-word"
+                  }}
+                  title={item.Name}
+                >
+                  {item.Name}
+                </p>
+                {/* <p style={{ marginBottom: "2px", color: "#475467", fontSize: "14px" }}>
+                  ID: {item.uh_id}
+                </p> */}
               </div>
             </div>
           </td>
@@ -200,8 +258,6 @@ function AdmitedDepatientBillDetals() {
                   onClick={() => handleShowPaymentModal(item)}
                 />
               </td> : <td>
-
-
                 <CommanButton
                   label={`Complete`}
                   className="fw-bold fs-6 "

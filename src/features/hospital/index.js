@@ -13,14 +13,15 @@ function HospitalDashboard() {
     const [patient, setPatient] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [adminCount, setAdmincount] = useState(0)
-    console.log(adminCount)
     const [loading, setLoading] = useState(false);
+    const [imageError, setImageError] = useState(false);
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
+
 
     const fetchadmincount = async () => {
         try {
@@ -108,30 +109,52 @@ function HospitalDashboard() {
         setCurrentPage(1); // Reset to first page when changing limit
     };
 
-    const renderRow = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center">
-            <td className="px-2 text-start lh-1">
-                <div className="d-flex align-items-center">
-                    <img
-                        src={`${process.env.REACT_APP_API_URL}/${item?.user_photo}`}
-                        alt={item.Name}
-                        style={{
+    const renderRow = (item, index) => {
+        const initials = item?.user_name?.split(' ')?.map(name => name[0]?.toUpperCase()).join('').slice(0,2) || ''
+        const imageUrl = item?.user_photo ? `${process.env.REACT_APP_API_URL}/${item?.user_photo}` : null
+        const showFallback = !imageUrl || imageError;
+
+        return (
+            <tr key={item.id} className="border-bottom text-center">
+                <td className="px-2 text-start lh-1">
+                    <div className="d-flex align-items-center">
+                        <div style={{
                             width: "40px",
                             height: "40px",
                             borderRadius: "50%",
-                            objectFit: "cover",
-                        }}
-                        className="ms-3"
-                    />
-                    <div className="d-flex flex-column ms-2" style={{ height: "40px", alignItems: "center", justifyContent: "center" }}>
-                        <p className="fw-semibold pt-3">{item?.user_name}</p>
+                            border: "1px solid #ccc",
+                            marginLeft: "0.75rem",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+                            overflow: "hidden"
+                        }}>
+                            {showFallback ? (
+                                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+                            ) : (
+                                <img
+                                    src={imageUrl}
+                                    alt={initials}
+                                    onError={() => setImageError(true)}
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                    }}
+                                />
+                            )}
+                        </div>
+                        <div className="ms-2">
+                            <p className="fw-semibold m-auto">{item?.user_name}</p>
+                        </div>
                     </div>
-                </div>
-            </td>
-            <td className="py-3 px-2">{item?.user_email}</td>
-            <td className="py-3 px-2">{item?.role_name}</td>
-        </tr>
-    );
+                </td>
+                <td className="py-3 px-2">{item?.user_email}</td>
+                <td className="py-3 px-2">{item?.role_name}</td>
+            </tr>
+        )
+    };
 
     return (
         <>

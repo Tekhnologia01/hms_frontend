@@ -22,6 +22,11 @@ function DoctorDashboard() {
         },
     }
 
+    const [imageErrors, setImageErrors] = useState({}); 
+    const handleImageError = (patientId) => {
+        setImageErrors((prev) => ({ ...prev, [patientId]: true }));
+    }
+
     const fetchTodaysAppointments = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/appointment/doctordaywise?doctor_id=${user?.userId}&appointment_date=${todaysDate}`, config)
@@ -100,6 +105,11 @@ function DoctorDashboard() {
     };
 
     const nameStyle = {
+        fontWeight: "500",
+        color: "#101828"
+    }
+    const nameStyle1 = {
+        marginBottom: "2px",
         fontWeight: "500",
         color: "#101828"
     }
@@ -216,9 +226,16 @@ function DoctorDashboard() {
                             </div>
                             <Table className="bordered">
                                 <tbody>
-                                    {todaysAppintments?.map((patient) => (
-                                        <tr key={patient.Patient_Id}>
-                                            <td style={{ bodystyle }}>
+                                    {todaysAppintments?.map((patient) => {
+
+                                        const initials = patient?.Patient_Name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+                                        const imageUrl = patient?.Patient_Photo ? `${process.env.REACT_APP_API_URL}/${patient.Patient_Photo}` : null;
+                                        const showFallback = !imageUrl || imageErrors[patient?.Patient_ID];
+
+                                        return (
+                                            <tr key={patient.Patient_Id}>
+
+                                                {/* <td style={{ bodystyle }}>
                                                 <div className="d-flex align-items-center">
                                                     <img
                                                         src={patient.Patient_Photo ? `${process.env.REACT_APP_API_URL}/${patient.Patient_Photo}` : vijay}
@@ -235,10 +252,48 @@ function DoctorDashboard() {
                                                         <p style={{ marginTop: "-20px", "color": "#475467", fontSize: "14px" }}>Disease: {patient.Disease}</p>
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td style={bodystyle} className="fw-semibold">{patient.slot_time}</td>
-                                        </tr>
-                                    ))}
+                                            </td> */}
+
+                                                <td className="px-2 text-start lh-1">
+                                                    <div className="d-flex align-items-center">
+                                                        <div style={{
+                                                            width: "40px",
+                                                            height: "40px",
+                                                            borderRadius: "50%",
+                                                            border: "1px solid #ccc",
+                                                            marginLeft: "0.75rem",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
+                                                            backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+                                                            overflow: "hidden"
+                                                        }}>
+                                                            {showFallback ? (
+                                                                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+                                                            ) : (
+                                                                <img
+                                                                    src={imageUrl}
+                                                                    alt={initials}
+                                                                        onError={() => handleImageError(patient?.patient_id)}
+                                                                    style={{
+                                                                        width: "100%",
+                                                                        height: "100%",
+                                                                        objectFit: "cover",
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                        <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
+                                                            <p style={nameStyle1} >{patient.Patient_Name}</p>
+                                                            <p style={{ marginBottom: "2px", "color": "#475467", fontSize: "14px" }}>Disease: {patient.Disease}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td style={bodystyle} className="fw-semibold">{patient.slot_time}</td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
                         </div>

@@ -22,6 +22,11 @@ function OpdReport() {
       Authorization: `Bearer ${token}`,
     },
   }
+  const [imageErrors, setImageErrors] = useState({});
+
+  const handleImageError = (patientId) => {
+    setImageErrors(prev => ({ ...prev, [patientId]: true }));
+  };
 
   const fetchReport = async () => {
     setIsLoading(true);
@@ -49,35 +54,82 @@ function OpdReport() {
     // { name: "Actions", accessor: "actions", class: "py-3 text-center px-1" },
   ];
 
-  const renderRow = (item, index) => (
-    <tr key={item.id || index} className="border-bottom text-center">
-      <td className="px-2 text-start">
-        <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
-          <img
-            src={item.patient_image ? `${process.env.REACT_APP_API_URL}/${item.patient_image}` : vijay}
-            alt={item.uh_id || "Patient"}
-            style={{
+  const renderRow = (item, index) => {
+
+    const initials = item?.patient_name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+    const imageUrl = item?.patient_image ? `${process.env.REACT_APP_API_URL}/${item.patient_image}` : null;
+    const showFallback = !imageUrl || imageErrors[item.User_ID];
+
+    return (
+      <tr key={item.id || index} className="border-bottom text-center">
+
+        {/* <td className="px-2 text-start">
+          <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
+            <img
+              src={item.patient_image ? `${process.env.REACT_APP_API_URL}/${item.patient_image}` : vijay}
+              alt={item.uh_id || "Patient"}
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+              className="ms-lg-3 mb-2 mb-lg-0"
+              onError={(e) => { e.target.src = vijay; }} // Fallback for broken images
+            />
+            <div className="d-flex flex-column ms-lg-2 text-center">
+              <p className="fw-semibold mb-0">{item.patient_name || "N/A"}</p>
+              <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
+                {item.uh_id || "-"}
+              </p>
+            </div>
+          </div>
+        </td> */}
+
+        <td className="px-2 text-start lh-1">
+          <div className="d-flex align-items-center">
+            <div style={{
               width: "40px",
               height: "40px",
               borderRadius: "50%",
-              objectFit: "cover",
-            }}
-            className="ms-lg-3 mb-2 mb-lg-0"
-            onError={(e) => { e.target.src = vijay; }} // Fallback for broken images
-          />
-          <div className="d-flex flex-column ms-lg-2 text-center">
-            <p className="fw-semibold mb-0">{item.patient_name || "N/A"}</p>
-            <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
-              {item.uh_id || "-"}
-            </p>
+              border: "1px solid #ccc",
+              marginLeft: "0.75rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+              overflow: "hidden"
+            }}>
+              {showFallback ? (
+                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+              ) : (
+                <img
+                  src={imageUrl}
+                  alt={initials}
+                  onError={() => handleImageError(item.User_ID)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+            <div className="ms-2">
+              <p className="fw-semibold" style={{ marginBottom: "2px" }}>{item.patient_name}</p>
+              <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
+                {item.uh_id || "-"}
+              </p>
+            </div>
           </div>
-        </div>
-      </td>
-      <td className="py-3 px-2">{item.bill_date ?? "-"}</td>
-      <td className="py-3 px-2">{item.amount ?? "-"}</td>
+        </td>
 
-    </tr>
-  );
+        <td className="py-3 px-2">{item.bill_date ?? "-"}</td>
+        <td className="py-3 px-2">{item.amount ?? "-"}</td>
+
+      </tr>
+    )
+  };
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);

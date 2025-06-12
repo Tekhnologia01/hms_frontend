@@ -57,9 +57,15 @@ function DischargeSummery() {
     }
 
     const renderRow = (item, index) => {
+
+        const initials = item?.Name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+        const imageUrl = item?.Photo ? `${process.env.REACT_APP_API_URL}/${item?.Photo}` : null;
+        const [imageError, setImageError] = useState(false);
+        const showFallback = !imageUrl || imageError;
+
         return (
             <tr key={item.id || index} className="border-bottom text-center">
-                <td className="px-2 text-start">
+                {/* <td className="px-2 text-start">
                     <div className="d-flex flex-lg-row flex-column align-items-center align-items-lg-start">
                         <img
                             src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
@@ -77,6 +83,41 @@ function DischargeSummery() {
                             <p className="mb-0" style={{ color: "#475467", fontSize: "14px" }}>
                                 {item.uh_id}
                             </p>
+                        </div>
+                    </div>
+                </td> */}
+                <td className="px-2 text-start lh-1">
+                    <div className="d-flex align-items-center">
+                        <div style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            border: "1px solid #ccc",
+                            marginLeft: "0.75rem",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+                            overflow: "hidden",
+                            flexShrink: 0,
+                        }}>
+                            {showFallback ? (
+                                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+                            ) : (
+                                <img
+                                    src={imageUrl}
+                                    alt={initials}
+                                    onError={() => setImageError(true)}
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                    }}
+                                />
+                            )}
+                        </div>
+                        <div className="ms-2">
+                            <p className="fw-semibold" style={{ marginBottom: "2px" }}>{item?.Name}</p>
                         </div>
                     </div>
                 </td>

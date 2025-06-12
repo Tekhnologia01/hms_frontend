@@ -169,13 +169,13 @@ const styles = StyleSheet.create({
         fontSize: 10
     },
     footer: {
-        position: 'absolute',
-        bottom: 30,
+        // position: 'absolute',
+        // bottom: 30,
         left: 40,
         right: 40,
         fontSize: 10,
         color: '#666',
-        textAlign: 'center',
+        // textAlign: 'center',
         borderTop: '1px solid #eaeaea',
         paddingTop: 10
     },
@@ -278,9 +278,20 @@ const DischargeSheetPDF = ({ data, prescription }) => {
     const dischargeDate = formatEpochToDate(data?.discharge_date_time);
     const followUpDate = formatEpochToDate(data?.follow_up_date_time);
 
+    const rowsPerPage = 20; // Adjust based on your row height
+
+    const prescriptionChunks = [];
+    if (prescription?.length > 0) {
+        for (let i = 0; i < prescription.length; i += rowsPerPage) {
+            prescriptionChunks.push(prescription.slice(i, i + rowsPerPage));
+        }
+    } else {
+        prescriptionChunks.push([]);
+    }
+
     return (
         <Document>
-            <Page size="A4" style={styles.page}>
+            <Page size="A4" style={styles.page} wrap>
 
                 <Image
                     src={Airavat}
@@ -315,7 +326,7 @@ const DischargeSheetPDF = ({ data, prescription }) => {
 
                 <View style={styles.divider}></View>
 
-                <View style={styles.section}>
+                <View style={styles.section} wrap>
                     <Text style={styles.subHeader}>Diagnosis</Text>
                     <View>
                         <Text>{data?.diagnosis}</Text>
@@ -364,11 +375,11 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                         <Text>{data?.past_history || "None provided"}</Text>
                     </View>
 
-                    <View style={styles.section}>
+                    <View style={styles.section} >
                         <Text style={styles.subHeader}>Course in hospital</Text>
                         <Text>{data?.course_details}</Text>
                         {data?.treatment_point?.length > 0 && (
-                            <View style={{ marginTop: 8 }}>
+                            <View style={{ marginTop: 8 }} >
                                 {data?.treatment_point?.map((treatment, index) => (
                                     <Text key={treatment?.treatment_id} style={styles.bulletPoint}>
                                         • {treatment.treatment_point}
@@ -395,9 +406,9 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                 </View>
 
                 {prescription?.length > 0 && (
-                    <View style={styles.section}>
+                    <View style={styles.section} wrap>
                         <Text style={styles.subHeader}>Prescription</Text>
-                        <View style={styles.table}>
+                        <View style={styles.table} wrap>
                             <View style={[styles.tableRow, { backgroundColor: "#F9FAFB" }]}>
                                 <Text style={[styles.tableHeader, styles.noCol]}>No</Text>
                                 <Text style={[styles.tableHeader, styles.medicineNameCol]}>Medicine Name</Text>
@@ -451,7 +462,7 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                     <Text>Summary issued date / time: {data?.discharge_date}, {data?.discharge_time}</Text>
                 </View>
 
-                <View style={styles.footerContainer}>
+                <View style={styles.footer}>
                     <View style={styles.hospitalInfo}>
                         <Text style={[styles.header, styles.margin_t]}>
                             Airavat-{data?.department}-Team
@@ -465,9 +476,9 @@ const DischargeSheetPDF = ({ data, prescription }) => {
                     </View>
                 </View>
 
-                <View style={styles.footer}>
+                {/* <View style={styles.footer}>
                     <Text>I have understood the instructions given about the medication dosage and post-discharge care.</Text>
-                </View>
+                </View> */}
             </Page>
         </Document>
     );

@@ -40,38 +40,84 @@ function HospitalDoctorList() {
       : []),
   ];
 
-  const renderRow = (item, index) => (
-    <tr key={item.id} className="border-bottom text-center">
-      <td className="px-2 text-start lh-1">
-        <div className="d-flex align-items-center">
-          <img
-            src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
-            alt={item.Name}
-            style={{
+  const renderRow = (item, index) => {
+    const initials = item?.Name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0,2) || "";
+    const imageUrl = item?.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : null;
+    const [imageError, setImageError] = useState(false);
+    const showFallback = !imageUrl || imageError;
+
+    return (
+      <tr key={item.id} className="border-bottom text-center">
+        {/* <td className="px-2 text-start lh-1">
+          <div className="d-flex align-items-center">
+            <img
+              src={item.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : vijay}
+              alt={item.Name}
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+              className="ms-3"
+            />
+            <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
+              <p className="fw-semibold">{item.Name}</p>
+              <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>Id: {item.User_ID}</p>
+            </div>
+          </div>
+        </td> */}
+
+        <td className="px-2 text-start lh-1">
+          <div className="d-flex align-items-center">
+            <div style={{
               width: "40px",
               height: "40px",
               borderRadius: "50%",
-              objectFit: "cover",
-            }}
-            className="ms-3"
-          />
-          <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-            <p className="fw-semibold">{item.Name}</p>
-            <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}>Id: {item.User_ID}</p>
+              border: "1px solid #ccc",
+              marginLeft: "0.75rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+              overflow: "hidden"
+            }}>
+              {showFallback ? (
+                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+              ) : (
+                <img
+                  src={imageUrl}
+                  alt={initials}
+                  onError={() => setImageError(true)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+            <div className="ms-2">
+              <p className="fw-semibold" style={{ marginBottom: "2px" }}>{item?.Name}</p>
+              <p style={{ marginBottom: "2px", color: "#475467", fontSize: "14px" }}>
+                ID: {item?.User_ID}
+              </p>
+            </div>
           </div>
-        </div>
-      </td>
-      <td className="py-3 px-2">{item?.joining_date}</td>
-      <td className="py-3 px-2">{item.degree ?? "-"}</td>
-      <td className="py-3 px-2">{item.consultancy_fee ?? "-"}</td>
-      {role == 1 &&
-        <td>
-          <FiEdit2 style={{ height: "23px", width: "23px" }} />
-          <span className="ps-3"></span>
-          <RiDeleteBinLine style={{ height: "25px", width: "25px" }} />
-        </td>}
-    </tr>
-  );
+        </td>
+
+        <td className="py-3 px-2">{item?.joining_date}</td>
+        <td className="py-3 px-2">{item.degree ?? "-"}</td>
+        <td className="py-3 px-2">{item.consultancy_fee ?? "-"}</td>
+        {role == 1 &&
+          <td>
+            <FiEdit2 style={{ height: "23px", width: "23px" }} />
+            <span className="ps-3"></span>
+            <RiDeleteBinLine style={{ height: "25px", width: "25px" }} />
+          </td>}
+      </tr>
+    )
+  };
 
   return (
     <>

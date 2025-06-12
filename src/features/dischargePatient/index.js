@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Col, Form, Row, Button, Spinner, Modal } from "react-bootstrap";
+import { Col, Form, Row, Button, Spinner } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -13,8 +13,6 @@ import { convertDateTimeToEpoch, convertEpochToDateTime, epochToTime } from "../
 import ViewDischargeSheet from "./ViewDischargeSheet";
 import { toast } from "react-toastify";
 import { FaSave } from 'react-icons/fa';
-// import { useCallback } from "react";
-// import CourseDetails from "../hospital/admitedPatient/CourseDetails";
 
 const DischargePatient = () => {
     const [prescriptionData, setPrescriptionData] = useState();
@@ -23,8 +21,13 @@ const DischargePatient = () => {
     const [saveStatus, setSaveStatus] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [initialCourseDetails, setInitialCourseDetails] = useState(''); // <-- add this
-
+    const [initialCourseDetails, setInitialCourseDetails] = useState('');
+    const [patientdetails, setPatientDetails] = useState({})
+    const [showDischargeSheet, setShowDischargeSheet] = useState(false);
+    const location = useLocation();
+    const { user } = useSelector(state => state?.auth);
+    const navigate = useNavigate();
+    const { id } = useParams()
 
     const config = {
         headers: {
@@ -32,8 +35,6 @@ const DischargePatient = () => {
         },
     };
 
-    const [patientdetails, setPatientDetails] = useState({})
-    const { id } = useParams()
 
     const [dischargeDetails, setDischargeDetails] = useState({
         diagnosisDetails: "",
@@ -56,11 +57,7 @@ const DischargePatient = () => {
         follow_up_date_time: "",
         icd_code: "",
     });
-    const [showDischargeSheet, setShowDischargeSheet] = useState(false);
 
-    const location = useLocation();
-    const { user } = useSelector(state => state?.auth);
-    const navigate = useNavigate();
 
     const validationSchema = Yup.object({
         diagnosisDetails: Yup.string().required("Diagnosis is required"),

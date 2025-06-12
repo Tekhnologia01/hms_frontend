@@ -32,7 +32,6 @@ function PatientAppointmentList() {
     admittedCount: 0
   });
   const handleShowModal = () => setShowModal(true);
-  // const handleCloseModal = () => setShowModal(false);
   const handleUpdateModal = () => setShowUpdateModal(true);
   const handleUpdateCloseModal = () => setShowUpdateModal(false);
   const handleCloseModal = () => {
@@ -63,7 +62,11 @@ function PatientAppointmentList() {
   const [cardState, setCardState] = useState("ipd");
   const [patient, setPatient] = useState();
   const [admited, setAdmited] = useState();
+  const [imageErrors, setImageErrors] = useState({});
 
+  const handleImageError = (patientId) => {
+    setImageErrors(prev => ({ ...prev, [patientId]: true }));
+  }
 
   async function getPatients() {
     try {
@@ -146,9 +149,6 @@ function PatientAppointmentList() {
     getPatientsCount();
   }, [user?.role])
 
-
-
-
   const handleAdmitpatientCloseModal = async () => {
     try {
       await getIPDPatients();
@@ -178,7 +178,6 @@ function PatientAppointmentList() {
   ];
 
   const opdColumns = [
-    // { name: "", accessor: "checkbox", class: "w-auto" },
     { name: "Patient Name", accessor: "patientName", class: "py-3 px-5 text-left", width: "250px" },
     { name: "UH ID", accessor: "uhId", class: "text-center px-1" },
     { name: "Date", accessor: "date", class: "text-center px-1" },
@@ -186,7 +185,6 @@ function PatientAppointmentList() {
     { name: "Slot", accessor: "doctor", class: "text-center px-1" },
     { name: "Sex", accessor: "sex", class: "py-3 text-center px-1" },
     { name: "Age", accessor: "age", class: "py-3 text-center px-1" },
-    // { name: "Action", accessor: "action", class: "py-3 text-center px-1", }
   ];
 
   const ipdColumns = [
@@ -201,61 +199,145 @@ function PatientAppointmentList() {
 
   ];
 
-  const renderRow = (item, index) => (
-    <tr key={item?.id} className="border-bottom text-center">
-      <td className="px-2 text-start lh-1">
-        <div className="d-flex align-items-center">
-          <img
-            src={item?.Photo ? `${process.env.REACT_APP_API_URL}/${item?.Photo}` : vijay}
-            alt={item?.Name}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-            className="ms-3"
-          />
-          <div className="ms-2">
-            <p className="fw-semibold m-auto">{item?.Name}</p>
-          </div>
-        </div>
-      </td>
-      <td className="py-3 px-2">{item?.uh_id}</td>
-      <td className="py-3 px-2">{item?.created_at?.split("T")[0]}</td>
-      <td className="py-3 px-2">{item?.patient_sex}</td>
-      <td className="py-3 px-2">{item?.patient_age}</td>
-      <td>
-        <FiEdit2 style={{ height: "23px", width: "23px" }}
-          onClick={() => {
-            setPatient(item)
-            handleUpdateModal()
-          }
-          }
-        />
-        <span className="ps-3"></span>
-        {/* <RiDeleteBinLine style={{ height: "25px", width: "25px" }} /> */}
-      </td>
-    </tr>
-  );
+  const renderRow = (item, index) => {
+    const initials = item?.Name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+    const imageUrl = item?.Photo ? `${process.env.REACT_APP_API_URL}/${item?.Photo}` : null;
+    const showFallback = !imageUrl || imageErrors[item?.Patient_ID];
 
-  const renderOPDRow = (item, index) => (
-    <tr key={item.id} className="border-bottom text-center">
-      <td className="px-2 text-start lh-1">
-        <div className="d-flex align-items-center">
-          <img
-            src={item?.patient_image ? `${process.env.REACT_APP_API_URL}/${item?.patient_image}` : vijay}
-            alt={item?.patient_name}
-            style={{
+    return (
+      <tr key={item?.id} className="border-bottom text-center">
+
+        {/* <td className="px-2 text-start lh-1">
+          <div className="d-flex align-items-center">
+            <img
+              src={item?.Photo ? `${process.env.REACT_APP_API_URL}/${item?.Photo}` : vijay}
+              alt={item?.Name}
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+              className="ms-3"
+            />
+            <div className="ms-2">
+              <p className="fw-semibold m-auto">{item?.Name}</p>
+            </div>
+          </div>
+        </td> */}
+
+        <td className="px-2 text-start lh-1">
+          <div className="d-flex align-items-center">
+            <div style={{
               width: "40px",
               height: "40px",
               borderRadius: "50%",
-              objectFit: "cover",
-            }}
-            className="ms-3"
+              border: "1px solid #ccc",
+              marginLeft: "0.75rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+              overflow: "hidden",
+              flexShrink: 0,
+            }}>
+              {showFallback ? (
+                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+              ) : (
+                <img
+                  src={imageUrl}
+                  alt={initials}
+                    onError={() => handleImageError(item?.Patient_ID)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+            <div className="ms-2">
+              <p className="fw-semibold" style={{ marginBottom: "2px" }}>{item?.Name}</p>
+            </div>
+          </div>
+        </td>
+
+
+        <td className="py-3 px-2">{item?.uh_id}</td>
+        <td className="py-3 px-2">{item?.created_at?.split("T")[0]}</td>
+        <td className="py-3 px-2">{item?.patient_sex}</td>
+        <td className="py-3 px-2">{item?.patient_age}</td>
+        <td>
+          <FiEdit2 style={{ height: "23px", width: "23px" }}
+            onClick={() => {
+              setPatient(item)
+              handleUpdateModal()
+            }
+            }
           />
+          <span className="ps-3"></span>
+        </td>
+      </tr>
+    )
+  };
+
+const renderOPDRow = (item, index) => {
+  const initials = item?.patient_name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+  const imageUrl = item?.patient_image ? `${process.env.REACT_APP_API_URL}/${item?.patient_image}` : null;
+  const showFallback = !imageUrl || imageErrors[item?.patient_id];
+
+  return (
+    <tr key={item.id} className="border-bottom text-center">
+      {/* <td className="px-2 text-start lh-1">
+          <div className="d-flex align-items-center">
+            <img
+              src={item?.patient_image ? `${process.env.REACT_APP_API_URL}/${item?.patient_image}` : vijay}
+              alt={item?.patient_name}
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+              className="ms-3"
+            />
+            <div className="ms-2">
+              <p className="fw-semibold m-auto">{item?.patient_name}</p>
+            </div>
+          </div>
+        </td> */}
+
+      <td className="px-2 text-start lh-1">
+        <div className="d-flex align-items-center">
+          <div style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            border: "1px solid #ccc",
+            marginLeft: "0.75rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+            overflow: "hidden"
+          }}>
+            {showFallback ? (
+              <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+            ) : (
+              <img
+                src={imageUrl}
+                alt={initials}
+                onError={() => handleImageError(item?.patient_id)}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            )}
+          </div>
           <div className="ms-2">
-            <p className="fw-semibold m-auto">{item?.patient_name}</p>
+            <p className="fw-semibold" style={{ marginBottom: "2px" }}>{item?.patient_name}</p>
           </div>
         </div>
       </td>
@@ -272,73 +354,89 @@ function PatientAppointmentList() {
         <RiDeleteBinLine style={{ height: "25px", width: "25px" }} />
       </td> */}
     </tr>
-  );
+  )
+};
 
 
-  const renderIPDRow = (item, index) => (
-    <tr key={item?.id} className="border-bottom text-center">
-      <td className="px-2 text-start lh-1">
+  const renderIPDRow = (item, index) => {
+    const initials = item?.Name?.split(" ")?.map(word => word[0]?.toUpperCase()).join("").slice(0, 2) || "";
+    const imageUrl = item?.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : null;
+    const showFallback = !imageUrl || imageErrors[item?.Patient_ID];
 
-        <div className="d-flex align-items-center">
-
-          <img
-            src={item?.Photo ? `${process.env.REACT_APP_API_URL}/${item?.Photo}` : vijay}
-            alt={item?.Name}
-            style={{
+    return (
+      <tr key={item?.id} className="border-bottom text-center">
+        <td className="px-2 text-start lh-1">
+          <div className="d-flex align-items-center">
+            <div style={{
               width: "40px",
               height: "40px",
               borderRadius: "50%",
-              objectFit: "cover",
               border: "1px solid #ccc",
-            }}
-            className="ms-3"
-          />
-          <div className="ms-2">
-            <p className="fw-semibold m-auto">{item?.Name}</p>
+              marginLeft: "0.75rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+              overflow: "hidden"
+            }}>
+              {showFallback ? (
+                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+              ) : (
+                <img
+                  src={imageUrl}
+                  alt={initials}
+                  onError={() => handleImageError(item?.Patient_ID)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+            <div className="ms-2">
+              <p className="fw-semibold" style={{ marginBottom: "2px" }}>{item.Name}</p>
+            </div>
           </div>
-        </div>
-        {/* </NavLink> */}
-      </td>
-      <td className="py-3 px-2">{item?.ipd_id}</td>
-      <td className="py-3 px-2">{item?.admitted_date} {item?.admit_time}</td>
-      <td className="py-3 px-2">{item?.patient_sex}</td>
-      <td className="py-3 px-2">{item?.patient_age}</td>
-      <td className="py-3 px-2">{item?.doctor_name}</td>
-      <td className="py-3 px-2">{item?.department}</td>
-      {
-        user?.RoleId == 2 &&
+        </td>
+        <td className="py-3 px-2">{item?.ipd_id}</td>
+        <td className="py-3 px-2">{item?.admitted_date} {item?.admit_time}</td>
+        <td className="py-3 px-2">{item?.patient_sex}</td>
+        <td className="py-3 px-2">{item?.patient_age}</td>
+        <td className="py-3 px-2">{item?.doctor_name}</td>
+        <td className="py-3 px-2">{item?.department}</td>
+        {
+          user?.RoleId == 2 &&
 
 
-        <td>
-          <MdOutlineBedroomChild style={{ height: "23px", width: "23px" }}
-            onClick={() => {
-              setAdmited(item)
-              handleChangeRoomModal()
-            }} />
-          <span className="ps-2"></span>
+          <td>
+            <MdOutlineBedroomChild style={{ height: "23px", width: "23px" }}
+              onClick={() => {
+                setAdmited(item)
+                handleChangeRoomModal()
+              }} />
+            <span className="ps-2"></span>
 
-          <FaPlusSquare style={{ height: "23px", width: "23px" }}
-            onClick={() => {
-              navigate(`/doctor/patient_list/ipd/${item.admitted_patient_id}`)
-              // setAdmited(item)
-              // handleAddChargesModal()
-            }} />
+            <FaPlusSquare style={{ height: "23px", width: "23px" }}
+              onClick={() => {
+                navigate(`/doctor/patient_list/ipd/${item.admitted_patient_id}`)
+                // setAdmited(item)
+                // handleAddChargesModal()
+              }} />
 
-{/* 
+            {/* 
           {user?.userId == item?.doctor_id && <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
             <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
           </NavLink>} */}
 
-          <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
-            <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
-          </NavLink>
-        </td>
-      }
-
-
-
-    </tr>
-  );
+            <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
+              <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
+            </NavLink>
+          </td>
+        }
+      </tr>
+    )
+  };
 
   const patientUpdate = async (data) => {
     try {

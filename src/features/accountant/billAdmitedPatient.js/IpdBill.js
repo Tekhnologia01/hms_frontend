@@ -136,7 +136,9 @@ function IpdBill() {
 
     const totalAmount = calculateTotal();
     const totalDeposit = details?.deposits?.reduce((sum, index) => sum + index.amount, 0) || 0;
-    const isAmountEqual = totalAmount == totalDeposit;
+
+    const isAmountEqual = totalDeposit >= totalAmount;
+    
     const isBillNotPaid = details?.bill_status == 0;
     const isDischared = details?.discharge_status == 1;
 

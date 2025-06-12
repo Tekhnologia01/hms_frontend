@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Table, Row, Col } from "react-bootstrap";
-import vijay from "../../assets/images/avatars/vijay1.jpg";
 import BarGraph from "../commonfeature/Graphs/barGraph";
 import ThreeLayeredChart from "../commonfeature/Graphs/circleGraph";
 import CommonTable from "../../components/common/table/CommonTable";
@@ -11,11 +10,7 @@ import { epochTimeToDate } from "../../utils/epochToDate";
 function AccountantDashboard() {
     const { user } = useSelector(state => state?.auth);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [limitPerPage, setLimitPerPage] = useState(10);
     const [reportData, setReportData] = useState()
-    // const totalRecords = 200;
-    // const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
     const [todaysAppintments, setTodaysAppointments] = useState([]);
 
     const [discharge, setDischarge] = useState()
@@ -25,6 +20,12 @@ function AccountantDashboard() {
             Authorization: `Bearer ${token}`,
         },
     }
+    const [imageErrors, setImageErrors] = useState({});
+
+    const handleImageError = (patientId) => {
+        setImageErrors(prev => ({ ...prev, [patientId]: true }));
+    };
+
 
     const fetchTodaysAppointments = async () => {
         try {
@@ -191,38 +192,55 @@ function AccountantDashboard() {
         { name: "Doctor Name", accessor: "sex", class: "py-3 text-center px-1" },
     ];
 
-    const renderRow = (item, index) => (
-        <tr key={item.id} className="border-bottom text-center">
-            <td className="px-2 text-start lh-1">
-                <div className="d-flex align-items-center">
-                    <div className="ps-2">
-                    </div>
-                    <img
-                        src={
-                            item.Photo
-                                ? `${process.env.REACT_APP_API_URL}/${item.Photo}`
-                                : vijay
-                        }
-                        alt={item.name}
-                        style={{
+    const renderRow = (item, index) => {
+        const initials = item?.Name?.split(" ").map(word => word[0].toUpperCase()).join("").slice(0, 2) || "";
+        const imageUrl = item?.Photo ? `${process.env.REACT_APP_API_URL}/${item.Photo}` : null;
+        const [imageError, setImageError] = useState(false);
+        const showFallback = !imageUrl || imageError;
+
+        return (
+            <tr key={item.id} className="border-bottom text-center">
+                <td className="px-2 text-start lh-1">
+                    <div className="d-flex align-items-center">
+                        <div style={{
                             width: "40px",
                             height: "40px",
                             borderRadius: "50%",
-                            objectFit: "cover",
-                        }}
-                        className="ms-3"
-                    />
-                    <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                        <p className="fw-semibold">{item.Name}</p>
-                        <p style={{ marginTop: "-10px", "color": "#475467", fontSize: "14px" }}> {item.ipd_id}</p>
+                            border: "1px solid #ccc",
+                            marginLeft: "0.75rem",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+                            overflow: "hidden"
+                        }}>
+                            {showFallback ? (
+                                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+                            ) : (
+                                <img
+                                    src={imageUrl}
+                                    alt={initials}
+                                    onError={() => setImageError(true)}
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        objectFit: "cover",
+                                    }}
+                                />
+                            )}
+                        </div>
+                        <div className="ms-2">
+                            <p className="fw-semibold" style={{ marginBottom: "2px" }}>{item?.Name}</p>
+                            <p style={{ marginBottom: "2px", "color": "#475467", fontSize: "14px" }}> ID:{item?.ipd_id}</p>
+                        </div>
                     </div>
-                </div>
-            </td>
-            <td className="py-3 px-2">{epochTimeToDate(item.admitted_date)}</td>
-            <td className="py-3 px-2">{epochTimeToDate(item.discharge_date)}</td>
-            <td className="py-3 px-2">{item.doctor_name}</td>
-        </tr>
-    );
+                </td>
+                <td className="py-3 px-2">{epochTimeToDate(item?.admitted_date)}</td>
+                <td className="py-3 px-2">{epochTimeToDate(item?.discharge_date)}</td>
+                <td className="py-3 px-2">{item?.doctor_name}</td>
+            </tr>
+        )
+    };
 
 
     return (
@@ -271,39 +289,79 @@ function AccountantDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {reportData?.map((patient) => (
-                                        <tr key={patient.ipd_id}>
-                                            <td >
-                                                <div className="d-flex align-items-center">
-                                                    <img
-                                                        src={
-                                                            patient.patient_image
-                                                                ? `${process.env.REACT_APP_API_URL}/${patient.patient_image}`
-                                                                : vijay
-                                                        }
-                                                        alt={patient?.patient_name}
-                                                        style={{
+                                    {reportData?.map((patient) => {
+                                        const initials = patient?.patient_name?.split(" ").map(word => word[0].toUpperCase()).join("").slice(0, 2) || "";
+                                        const imageUrl = patient?.patient_image ? `${process.env.REACT_APP_API_URL}/${patient?.patient_image}` : null;
+                                        const showFallback = !imageUrl || imageErrors[patient?.Patient_ID];
+                                        return (
+                                            <tr key={patient?.ipd_id}>
+                                                {/* <td >
+                                                    <div className="d-flex align-items-center">
+                                                        <img
+                                                            src={
+                                                                patient.patient_image
+                                                                    ? `${process.env.REACT_APP_API_URL}/${patient.patient_image}`
+                                                                    : vijay
+                                                            }
+                                                            alt={patient?.patient_name}
+                                                            style={{
+                                                                width: "40px",
+                                                                height: "40px",
+                                                                borderRadius: "50%",
+                                                                objectFit: "cover",
+                                                            }}
+                                                        />
+                                                        <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
+                                                            <p style={nameStyle}>{patient.patient_name}</p>
+                                                            <p style={{ marginTop: "-20px", color: "#475467", fontSize: "14px" }}>
+                                                                UH_ID: {patient.uh_id}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </td> */}
+                                                <td className="px-2 text-start lh-1">
+                                                    <div className="d-flex align-items-center">
+                                                        <div style={{
                                                             width: "40px",
                                                             height: "40px",
                                                             borderRadius: "50%",
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                    <div className="d-flex flex-column ms-2" style={{ height: "40px" }}>
-                                                        <p style={nameStyle}>{patient.patient_name}</p>
-                                                        <p style={{ marginTop: "-20px", color: "#475467", fontSize: "14px" }}>
-                                                            UH_ID: {patient.uh_id}
-                                                        </p>
+                                                            border: "1px solid #ccc",
+                                                            marginLeft: "0.75rem",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
+                                                            backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+                                                            overflow: "hidden"
+                                                        }}>
+                                                            {showFallback ? (
+                                                                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+                                                            ) : (
+                                                                <img
+                                                                    src={imageUrl}
+                                                                    alt={initials}
+                                                                    onError={() => handleImageError(patient?.Patient_ID)}
+                                                                    style={{
+                                                                        width: "100%",
+                                                                        height: "100%",
+                                                                        objectFit: "cover",
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                        <div className="ms-2">
+                                                            <p className="fw-semibold" style={{ marginBottom: "2px" }}>{patient?.patient_name}</p>
+                                                            <p style={{ marginBottom: "2px", "color": "#475467", fontSize: "14px" }}> ID:{patient?.uh_id}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td >
-                                                <span className="py-1 px-3 fw-semibold rounded-5">
-                                                    ₹{patient.amount}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                                </td>
+                                                <td >
+                                                    <p className="py-1 fw-semibold rounded-5" style={{ width: "fit-content", marginTop: "4px", marginBottom: "2px", backgroundColor: "#F0FDF4", color: "#16A34A", fontSize: "14px", padding: "0 10px" }}>
+                                                        ₹{patient.amount}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
                         </div>
@@ -320,31 +378,73 @@ function AccountantDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {todaysAppintments?.map((patient) => (
-                                        <tr key={patient.Patient_Id}>
-                                            <td>
-                                                <div className="d-flex align-items-center">
-                                                    <img
-                                                        src={patient.Photo ? `${process.env.REACT_APP_API_URL}/${patient.Photo}` : vijay}
-                                                        alt={patient.name}
-                                                        style={{
+                                    {todaysAppintments?.map((patient) => {
+                                        const initials = patient?.Name?.split(" ").map(word => word[0].toUpperCase()).join("").slice(0, 2) || "";
+                                        const imageUrl = patient?.Photo ? `${process.env.REACT_APP_API_URL}/${patient?.Photo}` : null;
+                                        const showFallback = !imageUrl || imageErrors[patient.Patient_Id];
+                                        return (
+                                            <tr key={patient.Patient_Id}>
+                                                {/* <td>
+                                                    <div className="d-flex align-items-center">
+                                                        <img
+                                                            src={patient.Photo ? `${process.env.REACT_APP_API_URL}/${patient.Photo}` : vijay}
+                                                            alt={patient.name}
+                                                            style={{
+                                                                width: "40px",
+                                                                height: "40px",
+                                                                borderRadius: "50%",
+                                                                objectFit: "cover",
+                                                            }}
+                                                        />
+                                                        <div className="d-flex flex-column ms-2">
+                                                            <span className="fw-semibold">{patient.Name}</span>
+                                                            <span style={{ marginTop: "-4px", color: "#475467", fontSize: "14px" }}>
+                                                                Disease: {patient.Disease}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td> */}
+                                                <td className="px-2 text-start lh-1">
+                                                    <div className="d-flex align-items-center">
+                                                        <div style={{
                                                             width: "40px",
                                                             height: "40px",
                                                             borderRadius: "50%",
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                    <div className="d-flex flex-column ms-2">
-                                                        <span className="fw-semibold">{patient.Name}</span>
-                                                        <span style={{ marginTop: "-4px", color: "#475467", fontSize: "14px" }}>
-                                                            Disease: {patient.Disease}
-                                                        </span>
+                                                            border: "1px solid #ccc",
+                                                            marginLeft: "0.75rem",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
+                                                            backgroundColor: showFallback ? "#f0f0f0" : "transparent",
+                                                            overflow: "hidden"
+                                                        }}>
+                                                            {showFallback ? (
+                                                                <span style={{ fontWeight: "bold", fontSize: "14px" }}>{initials}</span>
+                                                            ) : (
+                                                                <img
+                                                                    src={imageUrl}
+                                                                    alt={initials}
+                                                                    onError={() => handleImageError(patient.Patient_Id)}
+                                                                    style={{
+                                                                        width: "100%",
+                                                                        height: "100%",
+                                                                        objectFit: "cover",
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                        <div className="ms-2">
+                                                            <p className="fw-semibold" style={{ marginBottom: "2px" }}>{patient.Name}</p>
+                                                            <p style={{ marginBottom: "2px", color: "#475467", fontSize: "14px" }}>
+                                                                Disease: {patient.Disease}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td className="fw-semibold align-middle">{patient.doctor_name}</td>
-                                        </tr>
-                                    ))}
+                                                </td>
+                                                <td className="fw-semibold align-middle">{patient.doctor_name}</td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </Table>
                         </div>
