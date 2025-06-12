@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import DetailedBillPDF from "./DetaliedBillPdf";
 import axios from "axios";
 import { processPatientData } from "../../../utils/billig";
+import { LuGalleryHorizontal } from "react-icons/lu";
 
 function IpdBill() {
     const navigate = useNavigate();
@@ -34,7 +35,7 @@ function IpdBill() {
                 `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientreceipt?admited_id=${params?.admitedId}`,
                 config
             );
-            const data=processPatientData(response?.data?.data)
+            const data = processPatientData(response?.data?.data)
             setDetails(data[0]);
         } catch (error) {
             console.error('Error fetching receipt:', error);
@@ -86,19 +87,35 @@ function IpdBill() {
         return Math.ceil((endDate - startDate) / (24 * 60 * 60));
     };
 
-    const calculateTotal = () => {
-        const roomCharges = details?.room1?.reduce((sum, item) => {
-            const days = calculateRoomDays(item.start_date, item.end_date);
-            return sum + (item.total * days);
-        }, 0) || 0;
+    // const calculateTotal = () => {
+    //     const roomCharges = details?.room1?.reduce((sum, item) => {
+    //         const days = calculateRoomDays(item.start_date, item.end_date);
+    //         return sum + (item.total * days);
+    //     }, 0) || 0;
 
+    //     const otherCharges = details?.othercharges?.reduce((sum, item) =>
+    //         sum + (item.amount * (item.quantity || 1)), 0) || 0;
+
+    //     const doctorVisits = details?.doctorvisiting?.reduce((sum, item) => sum + item.amount, 0) || 0;
+    //     const totalBeforeDiscount = roomCharges + otherCharges + doctorVisits;
+    //     return totalBeforeDiscount - discountAmount;
+    // };
+
+   const calculateTotal = () => {
+        const roomCharges =combineRoomEntries(details?.room1)?.reduce((sum, item) => {
+            const days = calculateRoomDays(item.start_date, item.end_date);
+            return sum + (item.total * item.days);
+        }, 0) || 0;
+ 
         const otherCharges = details?.othercharges?.reduce((sum, item) =>
             sum + (item.amount * (item.quantity || 1)), 0) || 0;
-
+ 
         const doctorVisits = details?.doctorvisiting?.reduce((sum, item) => sum + item.amount, 0) || 0;
         const totalBeforeDiscount = roomCharges + otherCharges + doctorVisits;
         return totalBeforeDiscount - discountAmount;
     };
+
+
 
     const handleSaveAndGeneratePDF = async () => {
         try {
@@ -191,27 +208,116 @@ function IpdBill() {
     };
 
     // Combine room entries
-    const combineRoomEntries = (rooms = []) => {
-        if (!rooms?.length) return [];
-        const combined = [];
-        let current = { ...rooms[0], days: 0, start_date: rooms[0]?.start_date, end_date: rooms[0]?.end_date };
-        current.days = Math.ceil((rooms[0].end_date - rooms[0]?.start_date) / (24 * 60 * 60));
-        for (let i = 1; i < rooms?.length; i++) {
-            const prev = current;
-            const curr = rooms[i];
-            const isSameType = prev.room_type === curr.room_type && prev.total === curr.total && prev.room_type_name === curr.room_type_name;
-            const isConsecutive = prev.end_date === curr.start_date;
-            if (isSameType && isConsecutive) {
-                current.end_date = curr.end_date;
-                current.days += Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60));
-            } else {
-                combined.push({ ...current });
-                current = { ...curr, days: Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60)), start_date: curr.start_date, end_date: curr.end_date };
-            }
+    // const combineRoomEntries = (rooms = []) => {
+    //     console.log("first")
+    //     if (!rooms?.length) return [];
+    //     const combined = [];
+    //     let current = { ...rooms[0], days: 0, start_date: rooms[0]?.start_date, end_date: rooms[0]?.end_date };
+    //     current.days = Math.ceil((rooms[0].end_date - rooms[0]?.start_date) / (24 * 60 * 60));
+    //     for (let i = 1; i < rooms?.length; i++) {
+    //         const prev = current;
+    //         const curr = rooms[i];
+    //         const isSameType = prev.room_type === curr.room_type && prev.total === curr.total && prev.room_type_name === curr.room_type_name;
+    //         const isConsecutive = prev.end_date === curr.start_date;
+    //         if (isSameType && isConsecutive) {
+    //             current.end_date = curr.end_date;
+    //             current.days += Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60));
+    //         } else {
+    //             combined.push({ ...current });
+    //             current = { ...curr, days: Math.ceil((curr.end_date - curr.start_date) / (24 * 60 * 60)), start_date: curr.start_date, end_date: curr.end_date };
+    //         }
+    //     }
+    //     combined.push({ ...current });
+
+    //     console.log("sssssssa______________________",combined)
+
+    //     return combined;
+    // };
+
+// const combineRoomEntries = (rooms = []) => {
+//     if (!rooms?.length) return [];
+
+//     const combined = [];
+//     let current = { ...rooms[0] };
+//     current.days = 1;
+
+//     for (let i = 1; i < rooms.length; i++) {
+//         const prev = current;
+//         const curr = rooms[i];
+
+//         const isSameGroup =
+//             prev.bed_id === curr.bed_id &&
+//             prev.room_type === curr.room_type;
+
+//         const isConsecutive = prev.end_date === curr.start_date;
+
+//         if (isSameGroup && isConsecutive) {
+//             current.end_date = curr.end_date;
+//             current.days += 1;
+//         } else {
+//             combined.push({ ...current });
+//             current = { ...curr, days: 1 };
+//         }
+//     }
+
+//     combined.push({ ...current });
+
+//     return combined;
+// };
+
+
+
+const combineRoomEntries = (rooms = []) => {
+    if (!rooms?.length) return [];
+
+    const combined = [];
+    let currentGroup = [rooms[0]];
+
+    for (let i = 1; i < rooms.length; i++) {
+        const prev = currentGroup[currentGroup.length - 1];
+        const curr = rooms[i];
+
+        const isSameGroup =
+            prev.bed_id === curr.bed_id &&
+            prev.room_type === curr.room_type &&
+            prev.total === curr.total &&
+            prev.room_type_name === curr.room_type_name;
+
+        const isConsecutive = prev.end_date === curr.start_date;
+
+        if (isSameGroup && isConsecutive) {
+            currentGroup.push(curr);
+        } else {
+            const merged = {
+                ...currentGroup[0],
+                start_date: currentGroup[0].start_date,
+                end_date: currentGroup[currentGroup.length - 1].end_date,
+                days: currentGroup.length,
+            };
+            combined.push(merged);
+            currentGroup = [curr];
         }
-        combined.push({ ...current });
-        return combined;
-    };
+    }
+
+    // Push the last group
+    if (currentGroup.length) {
+        const merged = {
+            ...currentGroup[0],
+            start_date: currentGroup[0].start_date,
+            end_date: currentGroup[currentGroup.length - 1].end_date,
+            days: currentGroup.length,
+        };
+        combined.push(merged);
+    }
+
+    return combined;
+};
+
+
+
+
+
+
 
     // Combine othercharges entries into a single row per charge_name and amount
     const combineOtherCharges = (charges = []) => {
@@ -322,7 +428,13 @@ function IpdBill() {
                                                 {new Date(room.start_date * 1000).toLocaleDateString()}
                                                 {room.days > 1 ? ` - ${new Date(room.end_date * 1000).toLocaleDateString()}` : ""}
                                             </td>
+
+
+
+
                                             <td className="text-center">{room.days} {room.days === 1 ? 'day' : 'days'}</td>
+
+
                                             <td className="text-center">{room.total * room.days}</td>
                                         </tr>
                                     ))}
