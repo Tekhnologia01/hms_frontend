@@ -13,6 +13,7 @@ import { MdPayments } from "react-icons/md";
 import CommanButton from "../../../components/common/form/commonButtton";
 import { Modal } from "react-bootstrap";
 import './discharge.css'
+import { processPatientData } from "../../../utils/billig";
 
 function AdmitedDepatientBillDetals() {
   const navigate = useNavigate();
@@ -51,7 +52,8 @@ function AdmitedDepatientBillDetals() {
         `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`,
         config
       );
-      setDoctors(response?.data?.data);
+      
+      setDoctors(processPatientData(response?.data?.data));
     } catch (err) {
     }
   };

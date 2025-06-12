@@ -10,6 +10,7 @@ import BillPDF from "./BillPdf";
 import { toast } from "react-toastify";
 import DetailedBillPDF from "./DetaliedBillPdf";
 import axios from "axios";
+import { processPatientData } from "../../../utils/billig";
 
 function IpdBill() {
     const navigate = useNavigate();
@@ -33,7 +34,8 @@ function IpdBill() {
                 `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientreceipt?admited_id=${params?.admitedId}`,
                 config
             );
-            setDetails(response?.data?.data[0]);
+            const data=processPatientData(response?.data?.data)
+            setDetails(data[0]);
         } catch (error) {
             console.error('Error fetching receipt:', error);
             throw error;

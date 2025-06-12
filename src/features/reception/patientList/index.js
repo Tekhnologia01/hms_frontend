@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import AdmitPatient from "../../admitPatient/admissionForm";
 import './patients.css';
 import UpdatePatient from "./UpdatePatient";
-import { epochTimeToDate } from "../../../utils/epochToDate";
+import { convertEpochToDateTime, convertEpochToDateTimeq, epochTimeToDate } from "../../../utils/epochToDate";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MdOutlineBedroomChild } from "react-icons/md";
 import ChangeRoom from "../../commonfeature/ChangeRoom";
@@ -300,7 +300,7 @@ function PatientAppointmentList() {
         {/* </NavLink> */}
       </td>
       <td className="py-3 px-2">{item?.ipd_id}</td>
-      <td className="py-3 px-2">{item?.admitted_date} {item?.admit_time}</td>
+      <td className="py-3 px-2">{convertEpochToDateTimeq(item?.admitted_date)}</td>
       <td className="py-3 px-2">{item?.patient_sex}</td>
       <td className="py-3 px-2">{item?.patient_age}</td>
       <td className="py-3 px-2">{item?.doctor_name}</td>

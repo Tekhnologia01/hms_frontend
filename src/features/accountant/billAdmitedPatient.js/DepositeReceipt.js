@@ -6,6 +6,7 @@ import Airavat from "../../../assets/images/Airavat.png";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { epochTimeToDate } from "../../../utils/epochToDate";
+import { processPatientData } from "../../../utils/billig";
 
 function DepositeReceipt() {
   const navigate = useNavigate();
@@ -25,8 +26,9 @@ function DepositeReceipt() {
         `${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientreceipt/?admited_id=${params.admitedId}`,
         config
       );
-
-      setDetails(response?.data?.data[0]);
+        const data=processPatientData(response?.data?.data)
+        setDetails(data[0]);
+      // setDetails(response?.data?.data[0]);
     } catch (error) {
       console.error('Error fetching receipt:', error);
       throw error; // Handle or propagate the error
