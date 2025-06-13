@@ -11,13 +11,8 @@ import { epochTimeToDate } from "../../utils/epochToDate";
 function AccountantDashboard() {
     const { user } = useSelector(state => state?.auth);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [limitPerPage, setLimitPerPage] = useState(10);
-    const [reportData, setReportData] = useState()
-    // const totalRecords = 200;
-    // const [todaysDate, setTodaysDate] = useState(new Date().toISOString().split("T")[0]);
+     const [reportData, setReportData] = useState()
     const [todaysAppintments, setTodaysAppointments] = useState([]);
-
     const [discharge, setDischarge] = useState()
     const token = useSelector((state) => state.auth.currentUserToken);
     const config = {
@@ -25,10 +20,8 @@ function AccountantDashboard() {
             Authorization: `Bearer ${token}`,
         },
     }
-
     const fetchTodaysAppointments = async () => {
         try {
-
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/accountant/getadmtedpatientbill`, config)
             setTodaysAppointments(response?.data?.data);
         } catch (err) {
@@ -349,6 +342,7 @@ function AccountantDashboard() {
                             </Table>
                         </div>
                     </Col>
+
                 </Row>
 
                 <div className="mt-4 pb-4">

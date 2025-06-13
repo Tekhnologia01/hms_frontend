@@ -13,16 +13,20 @@ import './patients.css';
 import UpdatePatient from "./UpdatePatient";
 import { convertEpochToDateTime, convertEpochToDateTimeq, epochTimeToDate } from "../../../utils/epochToDate";
 import { NavLink, useNavigate } from "react-router-dom";
-import { MdOutlineBedroomChild } from "react-icons/md";
+import { MdOutlineBedroomChild, MdOutlineBrowserUpdated } from "react-icons/md";
 import ChangeRoom from "../../commonfeature/ChangeRoom";
 import { FaPlusSquare } from "react-icons/fa";
 import AddCharges from "../../commonfeature/AddCharges";
 import { CiMedicalClipboard } from "react-icons/ci";
 import { toast } from "react-toastify";
+import ChangeAdmiteDate from "../../commonfeature/ChangeAdmiteddate";
+import { HiCalendarDateRange } from "react-icons/hi2";
 
 function PatientAppointmentList() {
   const [showModal, setShowModal] = useState(false);
   const [showChangeRoomModal, setShowChangeRoomModal] = useState(false);
+    const [showChangeAdmitdDateModal, setShowChangeAdmitdDateModal] = useState(false);
+
   const [showAddChargesModal, setShowAddChargesModal] = useState(false);
   const [showBookModal, setShowBookModal] = useState(false);
   const [showUpdteModal, setShowUpdateModal] = useState(false);
@@ -51,8 +55,16 @@ function PatientAppointmentList() {
   const navigate = useNavigate()
   const handleAddChargesModal = () => setShowAddChargesModal(true);
   const handleAddChargesCloseModal = () => setShowAddChargesModal(false);
+
+
   const handleChangeRoomModal = () => setShowChangeRoomModal(true);
   const handleChangeRoomCloseModal = () => setShowChangeRoomModal(false);
+
+
+
+    const handleChangeAdmitdDateModal = () => setShowChangeAdmitdDateModal(true);
+  const handleChangeAdmitedCloseModal = () => setShowChangeAdmitdDateModal(false);
+
   const handleBookModal = () => setShowBookModal(true);
   const handleBookCloseModal = () => setShowBookModal(false);
   const { user } = useSelector(state => state?.auth)
@@ -104,6 +116,7 @@ function PatientAppointmentList() {
       console.log("Error fetching departments:", err);
     }
   }
+
 
   useEffect(() => {
     if (cardState === "opd") {
@@ -158,6 +171,8 @@ function PatientAppointmentList() {
 
     }
   }
+
+
   const handleBookAppointmentClose = async () => {
     try {
       await getOPDPatients();
@@ -196,7 +211,9 @@ function PatientAppointmentList() {
     { name: "Sex", accessor: "sex", class: "py-3 text-center px-1" },
     { name: "Age", accessor: "age", class: "py-3 text-center px-1", width: "30px" },
     { name: "Doctor name", accessor: "doctorName", class: "py-3 text-center px-1", },
-    { name: "Department", accessor: "department", class: "py-3 text-center px-1", },
+    // { name: "Department", accessor: "department", class: "py-3 text-center px-1", },
+    ...(user.RoleId == 4 ? [{ name: "Action", accessor: "action", class: " text-center", }] : []),
+
     ...(user.RoleId == 2 ? [{ name: "Action", accessor: "action", class: " text-center", }] : [])
 
   ];
@@ -304,7 +321,21 @@ function PatientAppointmentList() {
       <td className="py-3 px-2">{item?.patient_sex}</td>
       <td className="py-3 px-2">{item?.patient_age}</td>
       <td className="py-3 px-2">{item?.doctor_name}</td>
-      <td className="py-3 px-2">{item?.department}</td>
+      {/* <td className="py-3 px-2">{item?.department}</td> */}
+      {
+        user?.RoleId == 4 &&
+
+        <td>
+          <HiCalendarDateRange  erUpdated style={{ height: "23px", width: "23px" }}
+            onClick={() => {
+              setAdmited(item)
+              handleChangeAdmitdDateModal()
+            }} />
+
+        </td>
+      }
+
+
       {
         user?.RoleId == 2 &&
 
@@ -327,11 +358,11 @@ function PatientAppointmentList() {
 
           {user?.userId == item?.doctor_id ? <NavLink to={`/doctor/discharge_patient/${item?.admitted_patient_id}`} state={item?.ipd_id}>
             <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
-          </NavLink>:<NavLink to={`/doctor/discharge_patientdotor/${item?.admitted_patient_id}`} state={item?.ipd_id}>
+          </NavLink> : <NavLink to={`/doctor/discharge_patientdotor/${item?.admitted_patient_id}`} state={item?.ipd_id}>
             <CiMedicalClipboard style={{ height: "30px", width: "30px" }} />
           </NavLink>}
 
-  
+
         </td>
       }
 
@@ -356,6 +387,13 @@ function PatientAppointmentList() {
       toast.error(error?.response?.data?.message);
 
     }
+  }
+
+
+
+  const handleAdmitedate=()=>{
+    handleChangeAdmitedCloseModal()
+    getIPDPatients()
   }
 
   return (
@@ -461,6 +499,14 @@ function PatientAppointmentList() {
         patientUpdate={patientUpdate}
         show={showChangeRoomModal}
         handleClose={handleChangeRoomCloseModal}
+      />
+
+
+     <ChangeAdmiteDate
+        admited={admited}
+        // patientUpdate={patientUpdate}
+        show={showChangeAdmitdDateModal}
+        handleClose={handleAdmitedate}
       />
 
 
