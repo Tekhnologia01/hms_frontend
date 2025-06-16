@@ -165,9 +165,9 @@ function Department() {
 
   return (
     <div className="px-3">
-      <div className="fw-semibold fs-6 pb-lg-3 mt-4" style={{ color: "#1E959B" }}>
+      <div className="fw-semibold fs-6 pb-lg-3 mt-4" style={{ color: "#1E959B" }} onClick={() => navigate("/hospital/departments")}>
         <FaArrowLeft />
-        <span className="pt-1 px-2" onClick={() => navigate("/hospital/departments")}>
+        <span className="pt-1 px-2" >
           Department / {deptId}
         </span>
       </div>

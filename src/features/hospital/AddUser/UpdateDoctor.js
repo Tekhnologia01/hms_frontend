@@ -2,20 +2,49 @@ import { Col, Modal, Row } from "react-bootstrap";
 import { FaTimes } from "react-icons/fa";
 import CommanButton from "../../../components/common/form/commonButtton";
 import InputBox from "../../../components/common/form/inputbox";
-import { useEffect, useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Form } from "react-bootstrap";
+import { useSelector } from "react-redux";
 const UpdateDoctor = ({ show = false, handleClose, user, patientUpdate, status }) => {
-
+const token = useSelector((state) => state.auth.currentUserToken);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
   const [formData, setFormData] = useState({
     name: "",
     phone_no: "",
     age: "",
     email_id: "",
     user_id: "",
-    fees: "",    // fees added
+    fees: "",
+    department_id:""
   });
+    const [departments, setDepartments] = useState([]);
 
+
+
+
+       async function getDepartments() {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/department/get`, config);
+            setDepartments(response?.data?.data);
+        } catch (err) {
+            toast.error("Error fetching departments");
+        }
+    }
+
+
+    
+        useEffect(() => {
+            getDepartments();
+  
+        }, [])
   const [errors, setErrors] = useState({});
+
 
   useEffect(() => {
     if (user) {
@@ -25,7 +54,8 @@ const UpdateDoctor = ({ show = false, handleClose, user, patientUpdate, status }
         age: user?.age || "",
         email_id: user?.user_email || "",
         user_id: user?.User_ID || "",
-        fees: user?.consultancy_fee || "",  // populate existing fees if available
+        fees: user?.consultancy_fee || "",
+        department_id:user.department_id || ""
       });
     }
   }, [user]);
@@ -71,14 +101,19 @@ const UpdateDoctor = ({ show = false, handleClose, user, patientUpdate, status }
     if (!validateForm()) return;
     try {
 
+
+
+      console.log("qwwwwwwww",formData)
       patientUpdate(formData);
+
       setFormData({
         name: "",
         phone_no: "",
         age: "",
         email_id: "",
         user_id: "",
-        fees: "",   // reset fees
+        fees: "", 
+          // reset fees
       });
       handleClose();
     } catch (error) {
@@ -169,6 +204,33 @@ const UpdateDoctor = ({ show = false, handleClose, user, patientUpdate, status }
             />
             {errors.fees && <p className="text-danger">{errors.fees}</p>}
           </Col>
+
+
+
+          <Col md={6} className="gy-3">
+            <Form.Group controlId="idSelect">
+              <Form.Label className="fw-semibold" style={{ fontSize: "1rem" }}>Select Department <span className="text-danger fw-bold">*</span></Form.Label>
+              <Form.Select
+                value={formData.department_id}
+                name="department_id"
+                onChange={handleInputChange}
+                isRequired={true}
+              >
+                <option value="">Select Department</option>
+                {
+                  departments?.map((dept) => {
+                    return <option key={dept.department_id} value={dept?.department_id}>{dept?.department_name}</option>
+                  })
+                }
+              </Form.Select>
+            </Form.Group>
+            {errors.department_id && <p className="text-danger">{errors.department_id}</p>}
+
+          </Col>
+
+
+
+
 
         </Row>
 
