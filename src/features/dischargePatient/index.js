@@ -52,6 +52,9 @@ const DischargePatient = () => {
         discharge_date_time: "",
         follow_up_date_time: "",
         icd_code: "",
+        discharge_type: "",
+        procedure_type: "",
+        procedure_details: "",
     });
     const [showDischargeSheet, setShowDischargeSheet] = useState(false);
 
@@ -114,7 +117,7 @@ const DischargePatient = () => {
     const formatDateForInput = (dateString) => {
         if (!dateString) return '';
         const [month, day, year] = dateString.split('/');
-        console.log( `${year}-${day.padStart(2, '0')}-${month.padStart(2, '0')}`)
+        console.log(`${year}-${day.padStart(2, '0')}-${month.padStart(2, '0')}`)
         return `${year}-${day.padStart(2, '0')}-${month.padStart(2, '0')}`;
     };
 
@@ -197,6 +200,11 @@ const DischargePatient = () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/patient/get_discahrge_details?ipd_id=${location.state}`, config);
 
+
+
+
+            console.log("response++++++", response?.data?.data)
+
             if (response?.data?.status) {
                 const dateTime = convertEpochToDateTime(response?.data?.data?.discharge_date_time);
                 const followUpDateTime = convertEpochToDateTime(response?.data?.data?.follow_up_date_time);
@@ -224,6 +232,9 @@ const DischargePatient = () => {
                     discharge_date_time: response?.data?.data?.discharge_date_time,
                     follow_up_date_time: response?.data?.data?.follow_up_date_time,
                     icd_code: response?.data?.data?.icd_code,
+                    discharge_type: response?.data?.data?.discharge_type,
+                    procedure_type: response?.data?.data?.procedure_type,
+                    procedure_details: response?.data?.data?.procedure_details || "",
                 });
             }
         } catch (error) {
@@ -240,6 +251,9 @@ const DischargePatient = () => {
 
     const handleSubmit = async (values) => {
         try {
+
+
+            console.log("values", values)
             const payload = {
                 "ipd_id": location.state,
                 "chief_complaints": values?.chiefComplaints,
@@ -259,11 +273,16 @@ const DischargePatient = () => {
                 "discharge_date": convertDateTimeToEpoch(values?.discharge_date, values?.discharge_time),
                 "follow_up_date": convertDateTimeToEpoch(values?.follow_up_date, values?.follow_up_time),
                 "icd_code": values?.icd_code,
+                "discharge_type": values?.discharge_type,
+                "procedure_type": values?.procedure_type,
+                "procedure_details": values?.procedure_details,
+
             };
 
             let response;
 
             if (values?.discharge_details_id) {
+
                 response = await axios.put(
                     `${process.env.REACT_APP_API_URL}/patient/updatedischarge?userId=${user?.userId}`,
                     {
@@ -512,7 +531,7 @@ const DischargePatient = () => {
                                         <Note
                                             label="Local Examination"
                                             name="local_examination"
-                                            placeholder="Enter details..."
+                                            placeholder="Enter details"
                                             isRequired
                                             onChange={handleChange}
                                             value={values.local_examination}
@@ -523,7 +542,7 @@ const DischargePatient = () => {
                                         <Note
                                             label="Past History"
                                             name="past_history"
-                                            placeholder="Enter history..."
+                                            placeholder="Enter history"
                                             onChange={handleChange}
                                             value={values.past_history}
                                         />
@@ -533,13 +552,14 @@ const DischargePatient = () => {
                                         <Note
                                             label="Advice On Discharge"
                                             name="discharge_advice"
-                                            placeholder="Enter advice..."
+                                            placeholder="Enter advice"
                                             isRequired
                                             onChange={handleChange}
                                             value={values.discharge_advice}
                                         />
                                         <ErrorMessage name="discharge_advice" component="div" className="text-danger" />
                                     </Col>
+
 
                                     <Col md={4} lg={6} className="mb-2">
                                         <Form.Group controlId="icd_code">
@@ -556,6 +576,61 @@ const DischargePatient = () => {
 
                                         </Form.Group>
                                     </Col>
+
+                                    <Col lg={6} className="mb-2">
+                                        <Form.Group controlId="discharge_type">
+                                            <Form.Label className="fw-semibold">Discharge Type <span className="text-danger fw-bold">*</span> </Form.Label>
+                                            <Field
+                                                as="select"
+                                                name="discharge_type"
+                                                className="form-control"
+                                                style={{ height: "45.5px" }}
+                                            >
+                                                <option value="">Select Discharge Type</option>
+                                                <option value="planned">Planned</option>
+                                                <option value="emergency">Emergency</option>
+                                                <option value="lama">LAMA (Leave Against Medical Advice)</option>
+                                                <option value="absconded">Absconded</option>
+                                                <option value="death">Death</option>
+                                            </Field>
+                                            <ErrorMessage name="discharge_type" component="div" className="text-danger" />
+                                        </Form.Group>
+                                    </Col>
+
+
+                                    <Col lg={6} className="mb-2">
+                                        <Form.Group controlId="discharge_type">
+                                            <Form.Label className="fw-semibold">Procedure Type <span className="text-danger fw-bold">*</span> </Form.Label>
+
+                                            <Field
+                                                as="select"
+                                                name="procedure_type"
+                                                className="form-control"
+                                                style={{ height: "45.5px" }}
+                                            >
+                                                <option value="">Select Procedure Type</option>
+                                                <option value="medical">Medical</option>
+                                                <option value="surgery">Surgery</option>
+
+                                            </Field>
+                                            <ErrorMessage name="procedure_type" component="div" className="text-danger" />
+                                        </Form.Group>
+                                    </Col>
+
+                                    <Col md={12} lg={12} className="mb-2">
+                                        <Note
+                                            label="Procedure Details"
+                                            name="procedure_details"
+                                            placeholder="Enter Procedure Details"
+                                            isRequired
+                                            onChange={handleChange}
+                                            value={values.procedure_details}
+                                        />
+                                        <ErrorMessage name="procedure_details" component="div" className="text-danger" />
+
+                                    </Col>
+
+
 
                                     <Col md={6}>
                                         <Row className="gy-4">
@@ -673,7 +748,7 @@ const DischargePatient = () => {
                                         type="submit"
                                     />
                                 </div>
-                                
+
                             </Form>
                         )
                     }}

@@ -24,6 +24,7 @@ const ViewDischargeSheet = ({ show, setShow, ipd_id }) => {
             const response = await axios.get(
                 `${process.env.REACT_APP_API_URL}/patient/get_ipd_details?ipd_id=${ipd_id}`, config);
             setDetails(response?.data?.data)
+            console.log(response?.data?.data)
         } catch (error) {
             toast.error("Error while retrieving data")
 
